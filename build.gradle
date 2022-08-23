@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['driver/src/main/java']
+        }
+        resources {
+            srcDirs = ['driver/src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['driver/src/test']
+        }
+    }
+}
+
+dependencies {
+    implementation group: 'redis.clients', name: 'jedis', version: '3.6.3'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
