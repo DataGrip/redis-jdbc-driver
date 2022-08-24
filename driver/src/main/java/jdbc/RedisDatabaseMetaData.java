@@ -1,6 +1,7 @@
 package jdbc;
 
 import java.sql.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RedisDatabaseMetaData implements DatabaseMetaData {
@@ -67,8 +68,9 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
     public String getDatabaseProductVersion() throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("INFO server");
-        String serverInfo = result.next() ? result.getString(1) : "";
-        return Pattern.compile("redis_version:(.+)").matcher(serverInfo).group(1);
+        String serverInfo = result.next() ? result.getString(1) : null;
+        Matcher matcher = serverInfo != null ? Pattern.compile("redis_version:(.+)").matcher(serverInfo) : null;
+        return matcher != null && matcher.find() ? matcher.group(1) : null;
     }
 
     @Override
