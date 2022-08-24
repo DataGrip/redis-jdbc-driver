@@ -4,7 +4,7 @@ plugins {
 
 version '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 
 repositories {
     mavenCentral()
@@ -41,3 +41,4 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
+targetCompatibility = JavaVersion.VERSION_1_9

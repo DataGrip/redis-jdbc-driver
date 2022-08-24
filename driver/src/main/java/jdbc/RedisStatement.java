@@ -1,7 +1,6 @@
 package jdbc;
 
 import java.sql.*;
-import java.util.List;
 
 public class RedisStatement implements Statement {
 
@@ -20,8 +19,7 @@ public class RedisStatement implements Statement {
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         checkClosed();
-        List<?> result = client.execute(sql);
-        return new RedisResultSet(this, result);
+        return client.execute(sql);
     }
 
     @Override
@@ -99,8 +97,7 @@ public class RedisStatement implements Statement {
     @Override
     public boolean execute(String sql) throws SQLException {
         checkClosed();
-        List<?> result = client.execute(sql);
-        this.result = new RedisResultSet(this, result);
+        this.result = client.execute(sql);
         return true;
     }
 

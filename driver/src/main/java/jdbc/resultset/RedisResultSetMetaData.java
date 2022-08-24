@@ -1,21 +1,36 @@
-package jdbc;
+package jdbc.resultset;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Types;
+import java.util.List;
 
 public class RedisResultSetMetaData implements ResultSetMetaData {
 
+    // TODO (result set): catalog and table name?
+    private static final String NOT_APPLICABLE_TABLE_NAME = "";
+    private static final String NOT_APPLICABLE_CATALOG = "";
+    private static final int NOT_APPLICABLE_SCALE = 0;
+    private static final int NOT_APPLICABLE_PRECISION = 0;
+
+    private final List<ColumnMetaData> columnMetaData;
+
+    public RedisResultSetMetaData(List<ColumnMetaData> columnMetaData) {
+        this.columnMetaData = columnMetaData;
+    }
+
+    public static ColumnMetaData createColumn(String name) {
+        return new ColumnMetaData(name);
+    }
+
     @Override
     public int getColumnCount() throws SQLException {
-        // TODO (result set)
-        return 1;
+        return columnMetaData.size();
     }
 
     @Override
     public boolean isAutoIncrement(int column) throws SQLException {
-        // TODO (result set)
         return false;
     }
 
@@ -51,12 +66,12 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnLabel(int column) throws SQLException {
-        return "result";
+        return columnMetaData.get(column - 1).name;
     }
 
     @Override
     public String getColumnName(int column) throws SQLException {
-        return "result";
+        return columnMetaData.get(column - 1).name;
     }
 
     @Override
@@ -66,38 +81,32 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getPrecision(int column) throws SQLException {
-        // TODO (implement later) ?
-        return 0;
+        return NOT_APPLICABLE_PRECISION;
     }
 
     @Override
     public int getScale(int column) throws SQLException {
-        // TODO (implement later) ?
-        return 0;
+        return NOT_APPLICABLE_SCALE;
     }
 
     @Override
     public String getTableName(int column) throws SQLException {
-        // TODO (implement)
-        return "";
+        return NOT_APPLICABLE_TABLE_NAME;
     }
 
     @Override
     public String getCatalogName(int column) throws SQLException {
-        // TODO (implement)
-        return "";
+        return NOT_APPLICABLE_CATALOG;
     }
 
     @Override
     public int getColumnType(int column) throws SQLException {
-        // TODO (result set)
-        return Types.NVARCHAR;
+        return columnMetaData.get(column - 1).getJavaType();
     }
 
     @Override
     public String getColumnTypeName(int column) throws SQLException {
-        // TODO (result set)
-        return "String";
+        return columnMetaData.get(column - 1).typeName;
     }
 
     @Override
@@ -117,8 +126,7 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnClassName(int column) throws SQLException {
-        // TODO (result set)
-        return "java.lang.String";
+        return columnMetaData.get(column - 1).getClassName();
     }
 
     @Override
@@ -129,5 +137,24 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw new SQLFeatureNotSupportedException();
+    }
+
+    // TODO (result set): types
+    public static class ColumnMetaData {
+        private final String name;
+        private final String typeName;
+
+        private ColumnMetaData(String name) {
+            this.name = name;
+            this.typeName = "string";
+        }
+
+        public int getJavaType() {
+            return Types.VARCHAR;
+        }
+
+        public String getClassName() {
+            return "java.lang.String";
+        }
     }
 }

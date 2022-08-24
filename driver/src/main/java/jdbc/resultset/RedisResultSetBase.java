@@ -1,4 +1,4 @@
-package jdbc;
+package jdbc.resultset;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -9,31 +9,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class RedisResultSet implements ResultSet {
+public abstract class RedisResultSetBase implements ResultSet {
 
-    private final Statement statement;
-    private final List<?> data;
-
-    private int currentRow = -1;
     private boolean isClosed = false;
-
-    public RedisResultSet(Statement statement, List<?> data) {
-        this.statement = statement;
-        this.data = data;
-    }
-
-    @Override
-    public boolean next() throws SQLException {
-        checkClosed();
-        if (data == null) {
-            return false;
-        }
-        if (currentRow < data.size() - 1) {
-            ++currentRow;
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void close() throws SQLException {
@@ -49,13 +27,6 @@ public class RedisResultSet implements ResultSet {
     @Override
     public boolean wasNull() throws SQLException {
         return false;
-    }
-
-    @Override
-    public String getString(int columnIndex) throws SQLException {
-        checkClosed();
-        if (currentRow >= data.size()) throw new SQLException("Exhausted ResultSet.");
-        return data.get(currentRow).toString();
     }
 
     @Override
@@ -231,11 +202,12 @@ public class RedisResultSet implements ResultSet {
        throw new SQLFeatureNotSupportedException();
     }
 
-    @Override
-    public ResultSetMetaData getMetaData() throws SQLException {
-        checkClosed();
-        return new RedisResultSetMetaData();
-    }
+//    @Override
+//    public ResultSetMetaData getMetaData() throws SQLException {
+//        checkClosed();
+//        // TODo (result set): meta data list (!)
+//        return new RedisResultSetMetaData(null);
+//    }
 
     @Override
     public Object getObject(int columnIndex) throws SQLException {
@@ -607,7 +579,7 @@ public class RedisResultSet implements ResultSet {
 
     @Override
     public Statement getStatement() throws SQLException {
-        return statement;
+        return null;
     }
 
     @Override

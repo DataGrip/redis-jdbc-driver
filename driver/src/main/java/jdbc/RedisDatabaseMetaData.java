@@ -67,7 +67,7 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
     public String getDatabaseProductVersion() throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("INFO server");
-        String serverInfo = result.getString(0);
+        String serverInfo = result.next() ? result.getString(1) : "";
         return Pattern.compile("redis_version:(.+)").matcher(serverInfo).group(1);
     }
 

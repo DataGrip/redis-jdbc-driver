@@ -4,8 +4,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisException;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 public class RedisClient implements Client {
@@ -23,11 +23,11 @@ public class RedisClient implements Client {
     }
 
     @Override
-    public List<?> execute(String sql) throws SQLException {
+    public ResultSet execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisClientUtil.parseQuery(sql);
             Object result = execute(query);
-            return RedisClientUtil.encodeResult(result);
+            return RedisClientUtil.createResultSet(query, result);
         } catch (JedisException e) {
             throw new SQLException(e);
         }
