@@ -1,8 +1,7 @@
-package jdbc;
+package jdbc.client;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public interface Client extends AutoCloseable {
 

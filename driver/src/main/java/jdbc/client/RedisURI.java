@@ -1,4 +1,4 @@
-package jdbc;
+package jdbc.client;
 
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisClientConfig;
@@ -6,7 +6,7 @@ import redis.clients.jedis.Protocol;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Properties;
 
 public class RedisURI implements JedisClientConfig {
 

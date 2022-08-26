@@ -1,5 +1,7 @@
 package jdbc;
 
+import jdbc.client.Client;
+
 import java.sql.*;
 
 public class RedisStatement implements Statement {

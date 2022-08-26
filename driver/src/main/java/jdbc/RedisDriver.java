@@ -1,5 +1,9 @@
 package jdbc;
 
+import jdbc.client.Client;
+import jdbc.client.RedisClient;
+import jdbc.client.RedisURI;
+
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;

@@ -1,5 +1,6 @@
 package jdbc;
 
+import jdbc.client.RedisURI;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
 

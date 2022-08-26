@@ -1,5 +1,7 @@
 package jdbc;
 
+import jdbc.client.Client;
+
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;

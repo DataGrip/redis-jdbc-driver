@@ -1,6 +1,6 @@
-package jdbc;
+package jdbc.client;
 
-import jdbc.RedisQuery.CompositeCommand;
+import jdbc.client.RedisQuery.CompositeCommand;
 import jdbc.resultset.RedisEmptyResultSet;
 import jdbc.resultset.RedisListResultSet;
 import jdbc.resultset.RedisMapResultSet;
