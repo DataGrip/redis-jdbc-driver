@@ -1,7 +1,11 @@
 package jdbc.client;
 
+import jdbc.RedisResultSet;
+import jdbc.client.helpers.RedisQuery;
+import jdbc.client.helpers.RedisQueryHelper;
+import jdbc.client.helpers.RedisResultHelper;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Protocol;
+import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.ResultSet;
@@ -25,16 +29,16 @@ public class RedisClient implements Client {
     @Override
     public ResultSet execute(String sql) throws SQLException {
         try {
-            RedisQuery query = RedisClientUtil.parseQuery(sql);
+            RedisQuery query = RedisQueryHelper.parseQuery(sql);
             Object result = execute(query);
-            return RedisClientUtil.createResultSet(query, result);
+            return new RedisResultSet(RedisResultHelper.parseResult(query, result));
         } catch (JedisException e) {
             throw new SQLException(e);
         }
     }
 
     private synchronized Object execute(RedisQuery query) {
-        Protocol.Command command = query.getCommand();
+        Command command = query.getCommand();
         String[] params = query.getParams();
         return params == null ? jedis.sendCommand(command) : jedis.sendCommand(command, params);
     }

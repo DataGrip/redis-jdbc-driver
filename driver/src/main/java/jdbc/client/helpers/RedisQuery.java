@@ -1,4 +1,4 @@
-package jdbc.client;
+package jdbc.client.helpers;
 
 import redis.clients.jedis.Protocol;
 

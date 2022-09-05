@@ -1,4 +1,6 @@
-package jdbc.resultset;
+package jdbc;
+
+import jdbc.types.ArrayImpl;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -9,9 +11,31 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public abstract class RedisResultSetBase implements ResultSet {
+public class RedisResultSet implements ResultSet {
+
+    private final List<Map<String, Object>> rows;
+    private final RedisResultSetMetaData metaData;
+
+    private Map<String, Object> currentRow = null;
+    private int index = 0;
 
     private boolean isClosed = false;
+
+    public RedisResultSet(List<Map<String, Object>> rows) {
+        this.rows = rows;
+        this.metaData = new RedisResultSetMetaData(rows);
+    }
+
+    @Override
+    public boolean next() throws SQLException {
+        checkClosed();
+        currentRow = null;
+        if (index < rows.size()) {
+            currentRow = rows.get(index++);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void close() throws SQLException {
@@ -19,9 +43,7 @@ public abstract class RedisResultSetBase implements ResultSet {
     }
 
     protected void checkClosed() throws SQLException {
-        if (isClosed) {
-            throw new SQLException("ResultSet was previously closed.");
-        }
+        if (isClosed) throw new SQLException("ResultSet was previously closed.");
     }
 
     @Override
@@ -30,201 +52,216 @@ public abstract class RedisResultSetBase implements ResultSet {
     }
 
     @Override
+    public String getString(int columnIndex) throws SQLException {
+        return getString(getMetaData().getColumnLabel(columnIndex));
+    }
+
+    @Override
     public boolean getBoolean(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getBoolean(getMetaData().getColumnName(columnIndex));
+    }
+
+    private Number getNumeric(int columnIndex) throws SQLException {
+        return getNumeric(getMetaData().getColumnName(columnIndex));
     }
 
     @Override
     public byte getByte(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).byteValue();
     }
 
     @Override
     public short getShort(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).shortValue();
     }
 
     @Override
     public int getInt(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).intValue();
     }
 
     @Override
     public long getLong(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).longValue();
     }
 
     @Override
     public float getFloat(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).floatValue();
     }
 
     @Override
     public double getDouble(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnIndex).doubleValue();
     }
 
     @Override
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public byte[] getBytes(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Date getDate(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Time getTime(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getAsciiStream(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public String getString(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        Object o = getObject(columnLabel);
+        return o != null ? o.toString() : null;
     }
 
     @Override
     public boolean getBoolean(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        Object o = getObject(columnLabel);
+        return o instanceof Boolean ? (Boolean) o : false;
+    }
+
+    private Number getNumeric(String columnLabel) throws SQLException {
+        Object o = getObject(columnLabel);
+        return o instanceof Number ? (Number) o : 0;
     }
 
     @Override
     public byte getByte(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).byteValue();
     }
 
     @Override
     public short getShort(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).shortValue();
     }
 
     @Override
     public int getInt(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).intValue();
     }
 
     @Override
     public long getLong(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).longValue();
     }
 
     @Override
     public float getFloat(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).floatValue();
     }
 
     @Override
     public double getDouble(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        return getNumeric(columnLabel).doubleValue();
     }
 
     @Override
     public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public byte[] getBytes(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Date getDate(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Time getTime(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public Timestamp getTimestamp(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getAsciiStream(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getUnicodeStream(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public InputStream getBinaryStream(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public SQLWarning getWarnings() throws SQLException {
-        // TODO (implement later) ?
         checkClosed();
         return null;
     }
 
     @Override
     public void clearWarnings() throws SQLException {
-        // TODO (implement later) ?
         checkClosed();
     }
 
     @Override
     public String getCursorName() throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        throw new SQLFeatureNotSupportedException();
     }
 
-//    @Override
-//    public ResultSetMetaData getMetaData() throws SQLException {
-//        checkClosed();
-//        // TODo (result set): meta data list (!)
-//        return new RedisResultSetMetaData(null);
-//    }
+    @Override
+    public RedisResultSetMetaData getMetaData() throws SQLException {
+        checkClosed();
+        return metaData;
+    }
 
     @Override
     public Object getObject(int columnIndex) throws SQLException {
-        checkClosed();
-        return getString(columnIndex);
+        return getObject(getMetaData().getColumnLabel(columnIndex));
     }
 
     @Override
     public Object getObject(String columnLabel) throws SQLException {
-       throw new SQLFeatureNotSupportedException();
+        checkClosed();
+        if (currentRow == null) throw new SQLException("Exhausted ResultSet.");
+        return currentRow.get(columnLabel);
     }
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {
-        // TODO (result set)
         checkClosed();
-        return 0;
+        int col = getMetaData().findColumn(columnLabel);
+        if (col == -1) throw new SQLException("No such column " + columnLabel);
+        return col;
     }
 
     @Override
@@ -604,7 +641,7 @@ public abstract class RedisResultSetBase implements ResultSet {
 
     @Override
     public Array getArray(int columnIndex) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+        return getArray(getMetaData().getColumnName(columnIndex));
     }
 
     @Override
@@ -629,7 +666,10 @@ public abstract class RedisResultSetBase implements ResultSet {
 
     @Override
     public Array getArray(String columnLabel) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+        Object o = getObject(columnLabel);
+        if (o.getClass().isArray()) return new ArrayImpl((Object[]) o);
+        if (o instanceof List<?>) return new ArrayImpl((List<?>) o);
+        return null;
     }
 
     @Override
