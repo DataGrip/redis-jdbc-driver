@@ -1,6 +1,7 @@
-package jdbc;
+package jdbc.resultset;
 
-import jdbc.types.ArrayImpl;
+import jdbc.RedisStatement;
+import jdbc.resultset.types.ArrayImpl;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -11,19 +12,21 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class RedisResultSet implements ResultSet {
+public abstract class RedisResultSetBase<T> implements ResultSet {
 
-    private final List<Map<String, Object>> rows;
+    private final RedisStatement statement;
     private final RedisResultSetMetaData metaData;
+    private final List<T> rows;
 
-    private Map<String, Object> currentRow = null;
+    private T currentRow = null;
     private int index = 0;
 
     private boolean isClosed = false;
 
-    public RedisResultSet(List<Map<String, Object>> rows) {
+    public RedisResultSetBase(RedisStatement statement, RedisResultSetMetaData metaData, List<T> rows) {
+        this.statement = statement;
+        this.metaData = metaData;
         this.rows = rows;
-        this.metaData = new RedisResultSetMetaData(rows);
     }
 
     @Override
@@ -253,8 +256,10 @@ public class RedisResultSet implements ResultSet {
     public Object getObject(String columnLabel) throws SQLException {
         checkClosed();
         if (currentRow == null) throw new SQLException("Exhausted ResultSet.");
-        return currentRow.get(columnLabel);
+        return getObject(currentRow, columnLabel);
     }
+
+    protected abstract Object getObject(T row, String columnLabel) throws SQLException;
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {
@@ -616,7 +621,7 @@ public class RedisResultSet implements ResultSet {
 
     @Override
     public Statement getStatement() throws SQLException {
-        return null;
+        return statement;
     }
 
     @Override
@@ -993,17 +998,17 @@ public class RedisResultSet implements ResultSet {
     }
 
     @Override
-    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+    public <V> V getObject(int columnIndex, Class<V> type) throws SQLException {
         throw new SQLFeatureNotSupportedException();
     }
 
     @Override
-    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+    public <V> V getObject(String columnLabel, Class<V> type) throws SQLException {
         throw new SQLFeatureNotSupportedException();
     }
 
     @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    public <V> V unwrap(Class<V> iface) throws SQLException {
         throw new SQLFeatureNotSupportedException();
     }
 

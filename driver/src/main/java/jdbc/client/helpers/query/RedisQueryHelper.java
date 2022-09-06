@@ -1,5 +1,6 @@
-package jdbc.client.helpers;
+package jdbc.client.helpers.query;
 
+import jdbc.client.structures.query.RedisQuery;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 

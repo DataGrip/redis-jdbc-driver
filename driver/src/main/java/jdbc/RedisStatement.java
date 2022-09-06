@@ -1,6 +1,14 @@
 package jdbc;
 
 import jdbc.client.Client;
+import jdbc.client.structures.result.RedisMapResult;
+import jdbc.client.structures.result.RedisObjectResult;
+import jdbc.client.structures.result.RedisResult;
+import jdbc.client.structures.result.RedisSimpleResult;
+import jdbc.resultset.RedisEmptyResultSet;
+import jdbc.resultset.RedisMapResultSet;
+import jdbc.resultset.RedisObjectResultSet;
+import jdbc.resultset.RedisSimpleResultSet;
 
 import java.sql.*;
 
@@ -11,23 +19,35 @@ public class RedisStatement implements Statement {
 
     private boolean isClosed = false;
 
-    private ResultSet result;
+    private ResultSet resultSet;
 
     RedisStatement(RedisConnection connection, Client client) {
         this.connection = connection;
         this.client = client;
     }
 
+    private ResultSet createResultSet(RedisResult result) {
+        if (result instanceof RedisSimpleResult) return new RedisSimpleResultSet(this, (RedisSimpleResult) result);
+        if (result instanceof RedisMapResult) return new RedisMapResultSet(this, (RedisMapResult) result);
+        if (result instanceof RedisObjectResult) return new RedisObjectResultSet(this, (RedisObjectResult) result);
+        return new RedisEmptyResultSet(this);
+    }
+
+    private ResultSet executeImpl(String sql) throws SQLException {
+        RedisResult result = client.execute(sql);
+        return createResultSet(result);
+    }
+
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         checkClosed();
-        return client.execute(sql);
+        return executeImpl(sql);
     }
 
     @Override
     public int executeUpdate(String sql) throws SQLException {
         checkClosed();
-        client.execute(sql);
+        executeImpl(sql);
         return 1;
     }
 
@@ -99,14 +119,14 @@ public class RedisStatement implements Statement {
     @Override
     public boolean execute(String sql) throws SQLException {
         checkClosed();
-        this.result = client.execute(sql);
+        this.resultSet = executeImpl(sql);
         return true;
     }
 
     @Override
     public ResultSet getResultSet() throws SQLException {
         checkClosed();
-        return result;
+        return resultSet;
     }
 
     @Override

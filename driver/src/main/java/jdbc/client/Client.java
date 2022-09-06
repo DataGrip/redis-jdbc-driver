@@ -1,11 +1,12 @@
 package jdbc.client;
 
-import java.sql.ResultSet;
+import jdbc.client.structures.result.RedisResult;
+
 import java.sql.SQLException;
 
 public interface Client extends AutoCloseable {
 
-    ResultSet execute(String sql) throws SQLException;
+    RedisResult execute(String sql) throws SQLException;
 
     void setDatabase(String db) throws SQLException;
 

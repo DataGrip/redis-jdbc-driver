@@ -1,51 +1,42 @@
-package jdbc;
+package jdbc.resultset;
 
-import jdbc.types.RedisColumnTypeHelper;
+import jdbc.resultset.types.RedisColumnTypeHelper;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RedisResultSetMetaData implements ResultSetMetaData {
 
-    // TODO (result set): catalog and table name?
+    // TODO (implement later): catalog and table name?
     private static final String NOT_APPLICABLE_TABLE_NAME = "";
     private static final String NOT_APPLICABLE_CATALOG = "";
     private static final int NOT_APPLICABLE_SCALE = 0;
     private static final int NOT_APPLICABLE_PRECISION = 0;
 
-    private final List<ColumnMetaData> columnMetaData;
+    private final ColumnMetaData[] columnMetaData;
 
-    public RedisResultSetMetaData(List<Map<String, Object>> rows) {
-        if (rows.isEmpty()) {
-            columnMetaData = Collections.emptyList();
-            return;
-        }
-        Map<String, Object> row = rows.get(0);
-        this.columnMetaData = row.entrySet().stream().map(e -> createColumn(e.getKey(), e.getValue())).collect(Collectors.toList());
+    // TODO (null)
+    public RedisResultSetMetaData(ColumnMetaData... columnMetaData) {
+        this.columnMetaData = columnMetaData;
     }
 
-    // TODO (result set): slow
     public int findColumn(String columnLabel) {
-        for (int i = 0; i < columnMetaData.size(); i++) {
-            if (columnMetaData.get(i).name.equals(columnLabel)) {
+        for (int i = 0; i < columnMetaData.length; i++) {
+            if (columnMetaData[i].name.equals(columnLabel)) {
                 return i + 1;
             }
         }
         return -1;
     }
 
-    public static ColumnMetaData createColumn(String name, Object value) {
-        return new ColumnMetaData(name, value);
+    public static ColumnMetaData createColumn(String name, String typeName) {
+        return new ColumnMetaData(name, typeName);
     }
 
     @Override
     public int getColumnCount() throws SQLException {
-        return columnMetaData.size();
+        return columnMetaData.length;
     }
 
     @Override
@@ -85,12 +76,12 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnLabel(int column) throws SQLException {
-        return columnMetaData.get(column - 1).name;
+        return columnMetaData[column - 1].name;
     }
 
     @Override
     public String getColumnName(int column) throws SQLException {
-        return columnMetaData.get(column - 1).name;
+        return columnMetaData[column - 1].name;
     }
 
     @Override
@@ -120,12 +111,12 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getColumnType(int column) throws SQLException {
-        return columnMetaData.get(column - 1).getJavaType();
+        return columnMetaData[column - 1].getJavaType();
     }
 
     @Override
     public String getColumnTypeName(int column) throws SQLException {
-        return columnMetaData.get(column - 1).typeName;
+        return columnMetaData[column - 1].typeName;
     }
 
     @Override
@@ -145,7 +136,7 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnClassName(int column) throws SQLException {
-        return columnMetaData.get(column - 1).getClassName();
+        return columnMetaData[column - 1].getClassName();
     }
 
     @Override
@@ -158,38 +149,13 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
         throw new SQLFeatureNotSupportedException();
     }
 
-    // TODO (result set): types
     public static class ColumnMetaData {
         private final String name;
         private final String typeName;
 
-        private ColumnMetaData(String name, Object value) {
+        private ColumnMetaData(String name, String typeName) {
             this.name = name;
-            this.typeName = getTypeName(value);
-        }
-
-        private static String getTypeName(Object object) {
-            String typeName = "string";
-            if (object == null) {
-                typeName = "null";
-            } else if (object instanceof List<?> || object.getClass().isArray()) {
-                typeName = "array";
-            } else if (object instanceof Map<?, ?>) {
-                typeName = "object";
-            } else if (object instanceof Boolean) {
-                typeName = "boolean";
-            } else if (object instanceof Float) {
-                typeName = "float";
-            } else if (object instanceof Double) {
-                typeName = "double";
-            } else if (object instanceof Long) {
-                typeName = "long";
-            } else if (object instanceof Integer) {
-                typeName = "integer";
-            } else if (object instanceof Number) {
-                typeName = "numeric";
-            }
-            return typeName;
+            this.typeName = typeName;
         }
 
         public int getJavaType() {

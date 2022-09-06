@@ -1,14 +1,13 @@
 package jdbc.client;
 
-import jdbc.RedisResultSet;
-import jdbc.client.helpers.RedisQuery;
-import jdbc.client.helpers.RedisQueryHelper;
-import jdbc.client.helpers.RedisResultHelper;
+import jdbc.client.helpers.query.RedisQueryHelper;
+import jdbc.client.helpers.result.RedisResultHelper;
+import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.result.RedisResult;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.exceptions.JedisException;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -27,11 +26,11 @@ public class RedisClient implements Client {
     }
 
     @Override
-    public ResultSet execute(String sql) throws SQLException {
+    public RedisResult execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
-            Object result = execute(query);
-            return new RedisResultSet(RedisResultHelper.parseResult(query, result));
+            Object data = execute(query);
+            return RedisResultHelper.parseResult(query, data);
         } catch (JedisException e) {
             throw new SQLException(e);
         }

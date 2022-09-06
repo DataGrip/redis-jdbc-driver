@@ -1,4 +1,4 @@
-package jdbc.client.extensions;
+package jdbc.client.structures.query;
 
 import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.util.SafeEncoder;
