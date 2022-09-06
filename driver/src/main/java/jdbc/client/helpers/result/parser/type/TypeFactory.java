@@ -33,7 +33,7 @@ public class TypeFactory {
 
     public static final Map<String, String> ACCESS_CONTROL_LOG_ENTRY = null;
 
-    public static final Map<String, String> STREAM_ENTRY_ID = null;
+    public static final String STREAM_ENTRY_ID = STRING;
 
     public static final Map<String, String> STREAM_ENTRY = null;
 

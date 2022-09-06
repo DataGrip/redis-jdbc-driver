@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class Converter<T> {
+abstract class Converter<T, V> {
 
-    public abstract Map<String, Object> convert(T encoded);
+    public abstract V convert(T encoded);
 
-    public final List<Map<String, Object>> convert(List<T> encoded) {
+    public final List<V> convert(List<T> encoded) {
         return encoded.stream().map(this::convert).collect(Collectors.toList());
+    }
+
+    public final Map<String, V> convert(Map<String, T> encoded) {
+        return encoded.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> convert(e.getValue())));
     }
 }

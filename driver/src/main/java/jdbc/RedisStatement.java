@@ -1,14 +1,14 @@
 package jdbc;
 
 import jdbc.client.Client;
+import jdbc.client.structures.result.RedisListResult;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.client.structures.result.RedisObjectResult;
 import jdbc.client.structures.result.RedisResult;
-import jdbc.client.structures.result.RedisSimpleResult;
 import jdbc.resultset.RedisEmptyResultSet;
+import jdbc.resultset.RedisListResultSet;
 import jdbc.resultset.RedisMapResultSet;
 import jdbc.resultset.RedisObjectResultSet;
-import jdbc.resultset.RedisSimpleResultSet;
 
 import java.sql.*;
 
@@ -27,7 +27,7 @@ public class RedisStatement implements Statement {
     }
 
     private ResultSet createResultSet(RedisResult result) {
-        if (result instanceof RedisSimpleResult) return new RedisSimpleResultSet(this, (RedisSimpleResult) result);
+        if (result instanceof RedisListResult) return new RedisListResultSet(this, (RedisListResult) result);
         if (result instanceof RedisMapResult) return new RedisMapResultSet(this, (RedisMapResult) result);
         if (result instanceof RedisObjectResult) return new RedisObjectResultSet(this, (RedisObjectResult) result);
         return new RedisEmptyResultSet(this);

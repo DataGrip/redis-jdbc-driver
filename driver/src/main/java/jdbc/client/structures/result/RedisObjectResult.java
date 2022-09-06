@@ -5,22 +5,22 @@ import java.util.Map;
 
 public class RedisObjectResult implements RedisResult {
 
-    private final List<Map<String, Object>> result;
     private final Map<String, String> type;
+    private final List<Map<String, Object>> result;
 
-    public RedisObjectResult(List<Map<String, Object>> result, Map<String, String> type) {
-        this.result = result;
+    public RedisObjectResult(Map<String, String> type, List<Map<String, Object>> result) {
         this.type = type;
-    }
-
-    @Override
-    public List<Map<String, Object>> getResult() {
-        return result;
+        this.result = result;
     }
 
     @Override
     public Map<String, String> getType() {
         return type;
+    }
+
+    @Override
+    public List<Map<String, Object>> getResult() {
+        return result;
     }
 }
 

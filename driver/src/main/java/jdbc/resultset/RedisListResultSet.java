@@ -1,15 +1,15 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.result.RedisSimpleResult;
+import jdbc.client.structures.result.RedisListResult;
 
 import java.sql.SQLException;
 
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
-public class RedisSimpleResultSet extends RedisResultSetBase<Object> {
+public class RedisListResultSet extends RedisResultSetBase<Object> {
 
-    public RedisSimpleResultSet(RedisStatement statement, RedisSimpleResult result) {
+    public RedisListResultSet(RedisStatement statement, RedisListResult result) {
         super(statement, createMetaData(result.getType()), result.getResult());
     }
 

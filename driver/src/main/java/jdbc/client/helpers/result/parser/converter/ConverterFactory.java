@@ -14,106 +14,105 @@ public class ConverterFactory {
     private ConverterFactory() {
     }
 
-    public static final Converter<Tuple> TUPLE = new Converter<>() {
+    public static final ObjectConverter<Tuple> TUPLE = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(Tuple encoded) {
             return null;
         }
     };
 
-    public static final Converter<KeyedListElement> KEYED_LIST_ELEMENT = new Converter<>() {
+    public static final ObjectConverter<KeyedListElement> KEYED_LIST_ELEMENT = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(KeyedListElement encoded) {
             return null;
         }
     };
     
-    public static final Converter<KeyedZSetElement> KEYED_ZSET_ELEMENT = new Converter<>() {
+    public static final ObjectConverter<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(KeyedZSetElement encoded) {
             return null;
         }
     };
 
-    public static final Converter<GeoCoordinate> GEO_COORDINATE = new Converter<>() {
+    public static final ObjectConverter<GeoCoordinate> GEO_COORDINATE = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(GeoCoordinate encoded) {
             return null;
         }
     };
 
-    public static final Converter<GeoRadiusResponse> GEORADIUS_RESPONSE = new Converter<>() {
+    public static final ObjectConverter<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(GeoRadiusResponse encoded) {
             return null;
         }
     };
 
-    public static final Converter<Module> MODULE = new Converter<>() {
+    public static final ObjectConverter<Module> MODULE = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(Module encoded) {
             return null;
         }
     };
 
-    public static final Converter<AccessControlUser> ACCESS_CONTROL_USER = new Converter<>() {
+    public static final ObjectConverter<AccessControlUser> ACCESS_CONTROL_USER = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(AccessControlUser encoded) {
             return null;
         }
     };
 
-    public static final Converter<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new Converter<>() {
+    public static final ObjectConverter<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(AccessControlLogEntry encoded) {
             return null;
         }
     };
 
-    public static final Converter<StreamEntryID> STREAM_ENTRY_ID = new Converter<>() {
+    public static final SimpleConverter<StreamEntryID> STREAM_ENTRY_ID = new SimpleConverter<>() {
         @Override
-        public Map<String, Object> convert(StreamEntryID encoded) {
-            // TODO: return encoded.toString();
-            return null;
+        public Object convert(StreamEntryID encoded) {
+            return encoded.toString();
         }
     };
 
-    public static final Converter<StreamEntry> STREAM_ENTRY = new Converter<>() {
+    public static final ObjectConverter<StreamEntry> STREAM_ENTRY = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(StreamEntry encoded) {
             return null;
         }
     };
 
-    public static final Converter<Map.Entry<String, List<StreamEntry>>> STREAM_READ = new Converter<>() {
+    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(Map.Entry<String, List<StreamEntry>> encoded) {
             return null;
         }
     };
 
-    public static final Converter<StreamInfo> STREAM_INFO = new Converter<>() {
+    public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(StreamInfo encoded) {
             return null;
         }
     };
 
-    public static final Converter<StreamGroupInfo> STREAM_GROUP_INFO = new Converter<>() {
+    public static final ObjectConverter<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(StreamGroupInfo encoded) {
             return null;
         }
     };
 
-    public static final Converter<StreamConsumersInfo> STREAM_CONSUMERS_INFO = new Converter<>() {
+    public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMERS_INFO = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(StreamConsumersInfo encoded) {
             return null;
         }
     };
 
-    public static final Converter<ScanResult<String>> STRING_SCAN_RESULT = new Converter<>() {
+    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(ScanResult<String> encoded) {
             return new LinkedHashMap<>() {{

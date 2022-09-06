@@ -1,13 +1,13 @@
 package jdbc.client.structures.result;
 
-import java.util.Map;
+import java.util.List;
 
-public class RedisMapResult implements RedisResult {
+public class RedisListResult implements RedisResult {
 
     private final String type;
-    private final Map<String, Object> result;
+    private final List<Object> result;
 
-    public RedisMapResult(String type, Map<String, Object> result) {
+    public RedisListResult(String type, List<Object> result) {
         this.type = type;
         this.result = result;
     }
@@ -18,7 +18,7 @@ public class RedisMapResult implements RedisResult {
     }
 
     @Override
-    public Map<String, Object> getResult() {
+    public List<Object> getResult() {
         return result;
     }
 }
