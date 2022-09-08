@@ -5,6 +5,8 @@ import jdbc.client.helpers.result.parser.ResultParserFactory;
 import jdbc.client.structures.query.CompositeCommand;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisResult;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 
@@ -159,12 +161,12 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.ZSCORE), ResultParserFactory.DOUBLE);
     }};
 
-    private static ResultParser getResultParser(CompositeCommand command) {
+    private static @NotNull ResultParser getResultParser(@NotNull CompositeCommand command) {
         return RESULT_PARSERS.getOrDefault(command, ResultParserFactory.RESULT);
     }
 
     // TODO (null): data == null
-    public static RedisResult parseResult(RedisQuery query, Object data) {
+    public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {
         ResultParser parser = getResultParser(query.getCompositeCommand());
         return parser.parse(data);
     }

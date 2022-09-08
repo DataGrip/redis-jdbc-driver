@@ -27,6 +27,7 @@ sourceSets {
 }
 
 dependencies {
+    implementation 'org.jetbrains:annotations:19.0.0'
     implementation group: 'redis.clients', name: 'jedis', version: '3.6.3'
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }

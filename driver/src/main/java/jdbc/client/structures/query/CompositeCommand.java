@@ -1,5 +1,7 @@
 package jdbc.client.structures.query;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 
@@ -9,7 +11,7 @@ public class CompositeCommand {
     private final Command command;
     private final Keyword keyword;
 
-    CompositeCommand(Command command, Keyword keyword) {
+    CompositeCommand(@NotNull Command command, @Nullable Keyword keyword) {
         this.command = command;
         this.keyword = keyword;
     }
@@ -26,12 +28,9 @@ public class CompositeCommand {
         return command.hashCode() ^ (keyword == null ? 0 : keyword.hashCode());
     }
 
+    @NotNull
     public Command getCommand() {
         return command;
-    }
-
-    public Keyword getKeyword() {
-        return keyword;
     }
 
     public static CompositeCommand create(Command command, Keyword keyword) {

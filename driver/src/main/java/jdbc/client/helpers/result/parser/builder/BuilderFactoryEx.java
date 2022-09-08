@@ -1,5 +1,7 @@
 package jdbc.client.helpers.result.parser.builder;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.*;
 import redis.clients.jedis.resps.KeyedListElement;
 import redis.clients.jedis.resps.KeyedZSetElement;
@@ -27,7 +29,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Long>> LONG_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<Long> getBuilder() {
+        protected @NotNull Builder<Long> getBuilder() {
             return BuilderFactory.LONG;
         }
 
@@ -39,7 +41,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Double>> DOUBLE_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<Double> getBuilder() {
+        protected @NotNull Builder<Double> getBuilder() {
             return BuilderFactory.DOUBLE;
         }
 
@@ -51,7 +53,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Boolean>> BOOLEAN_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<Boolean> getBuilder() {
+        protected @NotNull Builder<Boolean> getBuilder() {
             return BuilderFactory.BOOLEAN;
         }
 
@@ -63,7 +65,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<byte[]>> BYTE_ARRAY_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<byte[]> getBuilder() {
+        protected @NotNull Builder<byte[]> getBuilder() {
             return BuilderFactory.BYTE_ARRAY;
         }
 
@@ -75,7 +77,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Tuple>> TUPLE_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<Tuple> getBuilder() {
+        protected @NotNull Builder<Tuple> getBuilder() {
             return BuilderFactory.TUPLE;
         }
 
@@ -84,28 +86,28 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<KeyedListElement>> KEYED_LIST_ELEMENT_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<KeyedListElement> getBuilder() {
+        protected @NotNull Builder<KeyedListElement> getBuilder() {
             return BuilderFactory.KEYED_LIST_ELEMENT;
         }
     };
 
     public static final Builder<List<KeyedZSetElement>> KEYED_ZSET_ELEMENT_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<KeyedZSetElement> getBuilder() {
+        protected @NotNull Builder<KeyedZSetElement> getBuilder() {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
         }
     };
 
     public static final Builder<List<AccessControlUser>> ACCESS_CONTROL_USER_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<AccessControlUser> getBuilder() {
+        protected @NotNull Builder<AccessControlUser> getBuilder() {
             return BuilderFactory.ACCESS_CONTROL_USER;
         }
     };
 
     public static final Builder<List<StreamEntryID>> STREAM_ENTRY_ID_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<StreamEntryID> getBuilder() {
+        protected @NotNull Builder<StreamEntryID> getBuilder() {
             return BuilderFactory.STREAM_ENTRY_ID;
         }
 
@@ -117,7 +119,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<StreamEntry>> STREAM_ENTRY_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<StreamEntry> getBuilder() {
+        protected @NotNull Builder<StreamEntry> getBuilder() {
             return BuilderFactory.STREAM_ENTRY;
         }
 
@@ -129,14 +131,14 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<StreamInfo>> STREAM_INFO = new ListBuilder<>() {
         @Override
-        protected Builder<StreamInfo> getBuilder() {
+        protected @NotNull Builder<StreamInfo> getBuilder() {
             return BuilderFactory.STREAM_INFO;
         }
     };
 
     public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT_RESULT = new ListBuilder<>() {
         @Override
-        protected Builder<ScanResult<String>> getBuilder() {
+        protected @NotNull Builder<ScanResult<String>> getBuilder() {
             return BuilderFactoryEx.STRING_SCAN_RESULT;
         }
     };
@@ -170,15 +172,13 @@ public class BuilderFactoryEx {
 
 
     private static abstract class ListBuilder<T> extends Builder<List<T>> {
-
-        protected abstract Builder<T> getBuilder();
-
-        protected Builder<List<T>> getListBuilder() {
+        protected abstract @NotNull Builder<T> getBuilder();
+        protected @Nullable Builder<List<T>> getListBuilder() {
             return null;
         }
 
         @Override
-        public List<T> build(Object data) {
+        public @NotNull List<T> build(@Nullable Object data) {
             Builder<List<T>> listBuilder = getListBuilder();
             if (listBuilder != null && data instanceof List) return listBuilder.build(data);
             return Collections.singletonList(getBuilder().build(data));
@@ -186,7 +186,7 @@ public class BuilderFactoryEx {
 
         @Override
         public String toString() {
-            return String.format("List<%s>", getBuilder().toString());
+            return String.format("List<%s>", getBuilder());
         }
     }
 }

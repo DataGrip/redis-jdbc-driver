@@ -5,7 +5,6 @@ import jdbc.client.helpers.result.RedisResultHelper;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisResult;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
@@ -37,9 +36,7 @@ public class RedisClient implements Client {
     }
 
     private synchronized Object execute(RedisQuery query) {
-        Command command = query.getCommand();
-        String[] params = query.getParams();
-        return params == null ? jedis.sendCommand(command) : jedis.sendCommand(command, params);
+        return jedis.sendCommand(query.getCommand(), query.getParams());
     }
 
     @Override
