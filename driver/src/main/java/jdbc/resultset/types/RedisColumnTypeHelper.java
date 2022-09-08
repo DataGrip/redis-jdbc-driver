@@ -17,7 +17,6 @@ public class RedisColumnTypeHelper {
         put("double", Types.DOUBLE);
         put("boolean", Types.BOOLEAN);
         put("array", Types.ARRAY);
-        put("object", Types.JAVA_OBJECT);
         put("map", Types.JAVA_OBJECT);
     }};
     
@@ -28,7 +27,6 @@ public class RedisColumnTypeHelper {
         put("double", "java.lang.Double");
         put("boolean", "java.lang.Boolean");
         put("array", "java.util.List");
-        put("object", "java.util.Map");
         put("map", "java.util.Map");
     }};
 

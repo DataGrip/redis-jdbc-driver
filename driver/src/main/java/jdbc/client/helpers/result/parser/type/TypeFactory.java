@@ -1,5 +1,6 @@
 package jdbc.client.helpers.result.parser.type;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TypeFactory {
@@ -16,6 +17,8 @@ public class TypeFactory {
     public static final String BOOLEAN = "boolean";
 
     public static final String ARRAY = "array";
+
+    public static final String MAP = "map";
 
     public static final Map<String, String> TUPLE = null;
 
@@ -35,7 +38,10 @@ public class TypeFactory {
 
     public static final String STREAM_ENTRY_ID = STRING;
 
-    public static final Map<String, String> STREAM_ENTRY = null;
+    public static final Map<String, String> STREAM_ENTRY = new LinkedHashMap<>() {{
+        put("id", STREAM_ENTRY_ID);
+        put("fields", MAP);
+    }};
 
     public static final Map<String, String> STREAM_READ = null;
 
@@ -45,5 +51,8 @@ public class TypeFactory {
 
     public static final Map<String, String> STREAM_CONSUMERS_INFO = null;
 
-    public static final Map<String, String> STRING_SCAN_RESULT = null;
+    public static final Map<String, String> STRING_SCAN_RESULT = new LinkedHashMap<>() {{
+        put("cursor", STRING);
+        put("results", ARRAY);
+    }};
 }

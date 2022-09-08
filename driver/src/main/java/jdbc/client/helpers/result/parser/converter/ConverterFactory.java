@@ -5,7 +5,7 @@ import redis.clients.jedis.*;
 import redis.clients.jedis.resps.KeyedListElement;
 import redis.clients.jedis.resps.KeyedZSetElement;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +80,10 @@ public class ConverterFactory {
     public static final ObjectConverter<StreamEntry> STREAM_ENTRY = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(StreamEntry encoded) {
-            return null;
+            return new HashMap<>() {{
+                put("id", STREAM_ENTRY_ID.convert(encoded.getID()));
+                put("fields", encoded.getFields());
+            }};
         }
     };
 
@@ -115,9 +118,9 @@ public class ConverterFactory {
     public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
         @Override
         public Map<String, Object> convert(ScanResult<String> encoded) {
-            return new LinkedHashMap<>() {{
+            return new HashMap<>() {{
                 put("cursor", encoded.getCursor());
-                put("result", encoded.getResult());
+                put("results", encoded.getResult());
             }};
         }
     };
