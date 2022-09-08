@@ -32,8 +32,8 @@ public class RedisConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
-        // TODO (implement)
-        throw new SQLFeatureNotSupportedException();
+        checkClosed();
+        return new RedisPreparedStatement(this, client, sql);
     }
 
     @Override
@@ -142,12 +142,14 @@ public class RedisConnection implements Connection {
 
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+        // TODO (temporary)
+        return createStatement();
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+        // TODO (temporary)
+        return prepareStatement(sql);
     }
 
     @Override
