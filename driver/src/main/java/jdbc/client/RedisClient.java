@@ -67,7 +67,7 @@ public class RedisClient implements Client {
     }
 
     @Override
-    public void close() throws SQLException {
+    public synchronized void close() throws SQLException {
         try {
             jedis.close();
         } catch (JedisException e) {
