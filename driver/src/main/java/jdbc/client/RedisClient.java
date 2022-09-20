@@ -3,6 +3,7 @@ package jdbc.client;
 import jdbc.client.helpers.query.RedisQueryHelper;
 import jdbc.client.helpers.result.RedisResultHelper;
 import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import jdbc.client.structures.result.RedisResult;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisException;
@@ -28,7 +29,9 @@ public class RedisClient implements Client {
     public RedisResult execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
-            Object data = execute(query);
+            Object data = query instanceof RedisSetDatabaseQuery ?
+                    execute((RedisSetDatabaseQuery)query) :
+                    execute(query);
             return RedisResultHelper.parseResult(query, data);
         } catch (JedisException e) {
             throw new SQLException(e);
@@ -37,6 +40,10 @@ public class RedisClient implements Client {
 
     private synchronized Object execute(RedisQuery query) {
         return jedis.sendCommand(query.getCommand(), query.getParams());
+    }
+
+    private synchronized Object execute(RedisSetDatabaseQuery query) {
+        return setDatabase(query.getDbIndex());
     }
 
     @Override
@@ -50,8 +57,8 @@ public class RedisClient implements Client {
         }
     }
 
-    private synchronized void setDatabase(int index) {
-        jedis.select(index);
+    private synchronized String setDatabase(int index) {
+        return jedis.select(index);
     }
 
     @Override

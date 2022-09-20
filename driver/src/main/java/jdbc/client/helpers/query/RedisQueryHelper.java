@@ -1,6 +1,7 @@
 package jdbc.client.helpers.query;
 
 import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
@@ -50,7 +51,7 @@ public class RedisQueryHelper {
         Command redisCommand = parseCommand(tokens[0]);
         String[] params = Arrays.stream(tokens).skip(1).toArray(String[]::new);
         Keyword redisKeyword = parseKeyword(redisCommand, params);
-        return new RedisQuery(redisCommand, redisKeyword, params);
+        return createQuery(redisCommand, redisKeyword, params);
     }
 
     private static @NotNull Command parseCommand(@NotNull String command) throws SQLException {
@@ -88,5 +89,24 @@ public class RedisQueryHelper {
 
     private static @Nullable Keyword parseSuffixKeyword(@NotNull Command redisCommand, @Nullable String keyword) {
         return keyword == null ? null : getKeyword(keyword);
+    }
+
+    private static @NotNull RedisQuery createQuery(@NotNull Command redisCommand,
+                                                   @Nullable Keyword redisKeyword,
+                                                   @NotNull String[] params) throws SQLException {
+        if (redisCommand == Command.SELECT) {
+            String db = params.length > 0 ? params[0] : null;
+            Integer dbIndex;
+            try {
+                dbIndex = db == null ? null : Integer.parseInt(db);
+            } catch (NumberFormatException e) {
+                throw new SQLException(String.format("Database should be a number: %s.", db));
+            }
+            if (dbIndex == null) {
+                throw new SQLException("Database should be specified");
+            }
+            return new RedisSetDatabaseQuery(dbIndex);
+        }
+        return new RedisQuery(redisCommand, redisKeyword, params);
     }
 }
