@@ -20,7 +20,10 @@ public class TypeFactory {
 
     public static final String MAP = "map";
 
-    public static final Map<String, String> TUPLE = null;
+    public static final Map<String, String> TUPLE = new LinkedHashMap<>() {{
+        put("element", STRING);
+        put("score", DOUBLE);
+    }};
 
     public static final Map<String, String> KEYED_LIST_ELEMENT = null;
 

@@ -31,7 +31,8 @@ public class RedisQueryHelper {
     );
 
     private static final Set<Command> COMMANDS_WITH_POSTFIX_KEYWORDS = Set.of(
-            Command.HRANDFIELD
+            Command.ZDIFF, Command.ZINTER, Command.ZRANDMEMBER, Command.ZRANGE, Command.ZRANGEBYSCORE,
+            Command.ZREVRANGE, Command.ZREVRANGEBYSCORE, Command.HRANDFIELD
     );
 
     private static @Nullable Command getCommand(@NotNull String command) {

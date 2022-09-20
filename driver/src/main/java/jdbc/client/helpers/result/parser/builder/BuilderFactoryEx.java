@@ -10,6 +10,7 @@ import redis.clients.jedis.util.SafeEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /* redis.clients.jedis.BuilderFactory */
 public class BuilderFactoryEx {
@@ -81,7 +82,23 @@ public class BuilderFactoryEx {
             return BuilderFactory.TUPLE;
         }
 
-        // TODO: getListBuilder()
+        private final Builder<List<Tuple>> TUPLE_LIST = new Builder<>() {
+            @Override
+            public List<Tuple> build(Object data) {
+                Set<Tuple> tupleSet = BuilderFactory.TUPLE_ZSET.build(data);
+                return tupleSet == null ? null : new ArrayList<>(tupleSet);
+            }
+
+            @Override
+            public String toString() {
+                return "List<Tuple>";
+            }
+        };
+
+        @Override
+        protected Builder<List<Tuple>> getListBuilder() {
+            return TUPLE_LIST;
+        }
     };
 
     public static final Builder<List<KeyedListElement>> KEYED_LIST_ELEMENT_RESULT = new ListBuilder<>() {
@@ -137,39 +154,39 @@ public class BuilderFactoryEx {
     };
 
     public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT_RESULT = new ListBuilder<>() {
+
+        private final Builder<ScanResult<String>> STRING_SCAN_RESULT = new Builder<>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public ScanResult<String> build(Object data) {
+                if (null == data) {
+                    return null;
+                }
+                List<?> l = (List<?>) data;
+                String cursor = SafeEncoder.encode((byte[]) l.get(0));
+                List<byte[]> rl = (List<byte[]>) l.get(1);
+                final ArrayList<String> results = new ArrayList<>(l.size());
+                for (final byte[] barray : rl) {
+                    if (barray == null) {
+                        results.add(null);
+                    } else {
+                        results.add(SafeEncoder.encode(barray));
+                    }
+                }
+                return new ScanResult<>(cursor, results);
+            }
+
+            @Override
+            public String toString() {
+                return "ScanResult<String>";
+            }
+        };
+
         @Override
         protected @NotNull Builder<ScanResult<String>> getBuilder() {
-            return BuilderFactoryEx.STRING_SCAN_RESULT;
+            return STRING_SCAN_RESULT;
         }
     };
-
-    public static final Builder<ScanResult<String>> STRING_SCAN_RESULT = new Builder<>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        public ScanResult<String> build(Object data) {
-            if (null == data) {
-                return null;
-            }
-            List<?> l = (List<?>) data;
-            String cursor = SafeEncoder.encode((byte[]) l.get(0));
-            List<byte[]> rl = (List<byte[]>) l.get(1);
-            final ArrayList<String> results = new ArrayList<>(l.size());
-            for (final byte[] barray : rl) {
-                if (barray == null) {
-                    results.add(null);
-                } else {
-                    results.add(SafeEncoder.encode(barray));
-                }
-            }
-            return new ScanResult<>(cursor, results);
-        }
-
-        @Override
-        public String toString() {
-            return "ScanResult<String>";
-        }
-    };
-
 
     private static abstract class ListBuilder<T> extends Builder<List<T>> {
         protected abstract @NotNull Builder<T> getBuilder();

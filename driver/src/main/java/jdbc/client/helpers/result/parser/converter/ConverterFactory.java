@@ -18,7 +18,10 @@ public class ConverterFactory {
     public static final ObjectConverter<Tuple> TUPLE = new ObjectConverter<>() {
         @Override
         public @NotNull Map<String, Object> convertImpl(@NotNull Tuple encoded) {
-            return null;
+            return new HashMap<>() {{
+                put("element", encoded.getElement());
+                put("score", encoded.getScore());
+            }};
         }
     };
 
