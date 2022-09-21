@@ -4,15 +4,19 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.StreamSupport;
 
 
 public class ArrayImpl implements Array {
     private Object[] array;
 
-    public ArrayImpl(Iterable<?> array) {
-        this.array = StreamSupport.stream(array.spliterator(), false).toArray();
+    public ArrayImpl(Object[] array) {
+        this.array = array;
+    }
+
+    public ArrayImpl(List<?> array) {
+        this.array = array.toArray();
     }
 
     @Override

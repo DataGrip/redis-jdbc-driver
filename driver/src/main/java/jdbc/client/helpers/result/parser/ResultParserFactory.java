@@ -5,7 +5,6 @@ import jdbc.client.helpers.result.parser.converter.ConverterFactory;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
 import jdbc.client.helpers.result.parser.converter.SimpleConverter;
 import jdbc.client.helpers.result.parser.type.TypeFactory;
-import jdbc.client.helpers.result.parser.wrapper.Wrapper;
 import jdbc.client.structures.result.RedisListResult;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.client.structures.result.RedisObjectResult;
@@ -241,7 +240,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected SimpleConverter<StreamEntryID> getConverter() {
+        protected @Nullable SimpleConverter<StreamEntryID> getConverter() {
             return ConverterFactory.STREAM_ENTRY_ID;
         }
     };
@@ -357,10 +356,11 @@ public class ResultParserFactory {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public final @NotNull RedisListResult parse(@Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
-            List<?> converted = getConverter() == null ? encoded : getConverter().convert(encoded);
-            return new RedisListResult(getType(), Wrapper.wrapList(converted));
+            List<Object> converted = getConverter() == null ? (List<Object>) encoded : getConverter().convert(encoded);
+            return new RedisListResult(getType(), converted);
         }
     }
 
@@ -369,13 +369,15 @@ public class ResultParserFactory {
         protected abstract @NotNull Builder<Map<String, T>> getBuilder();
         protected @Nullable SimpleConverter<T> getConverter() {
             return null;
-        }
+        };
 
         @Override
+        @SuppressWarnings("unchecked")
         public final @NotNull RedisMapResult parse(@Nullable Object data) {
             Map<String, T> encoded = getBuilder().build(data);
-            Map<String, ?> converted = getConverter() == null ? encoded : getConverter().convert(encoded);
-            return new RedisMapResult(getType(), Wrapper.wrapMap(converted));
+            Map<String, Object> converted =
+                    getConverter() == null ? (Map<String, Object>) encoded : getConverter().convert(encoded);
+            return new RedisMapResult(getType(), converted);
         }
     }
 
@@ -388,7 +390,7 @@ public class ResultParserFactory {
         public final @NotNull RedisObjectResult parse(@Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
             List<Map<String, Object>> converted = getConverter().convert(encoded);
-            return new RedisObjectResult(getType(), Wrapper.wrapObject(converted));
+            return new RedisObjectResult(getType(), converted);
         }
     }
 }

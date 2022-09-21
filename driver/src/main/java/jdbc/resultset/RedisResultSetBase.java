@@ -672,7 +672,9 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
     @Override
     public Array getArray(String columnLabel) throws SQLException {
         Object o = getObject(columnLabel);
-        return o instanceof Iterable ? new ArrayImpl((Iterable<?>) o) : null;
+        if (o.getClass().isArray()) return new ArrayImpl((Object[]) o);
+        if (o instanceof List<?>) return new ArrayImpl((List<?>) o);
+        return null;
     }
 
     @Override

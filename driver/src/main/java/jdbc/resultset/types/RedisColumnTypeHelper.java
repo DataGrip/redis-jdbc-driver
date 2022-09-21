@@ -17,7 +17,7 @@ public class RedisColumnTypeHelper {
         put("double", Types.DOUBLE);
         put("boolean", Types.BOOLEAN);
         put("array", Types.ARRAY);
-        put("object", Types.JAVA_OBJECT);
+        put("map", Types.JAVA_OBJECT);
     }};
     
     private static final Map<String, String> typeNameMap = new HashMap<>() {{
@@ -27,7 +27,7 @@ public class RedisColumnTypeHelper {
         put("double", "java.lang.Double");
         put("boolean", "java.lang.Boolean");
         put("array", "java.util.List");
-        put("object", "java.util.Object");
+        put("map", "java.util.Map");
     }};
 
     private static String toLowerCase(String value) {

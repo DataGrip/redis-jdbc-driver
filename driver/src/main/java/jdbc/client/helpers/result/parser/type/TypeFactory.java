@@ -18,7 +18,7 @@ public class TypeFactory {
 
     public static final String ARRAY = "array";
 
-    public static final String OBJECT = "object";
+    public static final String MAP = "map";
 
     public static final Map<String, String> TUPLE = new LinkedHashMap<>() {{
         put("element", STRING);
@@ -43,7 +43,7 @@ public class TypeFactory {
 
     public static final Map<String, String> STREAM_ENTRY = new LinkedHashMap<>() {{
         put("id", STREAM_ENTRY_ID);
-        put("fields", OBJECT);
+        put("fields", MAP);
     }};
 
     public static final Map<String, String> STREAM_READ = null;
