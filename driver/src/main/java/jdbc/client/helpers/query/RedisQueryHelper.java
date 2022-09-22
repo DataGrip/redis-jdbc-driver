@@ -1,5 +1,6 @@
 package jdbc.client.helpers.query;
 
+import jdbc.client.helpers.query.tokenizer.Tokenizer;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import org.jetbrains.annotations.NotNull;
@@ -8,10 +9,7 @@ import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RedisQueryHelper {
@@ -46,10 +44,10 @@ public class RedisQueryHelper {
 
     public static @NotNull RedisQuery parseQuery(@Nullable String sql) throws SQLException {
         if (sql == null) throw new SQLException("Empty query.");
-        String[] tokens = sql.trim().split("\\s+");
-        if (tokens.length == 0) throw new SQLException("Empty query.");
-        Command redisCommand = parseCommand(tokens[0]);
-        String[] params = Arrays.stream(tokens).skip(1).toArray(String[]::new);
+        List<String> tokens = Tokenizer.tokenize(sql);
+        if (tokens.isEmpty()) throw new SQLException("Empty query.");
+        Command redisCommand = parseCommand(tokens.get(0));
+        String[] params = tokens.stream().skip(1).toArray(String[]::new);
         Keyword redisKeyword = parseKeyword(redisCommand, params);
         return createQuery(redisCommand, redisKeyword, params);
     }
@@ -85,7 +83,6 @@ public class RedisQueryHelper {
             ));
         return redisKeyword;
     }
-
 
     private static @Nullable Keyword parseSuffixKeyword(@NotNull Command redisCommand, @Nullable String keyword) {
         return keyword == null ? null : getKeyword(keyword);
