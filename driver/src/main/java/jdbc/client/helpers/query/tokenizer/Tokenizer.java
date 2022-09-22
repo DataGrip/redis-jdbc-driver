@@ -1,6 +1,7 @@
 package jdbc.client.helpers.query.tokenizer;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,92 +12,95 @@ public class Tokenizer {
     private Tokenizer() {
     }
 
-    private interface State {
-        @NotNull State process(int index, char symbol);
-    }
+    private static class Token {
+        public final int begin;
+        public final int end;
 
-    private static class None implements State {
-        public static None INSTANCE = new None();
-
-        private None() {
-        }
-
-        @Override
-        public @NotNull State process(int index, char symbol) {
-            if (isBlank(symbol)) return None.INSTANCE;
-            if (isQuote(symbol)) return new QuotedIdentifier(index, symbol, false);
-            return new PlainIdentifier(index, isEscaping(symbol));
-        }
-    }
-
-    private abstract static class Identifier implements State {
-        public final int start;
-        public final boolean isEscaped;
-        public int end = -1;
-
-        public Identifier(int start, boolean isEscaped) {
-            this.start = start;
-            this.isEscaped = isEscaped;
-        }
-
-        public void complete(int end) {
+        public Token(int begin, int end) {
+            this.begin = begin;
             this.end = end;
         }
     }
 
-    private static class PlainIdentifier extends Identifier {
-        public PlainIdentifier(int start, boolean isEscaped) {
-            super(start, isEscaped);
+    private abstract static class State {
+        public final Token token;
+
+        protected State(@Nullable Token token) {
+            this.token = token;
+        }
+
+        public abstract @NotNull State process(int index, char symbol);
+    }
+
+    private static class None extends State {
+        public None(@Nullable Token token) {
+            super(token);
         }
 
         @Override
         public @NotNull State process(int index, char symbol) {
-            if (isBlank(symbol)) {
-                complete(index);
-                return None.INSTANCE;
-            }
-            if (isQuote(symbol) && !isEscaped) {
-                complete(index);
-                return new QuotedIdentifier(index, symbol, false);
-            }
-            return new PlainIdentifier(start, isEscaping(symbol));
+            if (isBlank(symbol)) return new None(null);
+            if (isQuote(symbol)) return new QuotedIdentifier(null, index, symbol, false);
+            return new PlainIdentifier(null, index, isEscaping(symbol));
+        }
+    }
+
+    private abstract static class Identifier extends State {
+        public final int begin;
+        public final boolean isEscaped;
+
+        public Identifier(@Nullable Token token, int begin, boolean isEscaped) {
+            super(token);
+            this.begin = begin;
+            this.isEscaped = isEscaped;
+        }
+
+        protected final Token complete(int end) {
+            return new Token(begin, end);
+        }
+    }
+
+    private static class PlainIdentifier extends Identifier {
+        public PlainIdentifier(@Nullable Token token, int start, boolean isEscaped) {
+            super(token, start, isEscaped);
+        }
+
+        @Override
+        public @NotNull State process(int index, char symbol) {
+            if (isBlank(symbol)) return new None(complete(index));
+            if (isQuote(symbol) && !isEscaped) new QuotedIdentifier(complete(index), index, symbol, false);
+            return new PlainIdentifier(null, begin, isEscaping(symbol) && !isEscaped);
         }
     }
 
     private static class QuotedIdentifier extends Identifier {
         public final char quote;
 
-        public QuotedIdentifier(int start, char quote, boolean isEscaped) {
-            super(start, isEscaped);
+        public QuotedIdentifier(@Nullable Token token, int start, char quote, boolean isEscaped) {
+            super(token, start, isEscaped);
             this.quote = quote;
         }
 
         @Override
         public @NotNull State process(int index, char symbol) {
-            if (symbol == quote && !isEscaped) {
-                complete(index + 1);
-                return None.INSTANCE;
-            }
-            return new QuotedIdentifier(index, quote, isEscaping(symbol));
+            if (symbol == quote && !isEscaped) return new None(complete(index + 1));
+            return new QuotedIdentifier(null, begin, quote, isEscaping(symbol) && !isEscaped);
         }
     }
 
     public static List<String> tokenize(@NotNull String sql) throws SQLException {
         List<String> tokens = new ArrayList<>();
-        State state = None.INSTANCE;
+        State state = new None(null);
         char[] symbols = sql.toCharArray();
         for (int i = 0; i <= symbols.length; ++i) {
             char symbol = i == symbols.length ? 0 : symbols[i];
-            State newState = state.process(i, symbol);
-            if (state instanceof Identifier) {
-                Identifier idState = (Identifier) state;
-                if (idState.end != -1) {
-                    tokens.add(sql.substring(idState.start, idState.end));
-                }
+            state = state.process(i, symbol);
+            Token token = state.token;
+            if (token != null) {
+                tokens.add(sql.substring(token.begin, token.end));
             }
-            state = newState;
         }
-        if (state != None.INSTANCE) throw new SQLException("No closing quotation.");
+        if (!(state instanceof None)) throw new SQLException("No closing quotation.");
         return tokens;
     }
 
