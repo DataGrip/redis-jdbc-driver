@@ -41,11 +41,8 @@ public class Tokenizer {
 
         public Identifier(@NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
             super(token);
-            this.builder = builder;
+            this.builder = isEscaping || symbol == 0 ? builder : builder.append(symbol);
             this.isEscaping = isEscaping;
-            if (symbol != 0) {
-                builder.append(symbol);
-            }
         }
     }
 
@@ -77,7 +74,6 @@ public class Tokenizer {
         public QuotedIdentifier(char quote, @Nullable String token) {
             this(quote, new StringBuilder(), (char)0, false, token);
         }
-
 
         @Override
         public @NotNull State process(char symbol) {
