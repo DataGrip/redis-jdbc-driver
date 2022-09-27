@@ -12,79 +12,77 @@ public class Tokenizer {
     private Tokenizer() {
     }
 
-    private static class Token {
-        public final int begin;
-        public final int end;
-
-        public Token(int begin, int end) {
-            this.begin = begin;
-            this.end = end;
-        }
-    }
-
     private abstract static class State {
-        public final Token token;
+        public final String token;
 
-        protected State(@Nullable Token token) {
+        protected State(@Nullable String token) {
             this.token = token;
         }
 
-        public abstract @NotNull State process(int index, char symbol);
+        public abstract @NotNull State process(char symbol);
     }
 
     private static class None extends State {
-        public None(@Nullable Token token) {
+        public None(@Nullable String token) {
             super(token);
         }
 
         @Override
-        public @NotNull State process(int index, char symbol) {
+        public @NotNull State process(char symbol) {
             if (isBlank(symbol)) return new None(null);
-            if (isQuote(symbol)) return new QuotedIdentifier(null, index, symbol, false);
-            return new PlainIdentifier(null, index, isEscaping(symbol));
+            if (isQuote(symbol)) return new QuotedIdentifier(symbol, null);
+            return new PlainIdentifier(symbol, isEscaping(symbol), null);
         }
     }
 
     private abstract static class Identifier extends State {
-        public final int begin;
-        public final boolean isEscaped;
+        public final StringBuilder builder;
+        public final boolean isEscaping;
 
-        public Identifier(@Nullable Token token, int begin, boolean isEscaped) {
+        public Identifier(@NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
             super(token);
-            this.begin = begin;
-            this.isEscaped = isEscaped;
-        }
-
-        protected final Token complete(int end) {
-            return new Token(begin, end);
+            this.builder = builder;
+            this.isEscaping = isEscaping;
+            if (symbol != 0) {
+                builder.append(symbol);
+            }
         }
     }
 
     private static class PlainIdentifier extends Identifier {
-        public PlainIdentifier(@Nullable Token token, int start, boolean isEscaped) {
-            super(token, start, isEscaped);
+        public PlainIdentifier(@NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
+            super(builder, symbol, isEscaping, token);
+        }
+
+        public PlainIdentifier(char symbol, boolean isEscaping, @Nullable String token) {
+            this(new StringBuilder(), symbol, isEscaping, token);
         }
 
         @Override
-        public @NotNull State process(int index, char symbol) {
-            if (isBlank(symbol)) return new None(complete(index));
-            if (isQuote(symbol) && !isEscaped) new QuotedIdentifier(complete(index), index, symbol, false);
-            return new PlainIdentifier(null, begin, isEscaping(symbol) && !isEscaped);
+        public @NotNull State process(char symbol) {
+            if (isBlank(symbol)) return new None(builder.toString());
+            if (isQuote(symbol) && !isEscaping) new QuotedIdentifier(symbol, builder.toString());
+            return new PlainIdentifier(builder, symbol, isEscaping(symbol) && !isEscaping, null);
         }
     }
 
     private static class QuotedIdentifier extends Identifier {
         public final char quote;
 
-        public QuotedIdentifier(@Nullable Token token, int start, char quote, boolean isEscaped) {
-            super(token, start, isEscaped);
+        public QuotedIdentifier(char quote, @NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
+            super(builder, symbol, isEscaping, token);
             this.quote = quote;
         }
 
+        public QuotedIdentifier(char quote, @Nullable String token) {
+            this(quote, new StringBuilder(), (char)0, false, token);
+        }
+
+
         @Override
-        public @NotNull State process(int index, char symbol) {
-            if (symbol == quote && !isEscaped) return new None(complete(index + 1));
-            return new QuotedIdentifier(null, begin, quote, isEscaping(symbol) && !isEscaped);
+        public @NotNull State process(char symbol) {
+            if (symbol == quote && !isEscaping) return new None(builder.toString());
+            return new QuotedIdentifier(quote, builder, symbol, isEscaping(symbol) && !isEscaping, null);
         }
     }
 
@@ -94,10 +92,10 @@ public class Tokenizer {
         char[] symbols = sql.toCharArray();
         for (int i = 0; i <= symbols.length; ++i) {
             char symbol = i == symbols.length ? 0 : symbols[i];
-            state = state.process(i, symbol);
-            Token token = state.token;
+            state = state.process(symbol);
+            String token = state.token;
             if (token != null) {
-                tokens.add(sql.substring(token.begin, token.end));
+                tokens.add(token);
             }
         }
         if (!(state instanceof None)) throw new SQLException("No closing quotation.");
