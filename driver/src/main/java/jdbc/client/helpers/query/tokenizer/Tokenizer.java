@@ -31,7 +31,7 @@ public class Tokenizer {
         public @NotNull State process(char symbol) {
             if (isBlank(symbol)) return new None(null);
             if (isQuote(symbol)) return new QuotedIdentifier(symbol, null);
-            return new PlainIdentifier(symbol, isEscaping(symbol), null);
+            return new PlainIdentifier(symbol, null);
         }
     }
 
@@ -39,36 +39,45 @@ public class Tokenizer {
         public final StringBuilder builder;
         public final boolean isEscaping;
 
-        public Identifier(@NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
+        public Identifier(@NotNull StringBuilder builder, char symbol, boolean isEscaped, @Nullable String token) {
             super(token);
-            this.builder = isEscaping || symbol == 0 ? builder : builder.append(symbol);
-            this.isEscaping = isEscaping;
+            this.builder = builder;
+            this.isEscaping = isEscaping(symbol) && !isEscaped;
         }
     }
 
     private static class PlainIdentifier extends Identifier {
-        public PlainIdentifier(@NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
-            super(builder, symbol, isEscaping, token);
+        public PlainIdentifier(@NotNull StringBuilder builder, char symbol, boolean isEscaped, @Nullable String token) {
+            super(builder, symbol, isEscaped, token);
+            if (!isEscaping && symbol != 0) {
+                builder.append(symbol);
+            }
         }
 
-        public PlainIdentifier(char symbol, boolean isEscaping, @Nullable String token) {
-            this(new StringBuilder(), symbol, isEscaping, token);
+        public PlainIdentifier(char symbol, @Nullable String token) {
+            this(new StringBuilder(), symbol, false, token);
         }
 
         @Override
         public @NotNull State process(char symbol) {
             if (isBlank(symbol)) return new None(builder.toString());
             if (isQuote(symbol) && !isEscaping) new QuotedIdentifier(symbol, builder.toString());
-            return new PlainIdentifier(builder, symbol, isEscaping(symbol) && !isEscaping, null);
+            return new PlainIdentifier(builder, symbol, isEscaping, null);
         }
     }
 
     private static class QuotedIdentifier extends Identifier {
         public final char quote;
 
-        public QuotedIdentifier(char quote, @NotNull StringBuilder builder, char symbol, boolean isEscaping, @Nullable String token) {
-            super(builder, symbol, isEscaping, token);
+        public QuotedIdentifier(char quote, @NotNull StringBuilder builder, char symbol, boolean isEscaped, @Nullable String token) {
+            super(builder, symbol, isEscaped, token);
             this.quote = quote;
+            if (isEscaped && (symbol == quote || isEscaping(symbol))) {
+                builder.deleteCharAt(builder.length() - 1);
+            }
+            if (symbol != 0) {
+                builder.append(symbol);
+            }
         }
 
         public QuotedIdentifier(char quote, @Nullable String token) {
@@ -78,7 +87,7 @@ public class Tokenizer {
         @Override
         public @NotNull State process(char symbol) {
             if (symbol == quote && !isEscaping) return new None(builder.toString());
-            return new QuotedIdentifier(quote, builder, symbol, isEscaping(symbol) && !isEscaping, null);
+            return new QuotedIdentifier(quote, builder, symbol, isEscaping, null);
         }
     }
 
