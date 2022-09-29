@@ -19,7 +19,7 @@ public class ConverterFactory {
         @Override
         public @NotNull Map<String, Object> convertImpl(@NotNull Tuple encoded) {
             return new HashMap<>() {{
-                put("element", encoded.getElement());
+                put("value", encoded.getElement());
                 put("score", encoded.getScore());
             }};
         }
