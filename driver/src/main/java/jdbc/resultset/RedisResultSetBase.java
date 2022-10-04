@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.resultset.types.ArrayImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -32,12 +33,14 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
     @Override
     public boolean next() throws SQLException {
         checkClosed();
-        currentRow = null;
         if (index < rows.size()) {
             currentRow = rows.get(index++);
             return true;
+        } else {
+            currentRow = null;
+            index = rows.size() + 1;
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -255,11 +258,11 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
     @Override
     public Object getObject(String columnLabel) throws SQLException {
         checkClosed();
-        if (currentRow == null) throw new SQLException("Exhausted ResultSet.");
-        return getObject(currentRow, columnLabel);
+        if (index > rows.size()) throw new SQLException("Exhausted ResultSet.");
+        return currentRow != null ? getObject(currentRow, columnLabel) : null;
     }
 
-    protected abstract Object getObject(T row, String columnLabel) throws SQLException;
+    protected abstract Object getObject(@NotNull T row, String columnLabel) throws SQLException;
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {

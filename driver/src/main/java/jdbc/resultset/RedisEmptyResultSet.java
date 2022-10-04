@@ -1,6 +1,7 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -16,7 +17,7 @@ public class RedisEmptyResultSet extends RedisResultSetBase<Void> {
     }
 
     @Override
-    protected Object getObject(Void row, String columnLabel) throws SQLException {
-        throw new SQLException("Exhausted ResultSet.");
+    protected Object getObject(@NotNull Void row, String columnLabel) throws SQLException {
+        return null;
     }
 }

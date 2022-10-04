@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.result.RedisMapResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class RedisMapResultSet extends RedisResultSetBase<Map.Entry<String, Obje
     }
 
     @Override
-    protected Object getObject(Map.Entry<String, Object> row, String columnLabel) throws SQLException {
+    protected Object getObject(@NotNull Map.Entry<String, Object> row, String columnLabel) throws SQLException {
         int columnIndex = getMetaData().findColumn(columnLabel);
         return columnIndex == 1 ? row.getKey() : columnIndex == 2 ? row.getValue() : null;
     }

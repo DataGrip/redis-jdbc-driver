@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.result.RedisListResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
@@ -18,7 +19,7 @@ public class RedisListResultSet extends RedisResultSetBase<Object> {
     }
 
     @Override
-    protected Object getObject(Object row, String columnLabel) throws SQLException {
+    protected Object getObject(@NotNull Object row, String columnLabel) throws SQLException {
         int columnIndex = getMetaData().findColumn(columnLabel);
         return columnIndex == 1 ? row : null;
     }

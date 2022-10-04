@@ -3,6 +3,7 @@ package jdbc.resultset;
 import jdbc.RedisStatement;
 import jdbc.client.structures.result.RedisObjectResult;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RedisObjectResultSet extends RedisResultSetBase<Map<String, Object>
     }
 
     @Override
-    protected Object getObject(Map<String, Object> row, String columnLabel) throws SQLException {
+    protected Object getObject(@NotNull Map<String, Object> row, String columnLabel) throws SQLException {
         return row.get(columnLabel);
     }
 }
