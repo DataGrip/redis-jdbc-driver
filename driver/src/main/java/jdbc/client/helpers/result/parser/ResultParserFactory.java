@@ -151,7 +151,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<GeoCoordinate>> getBuilder() {
-            return BuilderFactory.GEO_COORDINATE_LIST;
+            return BuilderFactoryEx.GEO_COORDINATE;
         }
 
         @Override
@@ -168,7 +168,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<GeoRadiusResponse>> getBuilder() {
-            return BuilderFactory.GEORADIUS_WITH_PARAMS_RESULT;
+            return BuilderFactoryEx.GEORADIUS_RESPONSE;
         }
 
         @Override
@@ -185,7 +185,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<Module>> getBuilder() {
-            return BuilderFactory.MODULE_LIST;
+            return BuilderFactoryEx.MODULE;
         }
 
         @Override
@@ -202,7 +202,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<AccessControlUser>> getBuilder() {
-            return BuilderFactoryEx.ACCESS_CONTROL_USER_RESULT;
+            return BuilderFactoryEx.ACCESS_CONTROL_USER;
         }
 
         @Override
@@ -219,7 +219,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<AccessControlLogEntry>> getBuilder() {
-            return BuilderFactory.ACCESS_CONTROL_LOG_ENTRY_LIST;
+            return BuilderFactoryEx.ACCESS_CONTROL_LOG_ENTRY;
         }
 
         @Override
@@ -236,7 +236,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<StreamEntryID>> getBuilder() {
-            return BuilderFactoryEx.STREAM_ENTRY_ID_RESULT;
+            return BuilderFactoryEx.STREAM_ENTRY_ID;
         }
 
         @Override
@@ -253,7 +253,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<StreamEntry>> getBuilder() {
-            return BuilderFactoryEx.STREAM_ENTRY_RESULT;
+            return BuilderFactoryEx.STREAM_ENTRY;
         }
 
         @Override
@@ -270,7 +270,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<Map.Entry<String, List<StreamEntry>>>> getBuilder() {
-            return BuilderFactory.STREAM_READ_RESPONSE;
+            return BuilderFactoryEx.STREAM_READ;
         }
 
         @Override
@@ -304,7 +304,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<StreamGroupInfo>> getBuilder() {
-            return BuilderFactory.STREAM_GROUP_INFO_LIST;
+            return BuilderFactoryEx.STREAM_GROUP_INFO;
         }
 
         @Override
@@ -321,7 +321,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<StreamConsumersInfo>> getBuilder() {
-            return BuilderFactory.STREAM_CONSUMERS_INFO_LIST;
+            return BuilderFactoryEx.STREAM_CONSUMERS_INFO;
         }
 
         @Override
@@ -338,7 +338,7 @@ public class ResultParserFactory {
 
         @Override
         protected @NotNull Builder<List<ScanResult<String>>> getBuilder() {
-            return BuilderFactoryEx.STRING_SCAN_RESULT_RESULT;
+            return BuilderFactoryEx.STRING_SCAN_RESULT;
         }
 
         @Override

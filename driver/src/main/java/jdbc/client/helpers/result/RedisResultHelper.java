@@ -165,7 +165,6 @@ public class RedisResultHelper {
         return RESULT_PARSERS.getOrDefault(command, ResultParserFactory.RESULT);
     }
 
-    // TODO (null): data == null
     public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {
         ResultParser parser = getResultParser(query.getCompositeCommand());
         return parser.parse(data);

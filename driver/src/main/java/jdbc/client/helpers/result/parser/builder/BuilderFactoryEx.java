@@ -2,15 +2,13 @@ package jdbc.client.helpers.result.parser.builder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
 import redis.clients.jedis.resps.KeyedListElement;
 import redis.clients.jedis.resps.KeyedZSetElement;
 import redis.clients.jedis.util.SafeEncoder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /* redis.clients.jedis.BuilderFactory */
 public class BuilderFactoryEx {
@@ -30,7 +28,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Long>> LONG_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<Long> getBuilder() {
+        protected Builder<Long> getBuilder() {
             return BuilderFactory.LONG;
         }
 
@@ -42,7 +40,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Double>> DOUBLE_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<Double> getBuilder() {
+        protected Builder<Double> getBuilder() {
             return BuilderFactory.DOUBLE;
         }
 
@@ -54,7 +52,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<Boolean>> BOOLEAN_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<Boolean> getBuilder() {
+        protected Builder<Boolean> getBuilder() {
             return BuilderFactory.BOOLEAN;
         }
 
@@ -66,7 +64,7 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<byte[]>> BYTE_ARRAY_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<byte[]> getBuilder() {
+        protected Builder<byte[]> getBuilder() {
             return BuilderFactory.BYTE_ARRAY;
         }
 
@@ -76,9 +74,10 @@ public class BuilderFactoryEx {
         }
     };
 
+    // TODO: use Iterable instead of conversation list to set
     public static final Builder<List<Tuple>> TUPLE_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<Tuple> getBuilder() {
+        protected Builder<Tuple> getBuilder() {
             return BuilderFactory.TUPLE;
         }
 
@@ -103,28 +102,56 @@ public class BuilderFactoryEx {
 
     public static final Builder<List<KeyedListElement>> KEYED_LIST_ELEMENT_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<KeyedListElement> getBuilder() {
+        protected Builder<KeyedListElement> getBuilder() {
             return BuilderFactory.KEYED_LIST_ELEMENT;
         }
     };
 
     public static final Builder<List<KeyedZSetElement>> KEYED_ZSET_ELEMENT_RESULT = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<KeyedZSetElement> getBuilder() {
+        protected Builder<KeyedZSetElement> getBuilder() {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
         }
     };
 
-    public static final Builder<List<AccessControlUser>> ACCESS_CONTROL_USER_RESULT = new ListBuilder<>() {
+    public static final Builder<List<GeoCoordinate>> GEO_COORDINATE = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<AccessControlUser> getBuilder() {
+        protected Builder<List<GeoCoordinate>> getListBuilder() {
+            return BuilderFactory.GEO_COORDINATE_LIST;
+        }
+    };
+
+    public static final Builder<List<GeoRadiusResponse>> GEORADIUS_RESPONSE = new ListBuilder<>() {
+        @Override
+        protected Builder<List<GeoRadiusResponse>> getListBuilder() {
+            return BuilderFactory.GEORADIUS_WITH_PARAMS_RESULT;
+        }
+    };
+
+    public static final Builder<List<Module>> MODULE = new ListBuilder<>() {
+        @Override
+        protected Builder<List<Module>> getListBuilder() {
+            return BuilderFactory.MODULE_LIST;
+        }
+    };
+
+    public static final Builder<List<AccessControlUser>> ACCESS_CONTROL_USER = new ListBuilder<>() {
+        @Override
+        protected Builder<AccessControlUser> getBuilder() {
             return BuilderFactory.ACCESS_CONTROL_USER;
         }
     };
 
-    public static final Builder<List<StreamEntryID>> STREAM_ENTRY_ID_RESULT = new ListBuilder<>() {
+    public static final Builder<List<AccessControlLogEntry>> ACCESS_CONTROL_LOG_ENTRY = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<StreamEntryID> getBuilder() {
+        protected Builder<List<AccessControlLogEntry>> getListBuilder() {
+            return BuilderFactory.ACCESS_CONTROL_LOG_ENTRY_LIST;
+        }
+    };
+
+    public static final Builder<List<StreamEntryID>> STREAM_ENTRY_ID = new ListBuilder<>() {
+        @Override
+        protected Builder<StreamEntryID> getBuilder() {
             return BuilderFactory.STREAM_ENTRY_ID;
         }
 
@@ -134,9 +161,9 @@ public class BuilderFactoryEx {
         }
     };
 
-    public static final Builder<List<StreamEntry>> STREAM_ENTRY_RESULT = new ListBuilder<>() {
+    public static final Builder<List<StreamEntry>> STREAM_ENTRY = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<StreamEntry> getBuilder() {
+        protected Builder<StreamEntry> getBuilder() {
             return BuilderFactory.STREAM_ENTRY;
         }
 
@@ -146,14 +173,35 @@ public class BuilderFactoryEx {
         }
     };
 
+    public static final Builder<List<Map.Entry<String, List<StreamEntry>>>> STREAM_READ = new ListBuilder<>() {
+        @Override
+        protected Builder<List<Map.Entry<String, List<StreamEntry>>>> getListBuilder() {
+            return BuilderFactory.STREAM_READ_RESPONSE;
+        }
+    };
+
     public static final Builder<List<StreamInfo>> STREAM_INFO = new ListBuilder<>() {
         @Override
-        protected @NotNull Builder<StreamInfo> getBuilder() {
+        protected Builder<StreamInfo> getBuilder() {
             return BuilderFactory.STREAM_INFO;
         }
     };
 
-    public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT_RESULT = new ListBuilder<>() {
+    public static final Builder<List<StreamGroupInfo>> STREAM_GROUP_INFO = new ListBuilder<>() {
+        @Override
+        protected Builder<List<StreamGroupInfo>> getListBuilder() {
+            return BuilderFactory.STREAM_GROUP_INFO_LIST;
+        }
+    };
+
+    public static final Builder<List<StreamConsumersInfo>> STREAM_CONSUMERS_INFO = new ListBuilder<>() {
+        @Override
+        protected Builder<List<StreamConsumersInfo>> getListBuilder() {
+            return BuilderFactory.STREAM_CONSUMERS_INFO_LIST;
+        }
+    };
+
+    public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT = new ListBuilder<>() {
 
         private final Builder<ScanResult<String>> STRING_SCAN_RESULT = new Builder<>() {
             @Override
@@ -183,13 +231,17 @@ public class BuilderFactoryEx {
         };
 
         @Override
-        protected @NotNull Builder<ScanResult<String>> getBuilder() {
+        protected Builder<ScanResult<String>> getBuilder() {
             return STRING_SCAN_RESULT;
         }
     };
 
     private static abstract class ListBuilder<T> extends Builder<List<T>> {
-        protected abstract @NotNull Builder<T> getBuilder();
+
+        protected @Nullable Builder<T> getBuilder() {
+            return null;
+        }
+
         protected @Nullable Builder<List<T>> getListBuilder() {
             return null;
         }
@@ -197,8 +249,12 @@ public class BuilderFactoryEx {
         @Override
         public @NotNull List<T> build(@Nullable Object data) {
             Builder<List<T>> listBuilder = getListBuilder();
-            if (listBuilder != null && data instanceof List) return listBuilder.build(data);
-            return Collections.singletonList(getBuilder().build(data));
+            Builder<T> builder = getBuilder();
+            if (data != null) {
+                if (listBuilder != null && data instanceof List) return listBuilder.build(data);
+                if (builder != null) return Collections.singletonList(builder.build(data));
+            }
+            return builder == null ? Collections.emptyList() : Collections.singletonList(null);
         }
 
         @Override
