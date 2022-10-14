@@ -240,7 +240,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @Nullable SimpleConverter<StreamEntryID> getConverter() {
+        protected @NotNull SimpleConverter<StreamEntryID> getConverter() {
             return ConverterFactory.STREAM_ENTRY_ID;
         }
     };
@@ -369,7 +369,7 @@ public class ResultParserFactory {
         protected abstract @NotNull Builder<Map<String, T>> getBuilder();
         protected @Nullable SimpleConverter<T> getConverter() {
             return null;
-        };
+        }
 
         @Override
         @SuppressWarnings("unchecked")
