@@ -1,5 +1,6 @@
 package jdbc.client.helpers.result.parser.converter;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,11 +16,17 @@ abstract class Converter<T, V> {
         return encoded != null ? convertImpl(encoded) : null;
     }
 
-    public final @NotNull List<V> convert(@NotNull List<T> encoded) {
-        return encoded.stream().map(this::convert).collect(Collectors.toList());
+    @Contract("null -> null; !null -> !null")
+    public final List<V> convert(List<T> encoded) {
+        return encoded != null
+                ? encoded.stream().map(this::convert).collect(Collectors.toList())
+                : null;
     }
 
-    public final @NotNull Map<String, V> convert(@NotNull Map<String, T> encoded) {
-        return encoded.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> convertImpl(e.getValue())));
+    @Contract("null -> null; !null -> !null")
+    public final Map<String, V> convert(Map<String, T> encoded) {
+        return encoded != null
+                ? encoded.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> convertImpl(e.getValue())))
+                : null;
     }
 }

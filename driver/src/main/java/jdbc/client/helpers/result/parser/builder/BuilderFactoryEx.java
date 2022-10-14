@@ -6,7 +6,6 @@ import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
 import redis.clients.jedis.resps.KeyedListElement;
 import redis.clients.jedis.resps.KeyedZSetElement;
-import redis.clients.jedis.util.SafeEncoder;
 
 import java.util.*;
 
@@ -75,28 +74,28 @@ public class BuilderFactoryEx {
     };
 
     // TODO: use Iterable instead of conversation list to set
+    private static final Builder<List<Tuple>> TUPLE_LIST = new Builder<>() {
+        @Override
+        public List<Tuple> build(Object data) {
+            Set<Tuple> tupleSet = BuilderFactory.TUPLE_ZSET.build(data);
+            return tupleSet == null ? null : new ArrayList<>(tupleSet);
+        }
+
+        @Override
+        public String toString() {
+            return "List<Tuple>";
+        }
+    };
+
     public static final Builder<List<Tuple>> TUPLE_RESULT = new ListBuilder<>() {
         @Override
         protected Builder<Tuple> getBuilder() {
             return BuilderFactory.TUPLE;
         }
 
-        private final Builder<List<Tuple>> TUPLE_LIST = new Builder<>() {
-            @Override
-            public List<Tuple> build(Object data) {
-                Set<Tuple> tupleSet = BuilderFactory.TUPLE_ZSET.build(data);
-                return tupleSet == null ? null : new ArrayList<>(tupleSet);
-            }
-
-            @Override
-            public String toString() {
-                return "List<Tuple>";
-            }
-        };
-
         @Override
         protected Builder<List<Tuple>> getListBuilder() {
-            return TUPLE_LIST;
+            return BuilderFactoryEx.TUPLE_LIST;
         }
     };
 
@@ -201,40 +200,42 @@ public class BuilderFactoryEx {
         }
     };
 
-    public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT = new ListBuilder<>() {
-
-        private final Builder<ScanResult<String>> STRING_SCAN_RESULT = new Builder<>() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public ScanResult<String> build(Object data) {
-                if (null == data) {
-                    return null;
-                }
-                List<?> l = (List<?>) data;
-                String cursor = SafeEncoder.encode((byte[]) l.get(0));
-                List<byte[]> rl = (List<byte[]>) l.get(1);
-                final ArrayList<String> results = new ArrayList<>(l.size());
-                for (final byte[] barray : rl) {
-                    if (barray == null) {
-                        results.add(null);
-                    } else {
-                        results.add(SafeEncoder.encode(barray));
-                    }
-                }
-                return new ScanResult<>(cursor, results);
-            }
-
-            @Override
-            public String toString() {
-                return "ScanResult<String>";
-            }
-        };
-
+    public static final Builder<List<ScanResult<String>>> STRING_SCAN_RESULT = new ScanResultBuilder<>() {
         @Override
-        protected Builder<ScanResult<String>> getBuilder() {
-            return STRING_SCAN_RESULT;
+        protected @NotNull Builder<List<String>> getResultsBuilder() {
+            return BuilderFactory.STRING_LIST;
         }
     };
+
+    public static final Builder<List<ScanResult<Tuple>>> TUPLE_SCAN_RESULT = new ScanResultBuilder<>() {
+        @Override
+        protected @NotNull Builder<List<Tuple>> getResultsBuilder() {
+            return BuilderFactoryEx.TUPLE_LIST;
+        }
+    };
+
+    private static abstract class ScanResultBuilder<T> extends ListBuilder<ScanResult<T>> {
+
+        abstract protected @NotNull Builder<List<T>> getResultsBuilder();
+
+        protected @Nullable Builder<ScanResult<T>> getBuilder() {
+            return new Builder<>() {
+                @Override
+                public ScanResult<T> build(Object data) {
+                    if (data == null) return null;
+                    List<?> l = (List<?>) data;
+                    String cursor = BuilderFactory.STRING.build(l.get(0));
+                    List<T> results = getResultsBuilder().build(l.get(1));
+                    return new ScanResult<>(cursor, results);
+                }
+            };
+        }
+
+        @Override
+        public String toString() {
+            return getResultsBuilder().toString().replaceFirst("List", "ScanResult");
+        }
+    }
 
     private static abstract class ListBuilder<T> extends Builder<List<T>> {
 

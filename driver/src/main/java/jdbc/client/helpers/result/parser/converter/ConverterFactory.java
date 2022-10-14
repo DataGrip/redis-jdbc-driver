@@ -179,4 +179,14 @@ public class ConverterFactory {
             }};
         }
     };
+
+    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<Tuple> encoded) {
+            return new HashMap<>() {{
+                put("cursor", encoded.getCursor());
+                put("results", TUPLE.convert(encoded.getResult()));
+            }};
+        }
+    };
 }

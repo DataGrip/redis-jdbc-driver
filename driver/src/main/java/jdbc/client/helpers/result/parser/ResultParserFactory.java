@@ -333,7 +333,7 @@ public class ResultParserFactory {
     public static final ResultParser STRING_SCAN_RESULT = new ObjectResultParser<ScanResult<String>>() {
         @Override
         protected @NotNull Map<String, String> getType() {
-            return TypeFactory.STRING_SCAN_RESULT;
+            return TypeFactory.SCAN_RESULT;
         }
 
         @Override
@@ -347,6 +347,22 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser TUPLE_SCAN_RESULT = new ObjectResultParser<ScanResult<Tuple>>() {
+        @Override
+        protected @NotNull Map<String, String> getType() {
+            return TypeFactory.SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull Builder<List<ScanResult<Tuple>>> getBuilder() {
+            return BuilderFactoryEx.TUPLE_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<ScanResult<Tuple>> getConverter() {
+            return ConverterFactory.TUPLE_SCAN_RESULT;
+        }
+    };
 
     private static abstract class ListResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();

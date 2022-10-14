@@ -106,7 +106,7 @@ public class TypeFactory {
         put("pending", LONG);
     }};
 
-    public static final Map<String, String> STRING_SCAN_RESULT = new LinkedHashMap<>() {{
+    public static final Map<String, String> SCAN_RESULT = new LinkedHashMap<>() {{
         put("cursor", STRING);
         put("results", ARRAY);
     }};

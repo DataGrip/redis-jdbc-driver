@@ -157,7 +157,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.ZREVRANGE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZREVRANGEBYSCORE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZREVRANK), ResultParserFactory.LONG);
-        // TODO: put(RedisCompositeCommand.create(Command.ZSCAN), ResultParserFactory.TUPLE_SCAN_RESULT);
+        put(CompositeCommand.create(Command.ZSCAN), ResultParserFactory.TUPLE_SCAN_RESULT);
         put(CompositeCommand.create(Command.ZSCORE), ResultParserFactory.DOUBLE);
     }};
 
