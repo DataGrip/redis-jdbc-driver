@@ -63,7 +63,7 @@ public class ConverterFactory {
                 put("member", encoded.getMemberByString());
                 put("distance", encoded.getDistance());
                 put("coordinate", GEO_COORDINATE.convert(encoded.getCoordinate()));
-                put("rawScore", encoded.getRawScore());
+                put("raw-score", encoded.getRawScore());
             }};
         }
     };
@@ -99,8 +99,8 @@ public class ConverterFactory {
                 put("context", encoded.getContext());
                 put("object", encoded.getObject());
                 put("username", encoded.getUsername());
-                put("ageSeconds", encoded.getAgeSeconds());
-                put("clientInfo", encoded.getClientInfo());
+                put("age-seconds", encoded.getAgeSeconds());
+                put("client-info", encoded.getClientInfo());
             }};
         }
     };
@@ -137,12 +137,12 @@ public class ConverterFactory {
         public @NotNull Map<String, Object> convertImpl(@NotNull StreamInfo encoded) {
             return new HashMap<>() {{
                 put("length", encoded.getLength());
-                put("radixTreeKeys", encoded.getRadixTreeKeys());
-                put("radixTreeNodes", encoded.getRadixTreeNodes());
+                put("radix-tree-keys", encoded.getRadixTreeKeys());
+                put("radix-tree-nodes", encoded.getRadixTreeNodes());
                 put("groups", encoded.getGroups());
-                put("lastGeneratedId", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
-                put("firstEntry", STREAM_ENTRY.convert(encoded.getFirstEntry()));
-                put("lastEntry", STREAM_ENTRY.convert(encoded.getLastEntry()));
+                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
+                put("first-entry", STREAM_ENTRY.convert(encoded.getFirstEntry()));
+                put("last-entry", STREAM_ENTRY.convert(encoded.getLastEntry()));
             }};
         }
     };
@@ -154,7 +154,7 @@ public class ConverterFactory {
                 put("name", encoded.getName());
                 put("consumers", encoded.getConsumers());
                 put("pending", encoded.getPending());
-                put("lastDeliveredId", STREAM_ENTRY_ID.convert(encoded.getLastDeliveredId()));
+                put("last-delivered-id", STREAM_ENTRY_ID.convert(encoded.getLastDeliveredId()));
             }};
         }
     };

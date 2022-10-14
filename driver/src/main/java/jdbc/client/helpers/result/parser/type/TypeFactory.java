@@ -46,7 +46,7 @@ public class TypeFactory {
         put("member", STRING);
         put("distance", DOUBLE);
         put("coordinate", MAP);
-        put("rawScore", LONG);
+        put("raw-score", LONG);
     }};
 
     public static final Map<String, String> MODULE = new LinkedHashMap<>() {{
@@ -59,7 +59,7 @@ public class TypeFactory {
         put("keys", ARRAY);
         put("passwords", ARRAY);
         put("commands", STRING);
-    }};;
+    }};
 
     public static final Map<String, String> ACCESS_CONTROL_LOG_ENTRY = new LinkedHashMap<>() {{
         put("count", STRING);
@@ -67,8 +67,8 @@ public class TypeFactory {
         put("context", STRING);
         put("object", STRING);
         put("username", STRING);
-        put("ageSeconds", STRING);
-        put("clientInfo", MAP);
+        put("age-seconds", STRING);
+        put("client-info", MAP);
     }};
 
     public static final String STREAM_ENTRY_ID = STRING;
@@ -85,19 +85,19 @@ public class TypeFactory {
 
     public static final Map<String, String> STREAM_INFO = new LinkedHashMap<>() {{
         put("length", LONG);
-        put("radixTreeKeys", LONG);
-        put("radixTreeNodes", LONG);
+        put("radix-tree-keys", LONG);
+        put("radix-tree-nodes", LONG);
         put("groups", LONG);
-        put("lastGeneratedId", STRING);
-        put("firstEntry", MAP);
-        put("lastEntry", MAP);
+        put("last-generated-id", STRING);
+        put("first-entry", MAP);
+        put("last-entry", MAP);
     }};
 
     public static final Map<String, String> STREAM_GROUP_INFO = new LinkedHashMap<>() {{
         put("name", STRING);
         put("consumers", LONG);
         put("pending", LONG);
-        put("lastDeliveredId", STRING);
+        put("last-delivered-id", STRING);
     }};
 
     public static final Map<String, String> STREAM_CONSUMERS_INFO = new LinkedHashMap<>() {{
