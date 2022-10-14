@@ -260,6 +260,8 @@ public class BuilderFactoryEx {
 
         @Override
         public String toString() {
+            Builder<List<T>> listBuilder = getListBuilder();
+            if (listBuilder != null) return listBuilder.toString();
             return String.format("List<%s>", getBuilder());
         }
     }
