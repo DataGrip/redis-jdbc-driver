@@ -2,6 +2,7 @@ package jdbc.client.helpers.result.parser;
 
 import jdbc.client.helpers.result.parser.builder.BuilderFactoryEx;
 import jdbc.client.helpers.result.parser.converter.ConverterFactory;
+import jdbc.client.helpers.result.parser.converter.IdentityConverter;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
 import jdbc.client.helpers.result.parser.converter.SimpleConverter;
 import jdbc.client.helpers.result.parser.type.TypeFactory;
@@ -367,15 +368,14 @@ public class ResultParserFactory {
     private static abstract class ListResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();
         protected abstract @NotNull Builder<List<T>> getBuilder();
-        protected @Nullable SimpleConverter<T> getConverter() {
-            return null;
+        protected @NotNull SimpleConverter<T> getConverter() {
+            return new IdentityConverter<>();
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public final @NotNull RedisListResult parse(@Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
-            List<Object> converted = getConverter() == null ? (List<Object>) encoded : getConverter().convert(encoded);
+            List<Object> converted = getConverter().convert(encoded);
             return new RedisListResult(getType(), converted);
         }
     }
@@ -383,16 +383,14 @@ public class ResultParserFactory {
     private static abstract class MapResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();
         protected abstract @NotNull Builder<Map<String, T>> getBuilder();
-        protected @Nullable SimpleConverter<T> getConverter() {
-            return null;
+        protected @NotNull SimpleConverter<T> getConverter() {
+            return new IdentityConverter<>();
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public final @NotNull RedisMapResult parse(@Nullable Object data) {
             Map<String, T> encoded = getBuilder().build(data);
-            Map<String, Object> converted =
-                    getConverter() == null ? (Map<String, Object>) encoded : getConverter().convert(encoded);
+            Map<String, Object> converted = getConverter().convert(encoded);
             return new RedisMapResult(getType(), converted);
         }
     }

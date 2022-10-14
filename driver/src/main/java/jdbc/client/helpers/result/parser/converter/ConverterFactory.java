@@ -170,23 +170,30 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
+    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<String> encoded) {
-            return new HashMap<>() {{
-                put("cursor", encoded.getCursor());
-                put("results", encoded.getResult());
-            }};
+        protected @NotNull Converter<String, ?> getResultsConvertor() {
+            return new IdentityConverter<>();
         }
     };
 
-    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ObjectConverter<>() {
+    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<Tuple> encoded) {
-            return new HashMap<>() {{
-                put("cursor", encoded.getCursor());
-                put("results", TUPLE.convert(encoded.getResult()));
-            }};
+        protected @NotNull Converter<Tuple, ?> getResultsConvertor() {
+            return TUPLE;
         }
     };
+
+    private abstract static class ScanResultConverter<T> extends ObjectConverter<ScanResult<T>> {
+
+        protected abstract @NotNull Converter<T, ?> getResultsConvertor();
+
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<T> encoded) {
+            return new HashMap<>() {{
+                put("cursor", encoded.getCursor());
+                put("results", getResultsConvertor().convert(encoded.getResult()));
+            }};
+        }
+    }
 }
