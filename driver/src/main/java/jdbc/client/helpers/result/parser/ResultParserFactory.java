@@ -72,7 +72,7 @@ public class ResultParserFactory {
     public static final ResultParser BYTE_ARRAY = new ListResultParser<byte[]>() {
         @Override
         protected @NotNull String getType() {
-            return TypeFactory.ARRAY;
+            return TypeFactory.BYTE_ARRAY;
         }
 
         @Override

@@ -21,6 +21,8 @@ public class TypeFactory {
 
     public static final String MAP = "map";
 
+    public static final String BYTE_ARRAY = "binary";
+
     public static final Map<String, String> TUPLE = new LinkedHashMap<>() {{
         put("value", STRING);
         put("score", DOUBLE);
