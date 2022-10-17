@@ -42,7 +42,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.DECRBY), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.DEL), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.DUMP), ResultParserFactory.BYTE_ARRAY);
-        put(CompositeCommand.create(Command.EXISTS), ResultParserFactory.BOOLEAN);
+        put(CompositeCommand.create(Command.EXISTS), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.EXPIRE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.EXPIREAT), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.GEOADD), ResultParserFactory.LONG);
