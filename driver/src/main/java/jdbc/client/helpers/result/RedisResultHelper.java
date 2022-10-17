@@ -70,7 +70,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.LASTSAVE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LINSERT), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LLEN), ResultParserFactory.LONG);
-        // TODO: put(RedisCompositeCommand.create(Protocol.Command.LPOS), ResultParserFactory.LONG); - depends on count argument
+        put(CompositeCommand.create(Command.LPOS), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LPUSH), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LPUSHX), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LREM), ResultParserFactory.LONG);
