@@ -32,8 +32,7 @@ public class RedisDriver implements Driver {
 
     @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
-        // TODO (implement)
-        return new DriverPropertyInfo[0];
+        return DriverPropertyInfoHelper.getPropertyInfo();
     }
 
     public String getVersion() {
