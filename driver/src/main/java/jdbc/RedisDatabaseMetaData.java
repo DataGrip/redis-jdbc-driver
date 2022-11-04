@@ -80,7 +80,7 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
 
     @Override
     public String getDriverVersion() throws SQLException {
-        return driver.getVersion();
+        return String.format("%d.%d", getDriverMajorVersion(), getDriverMinorVersion());
     }
 
     @Override

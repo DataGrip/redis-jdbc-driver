@@ -36,7 +36,7 @@ public class RedisDriver implements Driver {
     }
 
     public String getVersion() {
-        return "1.0";
+        return String.format("%d.%d", getMajorVersion(), getMajorVersion());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class RedisDriver implements Driver {
 
     @Override
     public int getMinorVersion() {
-        return 0;
+        return 1;
     }
 
     @Override

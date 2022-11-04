@@ -1,10 +1,10 @@
 package jdbc.client.helpers.result.parser.converter;
 
 import org.jetbrains.annotations.NotNull;
+import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
-import redis.clients.jedis.*;
-import redis.clients.jedis.resps.KeyedListElement;
-import redis.clients.jedis.resps.KeyedZSetElement;
+import redis.clients.jedis.StreamEntryID;
+import redis.clients.jedis.resps.*;
 
 import java.util.HashMap;
 import java.util.List;

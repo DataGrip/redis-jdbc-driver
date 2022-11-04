@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-version '1.0'
+version '1.1'
 
 sourceCompatibility = 1.9
 
@@ -28,7 +28,7 @@ sourceSets {
 
 dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
-    implementation group: 'redis.clients', name: 'jedis', version: '3.6.3'
+    implementation group: 'redis.clients', name: 'jedis', version: '4.2.3'
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }
 

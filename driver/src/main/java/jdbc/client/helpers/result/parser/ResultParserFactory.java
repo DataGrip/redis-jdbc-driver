@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
-import redis.clients.jedis.resps.KeyedListElement;
-import redis.clients.jedis.resps.KeyedZSetElement;
+import redis.clients.jedis.resps.*;
 
 import java.util.List;
 import java.util.Map;
