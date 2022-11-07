@@ -1,6 +1,6 @@
 package jdbc;
 
-import jdbc.client.Client;
+import jdbc.client.RedisClient;
 
 import java.sql.*;
 import java.util.Map;
@@ -10,12 +10,12 @@ import java.util.concurrent.Executor;
 public class RedisConnection implements Connection {
 
     private final RedisDriver driver;
-    private final Client client;
+    private final RedisClient client;
 
     private boolean isClosed = false;
     private boolean isReadOnly = false;
 
-    public RedisConnection(RedisDriver driver, Client client) {
+    public RedisConnection(RedisDriver driver, RedisClient client) {
         this.driver = driver;
         this.client = client;
     }
