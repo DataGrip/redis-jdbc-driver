@@ -21,7 +21,6 @@ import java.util.Map;
 public class ResultParserFactory {
 
     public static final ResultParser RESULT = new ListResultParser<>() {
-        // TODO: think about type here
         @Override
         protected @NotNull String getType() {
             return TypeFactory.STRING;

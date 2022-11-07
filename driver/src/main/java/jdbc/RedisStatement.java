@@ -1,6 +1,6 @@
 package jdbc;
 
-import jdbc.client.RedisClient;
+import jdbc.client.Client;
 import jdbc.client.structures.result.RedisListResult;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.client.structures.result.RedisObjectResult;
@@ -15,13 +15,13 @@ import java.sql.*;
 public class RedisStatement implements Statement {
 
     private final RedisConnection connection;
-    private final RedisClient client;
+    private final Client client;
 
     private boolean isClosed = false;
 
     private ResultSet resultSet;
 
-    RedisStatement(RedisConnection connection, RedisClient client) {
+    RedisStatement(RedisConnection connection, Client client) {
         this.connection = connection;
         this.client = client;
     }

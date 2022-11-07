@@ -1,6 +1,6 @@
 package jdbc;
 
-import jdbc.client.RedisClient;
+import jdbc.client.Client;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -13,7 +13,7 @@ public class RedisPreparedStatement extends RedisStatement implements PreparedSt
 
     private final String sql;
 
-    RedisPreparedStatement(RedisConnection connection, RedisClient client, String sql) {
+    RedisPreparedStatement(RedisConnection connection, Client client, String sql) {
         super(connection, client);
         this.sql = sql;
     }

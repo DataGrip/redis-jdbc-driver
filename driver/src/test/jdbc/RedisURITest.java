@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RedisURITest {
     @Test
-    public void testSingleURI() {
+    public void testURI() {
         RedisURI uri = new RedisURI("jdbc:redis://user:password@server:6380/7", null);
         HostAndPort hostAndPort = uri.getHostAndPort();
         assertEquals("server", hostAndPort.getHost());
