@@ -1,8 +1,7 @@
 package jdbc;
 
-import jdbc.client.Client;
 import jdbc.client.RedisClient;
-import jdbc.client.RedisURI;
+import jdbc.client.RedisClientFactory;
 
 import java.sql.*;
 import java.util.Properties;
@@ -20,23 +19,19 @@ public class RedisDriver implements Driver {
 
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
-        if (!acceptsURL(url)) return null;
-        Client client = new RedisClient(url, info);
+        RedisClient client = RedisClientFactory.create(url, info);
+        if (client == null) return null;
         return new RedisConnection(this, client);
     }
 
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        return RedisURI.acceptsURL(url);
+        return RedisClientFactory.acceptsURL(url);
     }
 
     @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
         return DriverPropertyInfoHelper.getPropertyInfo();
-    }
-
-    public String getVersion() {
-        return String.format("%d.%d", getMajorVersion(), getMajorVersion());
     }
 
     @Override

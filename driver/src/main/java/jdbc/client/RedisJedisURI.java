@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-public class RedisURI implements JedisClientConfig {
+class RedisJedisURI implements JedisClientConfig {
 
     private static final String PREFIX = "jdbc:redis://";
 
@@ -22,7 +22,7 @@ public class RedisURI implements JedisClientConfig {
     private final String password;
     private final Integer databaseIndex;
 
-    public RedisURI(String url, Properties info) {
+    public RedisJedisURI(String url, Properties info) {
         try {
             if (!acceptsURL(url))
                 throw new IllegalArgumentException(String.format("Incorrect URL: URL needs to start with %s", PREFIX));
