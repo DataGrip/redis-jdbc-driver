@@ -1,5 +1,7 @@
 package jdbc.client;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.Protocol;
@@ -9,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class RedisJedisClusterURI extends RedisJedisURIBase {
+class RedisJedisClusterURI extends RedisJedisURIBase {
 
     private static final String PREFIX = "jdbc:redis:cluster://";
 
@@ -18,7 +20,7 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
     }
 
     @Override
-    protected String getPrefix() {
+    protected @NotNull String getPrefix() {
         return PREFIX;
     }
 
@@ -35,7 +37,7 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
 
 
     @Override
-    protected void setHostAndPort(String nodesBlock) {
+    protected void setHostAndPort(@NotNull String nodesBlock) {
         Set<HostAndPort> nodes = new HashSet<>();
 
         String[] nodesParts = nodesBlock.split(",");
@@ -60,10 +62,9 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
     }
 
     @Override
-    protected void setParameters(Map<String, String> parameters, Properties info) {
-        int maxAttempts = getIntOption(parameters, "maxAttempts", JedisCluster.DEFAULT_MAX_ATTEMPTS);
-
-        this.maxAttempts = getIntOption(info, "maxAttempts", maxAttempts);
+    protected void setParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {
+        super.setParameters(parameters, info);
+        this.maxAttempts = getIntOption(parameters, info, "maxAttempts", JedisCluster.DEFAULT_MAX_ATTEMPTS);
     }
 
 

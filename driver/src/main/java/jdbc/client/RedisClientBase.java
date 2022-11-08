@@ -10,7 +10,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
-public abstract class RedisClientBase implements RedisClient {
+abstract class RedisClientBase implements RedisClient {
 
     @Override
     public RedisResult execute(String sql) throws SQLException {

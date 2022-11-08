@@ -9,7 +9,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
-public class RedisJedisClusterClient extends RedisClientBase {
+class RedisJedisClusterClient extends RedisClientBase {
 
     private final JedisCluster jedisCluster;
 

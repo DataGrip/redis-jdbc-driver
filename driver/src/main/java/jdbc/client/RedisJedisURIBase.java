@@ -1,5 +1,6 @@
 package jdbc.client;
 
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisClientConfig;
 
 import java.util.HashMap;
@@ -7,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
-public abstract class RedisJedisURIBase implements JedisClientConfig {
+abstract class RedisJedisURIBase implements JedisClientConfig {
 
     // auth
     private String user;
@@ -15,6 +16,12 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
 
     // database
     private int database;
+
+    // parameters
+    private int connectionTimeout;
+    private int socketTimeout;
+    private int blockingSocketTimeout;
+    private String clientName;
 
     public RedisJedisURIBase(String url, Properties info) {
         String uri = extractURI(url);
@@ -64,7 +71,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     }
 
 
-    private String extractURI(String url) {
+    private @NotNull String extractURI(String url) {
         if (url == null)
             throw new IllegalArgumentException("Empty URL");
         String prefix = getPrefix();
@@ -73,10 +80,10 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         return url.replaceFirst(prefix, "");
     }
 
-    protected abstract String getPrefix();
+    protected abstract @NotNull String getPrefix();
 
 
-    private void setAuth(String authBlock, Properties info) {
+    private void setAuth(@NotNull String authBlock, Properties info) {
         String user = JedisClientConfig.super.getUser();
         String password = JedisClientConfig.super.getPassword();
 
@@ -94,9 +101,9 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         this.password = getStringOption(info, "password", password);
     }
 
-    protected abstract void setHostAndPort(String hostAndPortBlock);
+    protected abstract void setHostAndPort(@NotNull String hostAndPortBlock);
 
-    private void setDatabase(String databaseBlock, Properties info) {
+    private void setDatabase(@NotNull String databaseBlock, Properties info) {
         int database = JedisClientConfig.super.getDatabase();
 
         if (!databaseBlock.isEmpty()) {
@@ -106,7 +113,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         this.database = getIntOption(info, "database", database);
     }
 
-    private void setParameters(String parametersBlock, Properties info) {
+    private void setParameters(@NotNull String parametersBlock, Properties info) {
         Map<String, String> parameters = new HashMap<>();
         String[] parametersParts = parametersBlock.split(",");
         for (String parameterBlock : parametersParts) {
@@ -120,20 +127,39 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         setParameters(parameters, info);
     }
 
-    protected abstract void setParameters(Map<String, String> parameters, Properties info);
-
-
-    protected String getStringOption(Map<?, ?> info, String optionName, String defaultValue) {
-        return getOption(info, optionName, defaultValue, Object::toString);
+    protected void setParameters(@NotNull Map<String, String> parameters, Properties info) {
+        this.connectionTimeout =
+                getIntOption(parameters, info, "connectionTimeout", JedisClientConfig.super.getConnectionTimeoutMillis());
+        this.socketTimeout =
+                getIntOption(parameters, info, "socketTimeout", JedisClientConfig.super.getSocketTimeoutMillis());
+        this.blockingSocketTimeout =
+                getIntOption(parameters, info, "blockingSocketTimeout", JedisClientConfig.super.getBlockingSocketTimeoutMillis());
+        this.clientName =
+                getStringOption(parameters, info, "clientName", JedisClientConfig.super.getClientName());
     }
 
-    protected int getIntOption(Map<?, ?> info, String optionName, int defaultValue) {
-        return getOption(info, optionName, defaultValue, Integer::parseInt);
+
+    protected String getStringOption(Map<String, String> parameters, Properties info, String optionName, String defaultValue) {
+        String parameter = getStringOption(parameters, optionName, defaultValue);
+        return getStringOption(info, optionName, parameter);
     }
 
-    private <T> T getOption(Map<?, ?> info, String optionName, T defaultValue, Function<String, T> valueGetter) {
-        if (info != null) {
-            Object option = info.get(optionName);
+    protected int getIntOption(Map<String, String> parameters, Properties info, String optionName, int defaultValue) {
+        int parameter = getIntOption(parameters, optionName, defaultValue);
+        return getIntOption(info, optionName, parameter);
+    }
+
+    protected String getStringOption(Map<?, ?> map, String optionName, String defaultValue) {
+        return getOption(map, optionName, defaultValue, Object::toString);
+    }
+
+    protected int getIntOption(Map<?, ?> map, String optionName, int defaultValue) {
+        return getOption(map, optionName, defaultValue, Integer::parseInt);
+    }
+
+    private <T> T getOption(Map<?, ?> map, String optionName, T defaultValue, Function<String, T> valueGetter) {
+        if (map != null) {
+            Object option = map.get(optionName);
             if (option != null) return valueGetter.apply(option.toString());
         }
         return defaultValue;
@@ -153,6 +179,26 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     @Override
     public int getDatabase() {
         return database;
+    }
+
+    @Override
+    public int getConnectionTimeoutMillis() {
+        return connectionTimeout;
+    }
+
+    @Override
+    public int getSocketTimeoutMillis() {
+        return socketTimeout;
+    }
+
+    @Override
+    public int getBlockingSocketTimeoutMillis() {
+        return blockingSocketTimeout;
+    }
+
+    @Override
+    public String getClientName() {
+        return clientName;
     }
 }
 

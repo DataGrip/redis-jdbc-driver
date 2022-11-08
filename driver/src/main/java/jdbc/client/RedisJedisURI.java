@@ -1,9 +1,9 @@
 package jdbc.client;
 
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 
-import java.util.Map;
 import java.util.Properties;
 
 class RedisJedisURI extends RedisJedisURIBase {
@@ -15,7 +15,7 @@ class RedisJedisURI extends RedisJedisURIBase {
     }
 
     @Override
-    protected String getPrefix() {
+    protected @NotNull String getPrefix() {
         return PREFIX;
     }
 
@@ -29,7 +29,7 @@ class RedisJedisURI extends RedisJedisURIBase {
 
 
     @Override
-    protected void setHostAndPort(String hostAndPortBlock) {
+    protected void setHostAndPort(@NotNull String hostAndPortBlock) {
         String host = Protocol.DEFAULT_HOST;
         int port = Protocol.DEFAULT_PORT;
 
@@ -44,10 +44,6 @@ class RedisJedisURI extends RedisJedisURIBase {
         }
 
         this.hostAndPort = new HostAndPort(host, port);
-    }
-
-    @Override
-    protected void setParameters(Map<String, String> parameters, Properties info) {
     }
 
 
