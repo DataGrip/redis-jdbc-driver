@@ -23,6 +23,7 @@ public class ResultParserFactory {
     public static final ResultParser RESULT = new ListResultParser<>() {
         @Override
         protected @NotNull String getType() {
+            // TODO: think about type here
             return TypeFactory.STRING;
         }
 
