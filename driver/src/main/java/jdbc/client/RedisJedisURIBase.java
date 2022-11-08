@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
 
+import static jdbc.properties.RedisDefaultConfig.CONFIG;
+import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
+
 abstract class RedisJedisURIBase implements JedisClientConfig {
 
     // auth
@@ -84,8 +87,8 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
 
 
     private void setAuth(@NotNull String authBlock, Properties info) {
-        String user = JedisClientConfig.super.getUser();
-        String password = JedisClientConfig.super.getPassword();
+        String user = CONFIG.getUser();
+        String password = CONFIG.getPassword();
 
         if (!authBlock.isEmpty()) {
             String[] authParts = authBlock.split(":", 2);
@@ -97,20 +100,20 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
             }
         }
 
-        this.user = getStringOption(info, "user", user);
-        this.password = getStringOption(info, "password", password);
+        this.user = getStringOption(info, USER, user);
+        this.password = getStringOption(info, PASSWORD, password);
     }
 
     protected abstract void setHostAndPort(@NotNull String hostAndPortBlock);
 
     private void setDatabase(@NotNull String databaseBlock, Properties info) {
-        int database = JedisClientConfig.super.getDatabase();
+        int database = CONFIG.getDatabase();
 
         if (!databaseBlock.isEmpty()) {
             database = Integer.parseInt(databaseBlock);
         }
 
-        this.database = getIntOption(info, "database", database);
+        this.database = getIntOption(info, DATABASE, database);
     }
 
     private void setParameters(@NotNull String parametersBlock, Properties info) {
@@ -128,14 +131,10 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
     }
 
     protected void setParameters(@NotNull Map<String, String> parameters, Properties info) {
-        this.connectionTimeout =
-                getIntOption(parameters, info, "connectionTimeout", JedisClientConfig.super.getConnectionTimeoutMillis());
-        this.socketTimeout =
-                getIntOption(parameters, info, "socketTimeout", JedisClientConfig.super.getSocketTimeoutMillis());
-        this.blockingSocketTimeout =
-                getIntOption(parameters, info, "blockingSocketTimeout", JedisClientConfig.super.getBlockingSocketTimeoutMillis());
-        this.clientName =
-                getStringOption(parameters, info, "clientName", JedisClientConfig.super.getClientName());
+        this.connectionTimeout = getIntOption(parameters, info, CONNECTION_TIMEOUT, CONFIG.getConnectionTimeoutMillis());
+        this.socketTimeout = getIntOption(parameters, info, SOCKET_TIMEOUT, CONFIG.getSocketTimeoutMillis());
+        this.blockingSocketTimeout = getIntOption(parameters, info, BLOCKING_SOCKET_TIMEOUT, CONFIG.getBlockingSocketTimeoutMillis());
+        this.clientName = getStringOption(parameters, info, CLIENT_NAME, CONFIG.getClientName());
     }
 
 

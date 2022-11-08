@@ -3,13 +3,15 @@ package jdbc.client;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.Protocol;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import static jdbc.properties.RedisDefaultConfig.CONFIG;
+import static jdbc.properties.RedisDriverPropertyInfoHelper.MAX_ATTEMPTS;
 
 class RedisJedisClusterURI extends RedisJedisURIBase {
 
@@ -64,7 +66,7 @@ class RedisJedisClusterURI extends RedisJedisURIBase {
     @Override
     protected void setParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {
         super.setParameters(parameters, info);
-        this.maxAttempts = getIntOption(parameters, info, "maxAttempts", JedisCluster.DEFAULT_MAX_ATTEMPTS);
+        this.maxAttempts = getIntOption(parameters, info, MAX_ATTEMPTS, CONFIG.getMaxAttempts());
     }
 
 

@@ -2,6 +2,7 @@ package jdbc;
 
 import jdbc.client.RedisClient;
 import jdbc.client.RedisClientFactory;
+import jdbc.properties.RedisDriverPropertyInfoHelper;
 
 import java.sql.*;
 import java.util.Properties;
@@ -31,7 +32,7 @@ public class RedisDriver implements Driver {
 
     @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
-        return DriverPropertyInfoHelper.getPropertyInfo();
+        return RedisDriverPropertyInfoHelper.getPropertyInfo();
     }
 
     @Override
