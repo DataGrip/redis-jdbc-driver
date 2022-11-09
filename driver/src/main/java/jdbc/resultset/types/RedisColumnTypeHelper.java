@@ -2,8 +2,9 @@ package jdbc.resultset.types;
 
 import java.sql.Types;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+
+import static jdbc.Utils.toLowerCase;
 
 public class RedisColumnTypeHelper {
     
@@ -31,10 +32,6 @@ public class RedisColumnTypeHelper {
         put("map", "java.util.Map");
         put("binary", "[B");
     }};
-
-    private static String toLowerCase(String value) {
-        return value.toLowerCase(Locale.ENGLISH);
-    }
 
     public static int getJavaType(String typeName) {
         String lower = toLowerCase(typeName);

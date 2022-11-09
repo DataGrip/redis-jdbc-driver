@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static jdbc.Utils.*;
+
 public class QueryParser {
 
     private QueryParser() {
@@ -37,11 +39,11 @@ public class QueryParser {
     );
 
     private static @Nullable Protocol.Command getCommand(@NotNull String command) {
-        return COMMANDS.get(command.toUpperCase(Locale.ENGLISH));
+        return COMMANDS.get(toUpperCase(command));
     }
 
     private static @Nullable Protocol.Keyword getKeyword(@NotNull String keyword) {
-        return KEYWORDS.get(keyword.toUpperCase(Locale.ENGLISH));
+        return KEYWORDS.get(toUpperCase(keyword));
     }
 
 
@@ -196,14 +198,5 @@ public class QueryParser {
         public static boolean accepts(@NotNull List<String> tokens) {
             return CommentLine.accepts(tokens) && tokens.size() >= 3 && COLUMN_NAME_SEPARATOR_TOKEN.equals(tokens.get(2));
         }
-    }
-
-
-    private static @Nullable String getFirst(@NotNull String[] elements) {
-        return elements.length > 0 ? elements[0] : null;
-    }
-
-    private static @Nullable String getLast(@NotNull String[] elements) {
-        return elements.length > 0 ? elements[elements.length - 1] : null;
     }
 }

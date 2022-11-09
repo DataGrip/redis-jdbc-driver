@@ -66,7 +66,7 @@ class RedisJedisClusterURI extends RedisJedisURIBase {
     @Override
     protected void setParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {
         super.setParameters(parameters, info);
-        this.maxAttempts = getIntOption(parameters, info, MAX_ATTEMPTS, CONFIG.getMaxAttempts());
+        this.maxAttempts = getInt(parameters, info, MAX_ATTEMPTS, CONFIG.getMaxAttempts());
     }
 
 

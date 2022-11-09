@@ -1,12 +1,12 @@
 package jdbc.client;
 
+import jdbc.Utils;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisClientConfig;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.function.Function;
 
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
@@ -100,8 +100,8 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
             }
         }
 
-        this.user = getStringOption(info, USER, user);
-        this.password = getStringOption(info, PASSWORD, password);
+        this.user = Utils.getString(info, USER, user);
+        this.password = Utils.getString(info, PASSWORD, password);
     }
 
     protected abstract void setHostAndPort(@NotNull String hostAndPortBlock);
@@ -113,7 +113,7 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
             database = Integer.parseInt(databaseBlock);
         }
 
-        this.database = getIntOption(info, DATABASE, database);
+        this.database = Utils.getInt(info, DATABASE, database);
     }
 
     private void setParameters(@NotNull String parametersBlock, Properties info) {
@@ -131,37 +131,20 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
     }
 
     protected void setParameters(@NotNull Map<String, String> parameters, Properties info) {
-        this.connectionTimeout = getIntOption(parameters, info, CONNECTION_TIMEOUT, CONFIG.getConnectionTimeoutMillis());
-        this.socketTimeout = getIntOption(parameters, info, SOCKET_TIMEOUT, CONFIG.getSocketTimeoutMillis());
-        this.blockingSocketTimeout = getIntOption(parameters, info, BLOCKING_SOCKET_TIMEOUT, CONFIG.getBlockingSocketTimeoutMillis());
-        this.clientName = getStringOption(parameters, info, CLIENT_NAME, CONFIG.getClientName());
+        this.connectionTimeout = getInt(parameters, info, CONNECTION_TIMEOUT, CONFIG.getConnectionTimeoutMillis());
+        this.socketTimeout = getInt(parameters, info, SOCKET_TIMEOUT, CONFIG.getSocketTimeoutMillis());
+        this.blockingSocketTimeout = getInt(parameters, info, BLOCKING_SOCKET_TIMEOUT, CONFIG.getBlockingSocketTimeoutMillis());
+        this.clientName = getString(parameters, info, CLIENT_NAME, CONFIG.getClientName());
     }
 
-
-    protected String getStringOption(Map<String, String> parameters, Properties info, String optionName, String defaultValue) {
-        String parameter = getStringOption(parameters, optionName, defaultValue);
-        return getStringOption(info, optionName, parameter);
+    protected String getString(Map<String, String> parameters, Properties info, String name, String defaultValue) {
+        String parameter = Utils.getString(parameters, name, defaultValue);
+        return Utils.getString(info, name, parameter);
     }
 
-    protected int getIntOption(Map<String, String> parameters, Properties info, String optionName, int defaultValue) {
-        int parameter = getIntOption(parameters, optionName, defaultValue);
-        return getIntOption(info, optionName, parameter);
-    }
-
-    protected String getStringOption(Map<?, ?> map, String optionName, String defaultValue) {
-        return getOption(map, optionName, defaultValue, Object::toString);
-    }
-
-    protected int getIntOption(Map<?, ?> map, String optionName, int defaultValue) {
-        return getOption(map, optionName, defaultValue, Integer::parseInt);
-    }
-
-    private <T> T getOption(Map<?, ?> map, String optionName, T defaultValue, Function<String, T> valueGetter) {
-        if (map != null) {
-            Object option = map.get(optionName);
-            if (option != null) return valueGetter.apply(option.toString());
-        }
-        return defaultValue;
+    protected int getInt(Map<String, String> parameters, Properties info, String name, int defaultValue) {
+        int parameter = Utils.getInt(parameters, name, defaultValue);
+        return Utils.getInt(info, name, parameter);
     }
 
 

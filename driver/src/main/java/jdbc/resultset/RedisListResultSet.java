@@ -12,8 +12,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
+import static jdbc.Utils.toLowerCase;
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
 public class RedisListResultSet extends RedisResultSetBase<String, List<Object>, Object> {
@@ -27,7 +27,7 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
         RedisQuery query = result.getQuery();
         ColumnHint columnHint = query.getColumnHint();
         if (columnHint != null && columnHint.getName().equals(VALUE)) {
-            String command = query.getCommand().name().toLowerCase(Locale.ENGLISH);
+            String command = toLowerCase(query.getCommand().name());
             return Arrays.asList(createHintColumn(columnHint), createColumn(command, result.getType()));
         }
         return super.createColumns(result);
