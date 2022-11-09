@@ -9,7 +9,7 @@ import java.util.Collections;
 public class RedisEmptyResultSet extends RedisResultSetBase<Void> {
 
     public RedisEmptyResultSet(RedisStatement statement) {
-        super(statement, createMetaData(), Collections.emptyList());
+        super(statement, createMetaData(), Collections.emptyList(), null);
     }
 
     private static RedisResultSetMetaData createMetaData() {

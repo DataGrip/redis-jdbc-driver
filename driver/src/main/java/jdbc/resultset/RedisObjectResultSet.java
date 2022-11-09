@@ -13,7 +13,7 @@ import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 public class RedisObjectResultSet extends RedisResultSetBase<Map<String, Object>> {
 
     public RedisObjectResultSet(RedisStatement statement, RedisObjectResult result) {
-        super(statement, createMetaData(result.getType()), result.getResult());
+        super(statement, createMetaData(result.getType()), result.getResult(), result.getColumnHint());
     }
 
     private static RedisResultSetMetaData createMetaData(Map<String, String> type) {

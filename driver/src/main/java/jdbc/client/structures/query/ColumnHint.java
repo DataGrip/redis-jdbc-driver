@@ -11,13 +11,11 @@ public class ColumnHint {
         this.values = values;
     }
 
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
-    @NotNull
-    public String[] getValues() {
+    public @NotNull String[] getValues() {
         return values;
     }
 }

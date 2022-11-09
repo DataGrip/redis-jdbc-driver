@@ -1,8 +1,10 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
+import jdbc.client.structures.query.ColumnHint;
 import jdbc.resultset.types.ArrayImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -18,16 +20,19 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
     private final RedisStatement statement;
     private final RedisResultSetMetaData metaData;
     private final List<T> rows;
+    private final ColumnHint columnHint;
 
     private T currentRow = null;
     private int index = 0;
 
     private boolean isClosed = false;
 
-    public RedisResultSetBase(RedisStatement statement, RedisResultSetMetaData metaData, List<T> rows) {
+    public RedisResultSetBase(RedisStatement statement, RedisResultSetMetaData metaData,
+                              @NotNull List<T> rows, @Nullable ColumnHint columnHint) {
         this.statement = statement;
         this.metaData = metaData;
         this.rows = rows;
+        this.columnHint = columnHint;
     }
 
     @Override
@@ -259,7 +264,13 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
     public Object getObject(String columnLabel) throws SQLException {
         checkClosed();
         if (index > rows.size()) throw new SQLException("Exhausted ResultSet.");
+        if (columnHint != null && columnHint.getName().equals(columnLabel)) return getColumnHintObject(columnHint, index);
         return currentRow != null ? getObject(currentRow, columnLabel) : null;
+    }
+
+    private @Nullable Object getColumnHintObject(@NotNull ColumnHint columnHint, int index) {
+        String[] values = columnHint.getValues();
+        return index < values.length ? values[index] : null;
     }
 
     protected abstract Object getObject(@NotNull T row, String columnLabel) throws SQLException;

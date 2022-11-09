@@ -14,7 +14,7 @@ import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 public class RedisMapResultSet extends RedisResultSetBase<Map.Entry<String, Object>> {
 
     public RedisMapResultSet(RedisStatement statement, RedisMapResult result) {
-        super(statement, createMetaData(result.getType()), createRows(result.getResult()));
+        super(statement, createMetaData(result.getType()), createRows(result.getResult()), result.getColumnHint());
     }
 
     private static RedisResultSetMetaData createMetaData(String type) {
