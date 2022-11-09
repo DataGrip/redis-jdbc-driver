@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
+import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.resultset.types.ArrayImpl;
@@ -47,12 +48,14 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
     }
 
     protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<T, RR> result) {
-        List<ColumnMetaData> resultColumns = createResultColumns(result.getType());
+        List<ColumnMetaData> resultColumns = createResultColumns(result.getQuery(), result.getType(), result.getResult());
         if (columnHint == null) return resultColumns;
         return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
     }
 
-    protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull T type);
+    protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
+                                                                         @NotNull T type,
+                                                                         @NotNull RR result);
 
     protected ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
         return createColumn(columnHint.getName(), "string");

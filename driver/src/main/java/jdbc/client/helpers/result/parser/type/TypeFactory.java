@@ -1,5 +1,6 @@
 package jdbc.client.helpers.result.parser.type;
 
+import jdbc.client.structures.result.ObjectType;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.resps.*;

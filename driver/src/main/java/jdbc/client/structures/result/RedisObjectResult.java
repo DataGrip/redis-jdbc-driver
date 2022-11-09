@@ -1,6 +1,5 @@
 package jdbc.client.structures.result;
 
-import jdbc.client.helpers.result.parser.type.ObjectType;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 

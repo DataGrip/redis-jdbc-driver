@@ -34,7 +34,9 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull String type) {
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
+                                                                @NotNull String type,
+                                                                @NotNull List<Object> result) {
         return Collections.singletonList(createColumn(VALUE, type));
     }
 

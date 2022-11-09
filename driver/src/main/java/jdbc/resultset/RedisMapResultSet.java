@@ -1,6 +1,7 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
+import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,9 @@ public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Ob
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull String type) {
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
+                                                                @NotNull String type,
+                                                                @NotNull Map<String, Object> result) {
         return Arrays.asList(createColumn(FIELD, "string"), createColumn(VALUE, type));
     }
 
