@@ -377,7 +377,7 @@ public class ResultParserFactory {
         public final @NotNull RedisListResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
             List<Object> converted = getConverter().convert(encoded);
-            return new RedisListResult(getType(), converted, query.getColumnHint());
+            return new RedisListResult(query.getCommand(), getType(), converted, query.getColumnHint());
         }
     }
 
@@ -392,7 +392,7 @@ public class ResultParserFactory {
         public final @NotNull RedisMapResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             Map<String, T> encoded = getBuilder().build(data);
             Map<String, Object> converted = getConverter().convert(encoded);
-            return new RedisMapResult(getType(), converted, query.getColumnHint());
+            return new RedisMapResult(query.getCommand(), getType(), converted, query.getColumnHint());
         }
     }
 
@@ -405,7 +405,7 @@ public class ResultParserFactory {
         public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
             List<Map<String, Object>> converted = getConverter().convert(encoded);
-            return new RedisObjectResult(getType(), converted, query.getColumnHint());
+            return new RedisObjectResult(query.getCommand(), getType(), converted, query.getColumnHint());
         }
     }
 }
