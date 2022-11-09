@@ -4,7 +4,7 @@ import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisListResult;
-import jdbc.client.structures.result.RedisResult;
+import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResult<String, List<Object>> result) {
+    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<String, List<Object>> result) {
         RedisQuery query = result.getQuery();
         ColumnHint columnHint = query.getColumnHint();
         if (columnHint != null && columnHint.getName().equals(VALUE)) {

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public interface RedisClient extends AutoCloseable {
 
-    RedisResult<?, ?> execute(String sql) throws SQLException;
+    RedisResult execute(String sql) throws SQLException;
 
     void setDatabase(String db) throws SQLException;
 

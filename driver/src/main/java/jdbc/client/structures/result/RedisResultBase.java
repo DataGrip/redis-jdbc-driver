@@ -3,7 +3,7 @@ package jdbc.client.structures.result;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 
-abstract class RedisResultBase<T, R> implements RedisResult<T, R> {
+public abstract class RedisResultBase<T, R> implements RedisResult {
 
     private final RedisQuery query;
     private final T type;
@@ -17,17 +17,14 @@ abstract class RedisResultBase<T, R> implements RedisResult<T, R> {
         this.result = result;
     }
 
-    @Override
     public @NotNull RedisQuery getQuery() {
         return query;
     }
 
-    @Override
     public @NotNull T getType() {
         return type;
     }
 
-    @Override
     public @NotNull R getResult() {
         return result;
     }

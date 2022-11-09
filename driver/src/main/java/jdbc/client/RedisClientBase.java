@@ -13,7 +13,7 @@ import java.sql.SQLException;
 abstract class RedisClientBase implements RedisClient {
 
     @Override
-    public RedisResult<?, ?> execute(String sql) throws SQLException {
+    public RedisResult execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
             Object data = query instanceof RedisSetDatabaseQuery ?

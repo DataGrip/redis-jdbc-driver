@@ -2,7 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.result.RedisResult;
+import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.resultset.types.ArrayImpl;
 import org.jetbrains.annotations.NotNull;
@@ -39,14 +39,14 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         this.columnHint = null;
     }
 
-    public RedisResultSetBase(RedisStatement statement, @NotNull RedisResult<T, RR> result) {
+    public RedisResultSetBase(RedisStatement statement, @NotNull RedisResultBase<T, RR> result) {
         this.statement = statement;
         this.metaData = new RedisResultSetMetaData(createColumns(result));
         this.rows = createRows(result.getResult());
         this.columnHint = result.getQuery().getColumnHint();
     }
 
-    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResult<T, RR> result) {
+    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<T, RR> result) {
         List<ColumnMetaData> resultColumns = createResultColumns(result.getType());
         if (columnHint == null) return resultColumns;
         return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
