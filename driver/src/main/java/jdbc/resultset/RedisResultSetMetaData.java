@@ -1,10 +1,12 @@
 package jdbc.resultset;
 
 import jdbc.resultset.types.RedisColumnTypeHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.List;
 
 public class RedisResultSetMetaData implements ResultSetMetaData {
 
@@ -14,16 +16,15 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
     private static final int NOT_APPLICABLE_SCALE = 0;
     private static final int NOT_APPLICABLE_PRECISION = 0;
 
-    private final ColumnMetaData[] columnMetaData;
+    private final List<ColumnMetaData> columnMetaDatas;
 
-    // TODO (null)
-    public RedisResultSetMetaData(ColumnMetaData... columnMetaData) {
-        this.columnMetaData = columnMetaData;
+    public RedisResultSetMetaData(@NotNull List<ColumnMetaData> columnMetaDatas) {
+        this.columnMetaDatas = columnMetaDatas;
     }
 
     public int findColumn(String columnLabel) {
-        for (int i = 0; i < columnMetaData.length; i++) {
-            if (columnMetaData[i].name.equals(columnLabel)) {
+        for (int i = 0; i < columnMetaDatas.size(); ++i) {
+            if (columnMetaDatas.get(i).name.equals(columnLabel)) {
                 return i + 1;
             }
         }
@@ -36,7 +37,7 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getColumnCount() throws SQLException {
-        return columnMetaData.length;
+        return columnMetaDatas.size();
     }
 
     @Override
@@ -76,12 +77,12 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnLabel(int column) throws SQLException {
-        return columnMetaData[column - 1].name;
+        return columnMetaDatas.get(column - 1).name;
     }
 
     @Override
     public String getColumnName(int column) throws SQLException {
-        return columnMetaData[column - 1].name;
+        return columnMetaDatas.get(column - 1).name;
     }
 
     @Override
@@ -111,12 +112,12 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getColumnType(int column) throws SQLException {
-        return columnMetaData[column - 1].getJavaType();
+        return columnMetaDatas.get(column - 1).getJavaType();
     }
 
     @Override
     public String getColumnTypeName(int column) throws SQLException {
-        return columnMetaData[column - 1].typeName;
+        return columnMetaDatas.get(column - 1).typeName;
     }
 
     @Override
@@ -136,7 +137,7 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public String getColumnClassName(int column) throws SQLException {
-        return columnMetaData[column - 1].getClassName();
+        return columnMetaDatas.get(column - 1).getClassName();
     }
 
     @Override
@@ -153,9 +154,13 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
         private final String name;
         private final String typeName;
 
-        private ColumnMetaData(String name, String typeName) {
+        private ColumnMetaData(@NotNull String name, @NotNull String typeName) {
             this.name = name;
             this.typeName = typeName;
+        }
+
+        public @NotNull String getName() {
+            return name;
         }
 
         public int getJavaType() {

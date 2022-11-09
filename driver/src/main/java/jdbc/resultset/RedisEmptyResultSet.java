@@ -13,7 +13,7 @@ public class RedisEmptyResultSet extends RedisResultSetBase<Void> {
     }
 
     private static RedisResultSetMetaData createMetaData() {
-        return new RedisResultSetMetaData();
+        return new RedisResultSetMetaData(Collections.emptyList());
     }
 
     @Override

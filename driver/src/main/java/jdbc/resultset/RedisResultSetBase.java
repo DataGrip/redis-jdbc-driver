@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
+import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.resultset.types.ArrayImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +16,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import static jdbc.resultset.RedisResultSetMetaData.createColumn;
+
 public abstract class RedisResultSetBase<T> implements ResultSet {
+
+    protected static final String VALUE = "value";
 
     private final RedisStatement statement;
     private final RedisResultSetMetaData metaData;
@@ -33,6 +38,10 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
         this.metaData = metaData;
         this.rows = rows;
         this.columnHint = columnHint;
+    }
+
+    protected static ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
+        return createColumn(columnHint.getName(), "string");
     }
 
     @Override
