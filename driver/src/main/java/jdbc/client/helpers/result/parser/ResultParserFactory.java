@@ -6,6 +6,7 @@ import jdbc.client.helpers.result.parser.converter.IdentityConverter;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
 import jdbc.client.helpers.result.parser.converter.SimpleConverter;
 import jdbc.client.helpers.result.parser.type.TypeFactory;
+import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisListResult;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.client.structures.result.RedisObjectResult;
@@ -373,10 +374,10 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisListResult parse(@Nullable Object data) {
+        public final @NotNull RedisListResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
             List<Object> converted = getConverter().convert(encoded);
-            return new RedisListResult(getType(), converted);
+            return new RedisListResult(getType(), converted, query.getColumnHint());
         }
     }
 
@@ -388,10 +389,10 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisMapResult parse(@Nullable Object data) {
+        public final @NotNull RedisMapResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             Map<String, T> encoded = getBuilder().build(data);
             Map<String, Object> converted = getConverter().convert(encoded);
-            return new RedisMapResult(getType(), converted);
+            return new RedisMapResult(getType(), converted, query.getColumnHint());
         }
     }
 
@@ -401,10 +402,10 @@ public class ResultParserFactory {
         protected abstract @NotNull ObjectConverter<T> getConverter();
 
         @Override
-        public final @NotNull RedisObjectResult parse(@Nullable Object data) {
+        public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getBuilder().build(data);
             List<Map<String, Object>> converted = getConverter().convert(encoded);
-            return new RedisObjectResult(getType(), converted);
+            return new RedisObjectResult(getType(), converted, query.getColumnHint());
         }
     }
 }

@@ -26,7 +26,7 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
     private int blockingSocketTimeout;
     private String clientName;
 
-    public RedisJedisURIBase(String url, Properties info) {
+    protected RedisJedisURIBase(String url, Properties info) {
         String uri = extractURI(url);
 
         String authBlock = "";
