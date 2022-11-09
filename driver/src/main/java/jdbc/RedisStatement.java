@@ -26,7 +26,7 @@ public class RedisStatement implements Statement {
         this.client = client;
     }
 
-    private ResultSet createResultSet(RedisResult result) {
+    private ResultSet createResultSet(RedisResult<?, ?> result) {
         if (result instanceof RedisListResult) return new RedisListResultSet(this, (RedisListResult) result);
         if (result instanceof RedisMapResult) return new RedisMapResultSet(this, (RedisMapResult) result);
         if (result instanceof RedisObjectResult) return new RedisObjectResultSet(this, (RedisObjectResult) result);
@@ -34,7 +34,7 @@ public class RedisStatement implements Statement {
     }
 
     private ResultSet executeImpl(String sql) throws SQLException {
-        RedisResult result = client.execute(sql);
+        RedisResult<?, ?> result = client.execute(sql);
         return createResultSet(result);
     }
 

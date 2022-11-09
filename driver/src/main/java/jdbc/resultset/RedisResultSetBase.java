@@ -2,6 +2,7 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
+import jdbc.client.structures.result.RedisResult;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.resultset.types.ArrayImpl;
 import org.jetbrains.annotations.NotNull;
@@ -11,38 +12,53 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.*;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
-public abstract class RedisResultSetBase<T> implements ResultSet {
+public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
 
     protected static final String VALUE = "value";
 
     private final RedisStatement statement;
     private final RedisResultSetMetaData metaData;
-    private final List<T> rows;
+    private final List<R> rows;
     private final ColumnHint columnHint;
 
-    private T currentRow = null;
+    private R currentRow = null;
     private int index = 0;
 
     private boolean isClosed = false;
 
-    public RedisResultSetBase(RedisStatement statement, RedisResultSetMetaData metaData,
-                              @NotNull List<T> rows, @Nullable ColumnHint columnHint) {
+    public RedisResultSetBase(RedisStatement statement) {
         this.statement = statement;
-        this.metaData = metaData;
-        this.rows = rows;
-        this.columnHint = columnHint;
+        this.metaData = new RedisResultSetMetaData(Collections.emptyList());
+        this.rows = Collections.emptyList();
+        this.columnHint = null;
     }
 
-    protected static ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
+    public RedisResultSetBase(RedisStatement statement, @NotNull RedisResult<T, RR> result) {
+        this.statement = statement;
+        this.metaData = new RedisResultSetMetaData(createColumns(result));
+        this.rows = createRows(result.getResult());
+        this.columnHint = result.getQuery().getColumnHint();
+    }
+
+    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResult<T, RR> result) {
+        List<ColumnMetaData> resultColumns = createResultColumns(result.getType());
+        if (columnHint == null) return resultColumns;
+        return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
+    }
+
+    protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull T type);
+
+    protected ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
         return createColumn(columnHint.getName(), "string");
     }
+
+    protected abstract @NotNull List<R> createRows(@NotNull RR result);
 
     @Override
     public boolean next() throws SQLException {
@@ -282,7 +298,7 @@ public abstract class RedisResultSetBase<T> implements ResultSet {
         return index < values.length ? values[index] : null;
     }
 
-    protected abstract Object getObject(@NotNull T row, String columnLabel) throws SQLException;
+    protected abstract Object getObject(@NotNull R row, String columnLabel) throws SQLException;
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {

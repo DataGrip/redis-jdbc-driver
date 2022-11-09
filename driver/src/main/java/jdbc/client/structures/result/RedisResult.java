@@ -1,8 +1,10 @@
 package jdbc.client.structures.result;
 
-import jdbc.client.structures.query.ColumnHint;
-import org.jetbrains.annotations.Nullable;
+import jdbc.client.structures.query.RedisQuery;
+import org.jetbrains.annotations.NotNull;
 
-public interface RedisResult {
-    @Nullable ColumnHint getColumnHint();
+public interface RedisResult<T, R> {
+    @NotNull RedisQuery getQuery();
+    @NotNull T getType();
+    @NotNull R getResult();
 }

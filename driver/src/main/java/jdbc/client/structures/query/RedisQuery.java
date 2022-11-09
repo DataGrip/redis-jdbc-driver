@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 
 public class RedisQuery {
-
     private final CompositeCommand compositeCommand;
     private final ColumnHint columnHint;
 

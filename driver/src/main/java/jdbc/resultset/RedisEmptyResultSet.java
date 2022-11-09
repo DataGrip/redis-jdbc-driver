@@ -1,19 +1,27 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
+import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.List;
 
-public class RedisEmptyResultSet extends RedisResultSetBase<Void> {
+public class RedisEmptyResultSet extends RedisResultSetBase<String, Void, Void> {
 
     public RedisEmptyResultSet(RedisStatement statement) {
-        super(statement, createMetaData(), Collections.emptyList(), null);
+        super(statement);
     }
 
-    private static RedisResultSetMetaData createMetaData() {
-        return new RedisResultSetMetaData(Collections.emptyList());
+    @Override
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull String type) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected @NotNull List<Void> createRows(@NotNull Void result) {
+        return Collections.emptyList();
     }
 
     @Override
