@@ -1,4 +1,4 @@
-package jdbc.client.helpers.query.tokenizer;
+package jdbc.client.helpers.query.parser.lexer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tokenizer {
+public class Lexer {
 
-    private Tokenizer() {
+    private Lexer() {
     }
 
     private abstract static class State {
