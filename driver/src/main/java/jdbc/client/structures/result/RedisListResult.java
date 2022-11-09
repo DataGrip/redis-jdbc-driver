@@ -6,24 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RedisListResult extends RedisResultBase {
-
-    private final String type;
-    private final List<Object> result;
-
+public class RedisListResult extends RedisResultBase<String, List<Object>> {
     public RedisListResult(@NotNull String type, @NotNull List<Object> result, @Nullable ColumnHint columnHint) {
-        super(columnHint);
-        this.type = type;
-        this.result = result;
-    }
-
-    @Override
-    public @NotNull String getType() {
-        return type;
-    }
-
-    @Override
-    public @NotNull List<Object> getResult() {
-        return result;
+        super(type, result, columnHint);
     }
 }
