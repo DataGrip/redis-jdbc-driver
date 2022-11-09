@@ -1,6 +1,8 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.helpers.query.parser.lexer.Lexer;
+import jdbc.client.structures.query.ColumnHint;
+import jdbc.client.structures.query.CompositeCommand;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import org.jetbrains.annotations.NotNull;
@@ -45,12 +47,18 @@ public class QueryParser {
 
     public static @NotNull RedisQuery parse(@Nullable String sql) throws SQLException {
         if (sql == null) throw new SQLException("Empty query.");
-        List<String> tokens = Lexer.tokenize(sql);
-        if (tokens.isEmpty()) throw new SQLException("Empty query.");
-        Protocol.Command redisCommand = parseCommand(tokens.get(0));
-        String[] params = tokens.stream().skip(1).toArray(String[]::new);
-        Protocol.Keyword redisKeyword = parseKeyword(redisCommand, params);
-        return createQuery(redisCommand, redisKeyword, params);
+        List<List<String>> tokens = Lexer.tokenize(sql);
+        RawQuery rawQuery = createRawQuery(tokens);
+
+        CommandLine commandLine = rawQuery.commandLine;
+        Protocol.Command redisCommand = parseCommand(commandLine.command);
+        Protocol.Keyword redisKeyword = parseKeyword(redisCommand, commandLine.params);
+        CompositeCommand compositeCommand = new CompositeCommand(redisCommand, redisKeyword, commandLine.params);
+
+        ColumnHintLine columnHintLine = rawQuery.columnHintLine;
+        ColumnHint columnHint = new ColumnHint(columnHintLine.name, columnHintLine.values);
+
+        return createQuery(compositeCommand, columnHint);
     }
 
     private static @NotNull Protocol.Command parseCommand(@NotNull String command) throws SQLException {
@@ -63,10 +71,10 @@ public class QueryParser {
     private static @Nullable Protocol.Keyword parseKeyword(@NotNull Protocol.Command redisCommand,
                                                            @NotNull String[] params) throws SQLException {
         if (COMMANDS_WITH_PREFIX_KEYWORDS.contains(redisCommand)) {
-            return parsePrefixKeyword(redisCommand, params.length > 0 ? params[0] : null);
+            return parsePrefixKeyword(redisCommand, getFirst(params));
         }
         if (COMMANDS_WITH_POSTFIX_KEYWORDS.contains(redisCommand)) {
-            return parseSuffixKeyword(redisCommand, params.length > 0 ? params[params.length - 1] : null);
+            return parseSuffixKeyword(redisCommand, getLast(params));
         }
         return null;
     }
@@ -74,11 +82,11 @@ public class QueryParser {
     private static @NotNull Protocol.Keyword parsePrefixKeyword(@NotNull Protocol.Command redisCommand,
                                                                 @Nullable String keyword) throws SQLException {
         if (keyword == null)
-            throw new SQLException(String.format("Query does not contain a keyword for the command %s", redisCommand));
+            throw new SQLException(String.format("Query does not contain a keyword for the command %s.", redisCommand));
         Protocol.Keyword redisKeyword = getKeyword(keyword);
         if (redisKeyword == null)
             throw new SQLException(String.format(
-                    "Query contains an unknown keyword for the command %s: %s",
+                    "Query contains an unknown keyword for the command %s: %s.",
                     redisCommand,
                     keyword
             ));
@@ -90,22 +98,112 @@ public class QueryParser {
     }
 
 
-    private static @NotNull RedisQuery createQuery(@NotNull Protocol.Command redisCommand,
-                                                   @Nullable Protocol.Keyword redisKeyword,
-                                                   @NotNull String[] params) throws SQLException {
-        if (redisCommand == Protocol.Command.SELECT) {
-            String db = params.length > 0 ? params[0] : null;
-            Integer dbIndex;
+    private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
+                                                   @Nullable ColumnHint columnHint) throws SQLException {
+        if (compositeCommand.getCommand() == Protocol.Command.SELECT) {
+            String db = getFirst(compositeCommand.getParams());
+            if (db == null) throw new SQLException("Database should be specified.");
             try {
-                dbIndex = db == null ? null : Integer.parseInt(db);
+                int dbIndex = Integer.parseInt(db);
+                return new RedisSetDatabaseQuery(compositeCommand, dbIndex, columnHint);
             } catch (NumberFormatException e) {
                 throw new SQLException(String.format("Database should be a number: %s.", db));
             }
-            if (dbIndex == null) {
-                throw new SQLException("Database should be specified");
-            }
-            return new RedisSetDatabaseQuery(dbIndex);
         }
-        return new RedisQuery(redisCommand, redisKeyword, params);
+        return new RedisQuery(compositeCommand, columnHint);
+    }
+
+
+    private static @NotNull RawQuery createRawQuery(@NotNull List<List<String>> tokens) throws SQLException {
+        List<Line> lines = tokens.stream().map(QueryParser::createLine).collect(Collectors.toList());
+
+        List<CommandLine> commandLines = lines.stream()
+                .map(l -> l instanceof CommandLine ? (CommandLine) l : null).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (commandLines.isEmpty()) throw new SQLException("Query should contain a command.");
+        if (commandLines.size() > 1) throw new SQLException("Query can contain only one command.");
+        CommandLine commandLine = commandLines.get(0);
+
+        List<ColumnHintLine> columnHintLines = lines.stream()
+                .map(l -> l instanceof ColumnHintLine? (ColumnHintLine) l : null).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (columnHintLines.size() > 1) throw new SQLException("Query can contain only one comment with column hint.");
+        ColumnHintLine columnHintLine = columnHintLines.isEmpty() ? null : columnHintLines.get(0);
+
+        return new RawQuery(commandLine, columnHintLine);
+    }
+
+    private static @Nullable Line createLine(@NotNull List<String> lineTokens) {
+        if (ColumnHintLine.accepts(lineTokens)) return new ColumnHintLine(lineTokens);
+        if (CommentLine.accepts(lineTokens)) return new CommentLine(lineTokens);
+        if (CommandLine.accepts(lineTokens)) return new CommandLine(lineTokens);
+        return null;
+    }
+
+
+    private static class RawQuery {
+        public final CommandLine commandLine;
+        public final ColumnHintLine columnHintLine;
+
+        RawQuery(@NotNull CommandLine commandLine, @Nullable ColumnHintLine columnHintLine) {
+            this.commandLine = commandLine;
+            this.columnHintLine = columnHintLine;
+        }
+    }
+
+    private interface Line {}
+
+    private static class CommandLine implements Line {
+        public final String command;
+        public final String[] params;
+
+        CommandLine(@NotNull List<String> tokens) {
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect command tokens: %s.", tokens));
+            command = tokens.get(0);
+            params = tokens.stream().skip(1).toArray(String[]::new);
+        }
+
+        public static boolean accepts(@NotNull List<String> tokens) {
+            return tokens.size() >= 1;
+        }
+    }
+
+    private static class CommentLine implements Line {
+        private static final String COMMENT_TOKEN = "--";
+
+        CommentLine(@NotNull List<String> tokens) {
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect comment tokens: %s.", tokens));
+        }
+
+        public static boolean accepts(@NotNull List<String> tokens) {
+            return tokens.size() >= 1 && COMMENT_TOKEN.equals(tokens.get(0));
+        }
+    }
+
+    private static class ColumnHintLine extends CommentLine {
+        private static final String COLUMN_NAME_SEPARATOR_TOKEN = ":";
+
+        public final String name;
+        public final String[] values;
+
+        ColumnHintLine(@NotNull List<String> tokens) {
+            super(tokens);
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect column hint tokens: %s.", tokens));
+            name = tokens.get(1);
+            values = tokens.stream().skip(3).toArray(String[]::new);
+        }
+
+        public static boolean accepts(@NotNull List<String> tokens) {
+            return CommentLine.accepts(tokens) && tokens.size() >= 3 && COLUMN_NAME_SEPARATOR_TOKEN.equals(tokens.get(2));
+        }
+    }
+
+
+    private static @Nullable String getFirst(@NotNull String[] elements) {
+        return elements.length > 0 ? elements[0] : null;
+    }
+
+    private static @Nullable String getLast(@NotNull String[] elements) {
+        return elements.length > 0 ? elements[elements.length - 1] : null;
     }
 }

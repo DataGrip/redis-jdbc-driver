@@ -10,10 +10,12 @@ import java.util.Objects;
 public class CompositeCommand {
     private final Command command;
     private final Keyword keyword;
+    private final String[] params;
 
-    CompositeCommand(@NotNull Command command, @Nullable Keyword keyword) {
+    public CompositeCommand(@NotNull Command command, @Nullable Keyword keyword, @NotNull String[] params) {
         this.command = command;
         this.keyword = keyword;
+        this.params = params;
     }
 
     @Override
@@ -33,11 +35,16 @@ public class CompositeCommand {
         return command;
     }
 
-    public static CompositeCommand create(Command command, Keyword keyword) {
-        return new CompositeCommand(command, keyword);
+    @NotNull
+    public String[] getParams() {
+        return params;
     }
 
-    public static CompositeCommand create(Command command) {
+    public static CompositeCommand create(@NotNull Command command, @Nullable Keyword keyword) {
+        return new CompositeCommand(command, keyword, new String[0]);
+    }
+
+    public static CompositeCommand create(@NotNull Command command) {
         return create(command, null);
     }
 }

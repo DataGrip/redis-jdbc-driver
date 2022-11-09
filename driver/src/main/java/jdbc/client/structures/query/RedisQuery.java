@@ -3,16 +3,15 @@ package jdbc.client.structures.query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
-import redis.clients.jedis.Protocol.Keyword;
 
 public class RedisQuery {
 
     private final CompositeCommand compositeCommand;
-    private final String[] params;
+    private final ColumnHint columnHint;
 
-    public RedisQuery(@NotNull Command command, @Nullable Keyword keyword, @NotNull String[] params) {
-        this.compositeCommand = new CompositeCommand(command, keyword);
-        this.params = params;
+    public RedisQuery(@NotNull CompositeCommand compositeCommand, @Nullable ColumnHint columnHint) {
+        this.compositeCommand = compositeCommand;
+        this.columnHint = columnHint;
     }
 
     @NotNull
@@ -27,6 +26,10 @@ public class RedisQuery {
 
     @NotNull
     public String[] getParams() {
-        return params;
+        return compositeCommand.getParams();
+    }
+
+    public ColumnHint getColumnHint() {
+        return columnHint;
     }
 }

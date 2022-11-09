@@ -1,19 +1,18 @@
 package jdbc.client.structures.query;
 
 import org.jetbrains.annotations.NotNull;
-import redis.clients.jedis.Protocol.Command;
+import org.jetbrains.annotations.Nullable;
 
 public class RedisSetDatabaseQuery extends RedisQuery {
 
     private final int dbIndex;
 
-    public RedisSetDatabaseQuery(int dbIndex) {
-        super(Command.SELECT, null, new String[]{Integer.toString(dbIndex)});
+    public RedisSetDatabaseQuery(@NotNull CompositeCommand compositeCommand, int dbIndex, @Nullable ColumnHint columnHint) {
+        super(compositeCommand, columnHint);
         this.dbIndex = dbIndex;
     }
 
-    @NotNull
-    public Integer getDbIndex() {
+    public int getDbIndex() {
         return dbIndex;
     }
 }

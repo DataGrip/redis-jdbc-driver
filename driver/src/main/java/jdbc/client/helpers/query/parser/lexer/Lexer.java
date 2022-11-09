@@ -9,8 +9,11 @@ import java.util.List;
 
 public class Lexer {
 
+    private static final String LINE_SEPARATOR = "\r|\n|\r\n";
+
     private Lexer() {
     }
+
 
     private abstract static class State {
         public final String token;
@@ -91,21 +94,27 @@ public class Lexer {
         }
     }
 
-    public static List<String> tokenize(@NotNull String sql) throws SQLException {
-        List<String> tokens = new ArrayList<>();
-        State state = new None(null);
-        char[] symbols = sql.toCharArray();
-        for (int i = 0; i <= symbols.length; ++i) {
-            char symbol = i == symbols.length ? 0 : symbols[i];
-            state = state.process(symbol);
-            String token = state.token;
-            if (token != null) {
-                tokens.add(token);
+
+    public static List<List<String>> tokenize(@NotNull String sql) throws SQLException {
+        List<List<String>> tokens = new ArrayList<>();
+        for (String line : sql.split(LINE_SEPARATOR)) {
+            List<String> lineTokens = new ArrayList<>();
+            State state = new None(null);
+            char[] symbols = line.toCharArray();
+            for (int i = 0; i <= symbols.length; ++i) {
+                char symbol = i == symbols.length ? 0 : symbols[i];
+                state = state.process(symbol);
+                String token = state.token;
+                if (token != null) {
+                    lineTokens.add(token);
+                }
             }
+            if (!(state instanceof None)) throw new SQLException("No closing quotation.");
+            tokens.add(lineTokens);
         }
-        if (!(state instanceof None)) throw new SQLException("No closing quotation.");
         return tokens;
     }
+
 
     private static boolean isBlank(char c) {
         return Character.isWhitespace(c) || c == 0;
