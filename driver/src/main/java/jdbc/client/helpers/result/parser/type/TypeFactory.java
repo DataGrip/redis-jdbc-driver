@@ -1,11 +1,14 @@
 package jdbc.client.helpers.result.parser.type;
 
-import java.util.LinkedHashMap;
+import redis.clients.jedis.GeoCoordinate;
+import redis.clients.jedis.Module;
+import redis.clients.jedis.resps.*;
+
+import java.util.List;
 import java.util.Map;
 
 public class TypeFactory {
-
-    // TODO: use List instead of LinkedHashMap
+    
     private TypeFactory() {
     }
 
@@ -23,93 +26,99 @@ public class TypeFactory {
 
     public static final String BYTE_ARRAY = "binary";
 
-    public static final Map<String, String> TUPLE = new LinkedHashMap<>() {{
-        put("value", STRING);
-        put("score", DOUBLE);
+    public static final ObjectType<Tuple> TUPLE = new ObjectType<>() {{
+        add("value", STRING);
+        add("score", DOUBLE);
     }};
 
-    public static final Map<String, String> KEYED_LIST_ELEMENT = new LinkedHashMap<>() {{
-        put("key", STRING);
-        put("value", STRING);
+    public static final ObjectType<KeyedListElement> KEYED_LIST_ELEMENT = new ObjectType<>() {{
+        add("key", STRING);
+        add("value", STRING);
     }};
 
-    public static final Map<String, String> KEYED_ZSET_ELEMENT = new LinkedHashMap<>() {{
-        put("key", STRING);
-        put("value", STRING);
-        put("score", DOUBLE);
+    public static final ObjectType<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ObjectType<>() {{
+        add("key", STRING);
+        add("value", STRING);
+        add("score", DOUBLE);
     }};
 
-    public static final Map<String, String> GEO_COORDINATE = new LinkedHashMap<>() {{
-        put("longitude", DOUBLE);
-        put("latitude", DOUBLE);
+    public static final ObjectType<GeoCoordinate> GEO_COORDINATE = new ObjectType<>() {{
+        add("longitude", DOUBLE);
+        add("latitude", DOUBLE);
     }};
 
-    public static final Map<String, String> GEORADIUS_RESPONSE = new LinkedHashMap<>() {{
-        put("member", STRING);
-        put("distance", DOUBLE);
-        put("coordinate", MAP);
-        put("raw-score", LONG);
+    public static final ObjectType<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectType<>() {{
+        add("member", STRING);
+        add("distance", DOUBLE);
+        add("coordinate", MAP);
+        add("raw-score", LONG);
     }};
 
-    public static final Map<String, String> MODULE = new LinkedHashMap<>() {{
-        put("name", STRING);
-        put("version", LONG);
+    public static final ObjectType<Module> MODULE = new ObjectType<>() {{
+        add("name", STRING);
+        add("version", LONG);
     }};
 
-    public static final Map<String, String> ACCESS_CONTROL_USER = new LinkedHashMap<>() {{
-        put("flags", ARRAY);
-        put("keys", ARRAY);
-        put("passwords", ARRAY);
-        put("commands", STRING);
+    public static final ObjectType<AccessControlUser> ACCESS_CONTROL_USER = new ObjectType<>() {{
+        add("flags", ARRAY);
+        add("keys", ARRAY);
+        add("passwords", ARRAY);
+        add("commands", STRING);
     }};
 
-    public static final Map<String, String> ACCESS_CONTROL_LOG_ENTRY = new LinkedHashMap<>() {{
-        put("count", STRING);
-        put("reason", STRING);
-        put("context", STRING);
-        put("object", STRING);
-        put("username", STRING);
-        put("age-seconds", STRING);
-        put("client-info", MAP);
+    public static final ObjectType<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new ObjectType<>() {{
+        add("count", STRING);
+        add("reason", STRING);
+        add("context", STRING);
+        add("object", STRING);
+        add("username", STRING);
+        add("age-seconds", STRING);
+        add("client-info", MAP);
     }};
 
     public static final String STREAM_ENTRY_ID = STRING;
 
-    public static final Map<String, String> STREAM_ENTRY = new LinkedHashMap<>() {{
-        put("id", STREAM_ENTRY_ID);
-        put("fields", MAP);
+    public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
+        add("id", STREAM_ENTRY_ID);
+        add("fields", MAP);
     }};
 
-    public static final Map<String, String> STREAM_READ = new LinkedHashMap<>() {{
-        put("key", STRING);
-        put("value", MAP);
+    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ = new ObjectType<>() {{
+        add("key", STRING);
+        add("value", MAP);
     }};
 
-    public static final Map<String, String> STREAM_INFO = new LinkedHashMap<>() {{
-        put("length", LONG);
-        put("radix-tree-keys", LONG);
-        put("radix-tree-nodes", LONG);
-        put("groups", LONG);
-        put("last-generated-id", STRING);
-        put("first-entry", MAP);
-        put("last-entry", MAP);
+    public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{
+        add("length", LONG);
+        add("radix-tree-keys", LONG);
+        add("radix-tree-nodes", LONG);
+        add("groups", LONG);
+        add("last-generated-id", STRING);
+        add("first-entry", MAP);
+        add("last-entry", MAP);
     }};
 
-    public static final Map<String, String> STREAM_GROUP_INFO = new LinkedHashMap<>() {{
-        put("name", STRING);
-        put("consumers", LONG);
-        put("pending", LONG);
-        put("last-delivered-id", STRING);
+    public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
+        add("name", STRING);
+        add("consumers", LONG);
+        add("pending", LONG);
+        add("last-delivered-id", STRING);
     }};
 
-    public static final Map<String, String> STREAM_CONSUMERS_INFO = new LinkedHashMap<>() {{
-        put("name", STRING);
-        put("idle", LONG);
-        put("pending", LONG);
+    public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMERS_INFO = new ObjectType<>() {{
+        add("name", STRING);
+        add("idle", LONG);
+        add("pending", LONG);
     }};
 
-    public static final Map<String, String> SCAN_RESULT = new LinkedHashMap<>() {{
-        put("cursor", STRING);
-        put("results", ARRAY);
-    }};
+    public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>();
+
+    public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>();
+
+    private static class ScanResultType<T> extends ObjectType<ScanResult<T>> {
+        ScanResultType() {
+            add("cursor", STRING);
+            add("results", ARRAY);
+        }
+    }
 }

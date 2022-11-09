@@ -5,6 +5,7 @@ import jdbc.client.helpers.result.parser.converter.ConverterFactory;
 import jdbc.client.helpers.result.parser.converter.IdentityConverter;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
 import jdbc.client.helpers.result.parser.converter.SimpleConverter;
+import jdbc.client.helpers.result.parser.type.ObjectType;
 import jdbc.client.helpers.result.parser.type.TypeFactory;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisListResult;
@@ -96,7 +97,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TUPLE = new ObjectResultParser<Tuple>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<Tuple> getType() {
             return TypeFactory.TUPLE;
         }
 
@@ -113,7 +114,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_LIST_ELEMENT = new ObjectResultParser<KeyedListElement>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<KeyedListElement> getType() {
             return TypeFactory.KEYED_LIST_ELEMENT;
         }
 
@@ -130,7 +131,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_ZSET_ELEMENT = new ObjectResultParser<KeyedZSetElement>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<KeyedZSetElement> getType() {
             return TypeFactory.KEYED_ZSET_ELEMENT;
         }
 
@@ -147,7 +148,7 @@ public class ResultParserFactory {
 
     public static final ResultParser GEO_COORDINATE = new ObjectResultParser<GeoCoordinate>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<GeoCoordinate> getType() {
             return TypeFactory.GEO_COORDINATE;
         }
 
@@ -164,7 +165,7 @@ public class ResultParserFactory {
 
     public static final ResultParser GEORADIUS_RESPONSE = new ObjectResultParser<GeoRadiusResponse>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<GeoRadiusResponse> getType() {
             return TypeFactory.GEORADIUS_RESPONSE;
         }
 
@@ -181,7 +182,7 @@ public class ResultParserFactory {
 
     public static final ResultParser MODULE = new ObjectResultParser<Module>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<Module> getType() {
             return TypeFactory.MODULE;
         }
 
@@ -198,7 +199,7 @@ public class ResultParserFactory {
 
     public static final ResultParser ACCESS_CONTROL_USER = new ObjectResultParser<AccessControlUser>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<AccessControlUser> getType() {
             return TypeFactory.ACCESS_CONTROL_USER;
         }
 
@@ -215,7 +216,7 @@ public class ResultParserFactory {
 
     public static final ResultParser ACCESS_CONTROL_LOG_ENTRY = new ObjectResultParser<AccessControlLogEntry>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<AccessControlLogEntry> getType() {
             return TypeFactory.ACCESS_CONTROL_LOG_ENTRY;
         }
 
@@ -249,7 +250,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_ENTRY = new ObjectResultParser<StreamEntry>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<StreamEntry> getType() {
             return TypeFactory.STREAM_ENTRY;
         }
 
@@ -266,7 +267,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_READ = new ObjectResultParser<Map.Entry<String, List<StreamEntry>>>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<Map.Entry<String, List<StreamEntry>>> getType() {
             return TypeFactory.STREAM_READ;
         }
 
@@ -283,7 +284,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_INFO = new ObjectResultParser<StreamInfo>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<StreamInfo> getType() {
             return TypeFactory.STREAM_INFO;
         }
 
@@ -300,7 +301,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_GROUP_INFO = new ObjectResultParser<StreamGroupInfo>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<StreamGroupInfo> getType() {
             return TypeFactory.STREAM_GROUP_INFO;
         }
 
@@ -317,7 +318,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_CONSUMERS_INFO = new ObjectResultParser<StreamConsumersInfo>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
+        protected @NotNull ObjectType<StreamConsumersInfo> getType() {
             return TypeFactory.STREAM_CONSUMERS_INFO;
         }
 
@@ -334,8 +335,8 @@ public class ResultParserFactory {
 
     public static final ResultParser STRING_SCAN_RESULT = new ObjectResultParser<ScanResult<String>>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
-            return TypeFactory.SCAN_RESULT;
+        protected @NotNull ObjectType<ScanResult<String>> getType() {
+            return TypeFactory.STRING_SCAN_RESULT;
         }
 
         @Override
@@ -351,8 +352,8 @@ public class ResultParserFactory {
 
     public static final ResultParser TUPLE_SCAN_RESULT = new ObjectResultParser<ScanResult<Tuple>>() {
         @Override
-        protected @NotNull Map<String, String> getType() {
-            return TypeFactory.SCAN_RESULT;
+        protected @NotNull ObjectType<ScanResult<Tuple>> getType() {
+            return TypeFactory.TUPLE_SCAN_RESULT;
         }
 
         @Override
@@ -397,7 +398,7 @@ public class ResultParserFactory {
     }
 
     private static abstract class ObjectResultParser<T> implements ResultParser {
-        protected abstract @NotNull Map<String, String> getType();
+        protected abstract @NotNull ObjectType<T> getType();
         protected abstract @NotNull Builder<List<T>> getBuilder();
         protected abstract @NotNull ObjectConverter<T> getConverter();
 

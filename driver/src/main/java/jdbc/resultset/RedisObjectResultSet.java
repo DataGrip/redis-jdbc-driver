@@ -1,6 +1,7 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
+import jdbc.client.helpers.result.parser.type.ObjectType;
 import jdbc.client.structures.result.RedisObjectResult;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
@@ -12,15 +13,15 @@ import java.util.stream.Collectors;
 
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
-public class RedisObjectResultSet extends RedisResultSetBase<Map<String, String>, List<Map<String, Object>>, Map<String, Object>> {
+public class RedisObjectResultSet extends RedisResultSetBase<ObjectType<?>, List<Map<String, Object>>, Map<String, Object>> {
 
     public RedisObjectResultSet(RedisStatement statement, @NotNull RedisObjectResult result) {
         super(statement, result);
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull Map<String, String> type) {
-        return type.entrySet().stream().map(e -> createColumn(e.getKey(), e.getValue())).collect(Collectors.toList());
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull ObjectType<?> type) {
+        return type.stream().map(e -> createColumn(e.getName(), e.getTypeName())).collect(Collectors.toList());
     }
 
     @Override
