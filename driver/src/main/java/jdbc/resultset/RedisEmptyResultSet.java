@@ -28,7 +28,7 @@ public class RedisEmptyResultSet extends RedisResultSetBase<String, Void, Void> 
     }
 
     @Override
-    protected Object getObject(@NotNull Void row, String columnLabel) throws SQLException {
+    protected Object getResultsObject(@NotNull Void row, String columnLabel) throws SQLException {
         return null;
     }
 }

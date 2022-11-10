@@ -35,8 +35,8 @@ public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Ob
     }
 
     @Override
-    protected Object getObject(@NotNull Map.Entry<String, Object> row, String columnLabel) throws SQLException {
-        int columnIndex = getMetaData().findColumn(columnLabel);
+    protected Object getResultsObject(@NotNull Map.Entry<String, Object> row, String columnLabel) throws SQLException {
+        int columnIndex = findResultsColumn(columnLabel);
         return columnIndex == 1 ? row.getKey() : columnIndex == 2 ? row.getValue() : null;
     }
 }

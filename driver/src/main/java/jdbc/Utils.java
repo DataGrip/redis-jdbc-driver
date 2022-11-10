@@ -18,7 +18,7 @@ public class Utils {
     }
 
     public static String toUpperCase(String value) {
-        return value.toLowerCase(Locale.ENGLISH);
+        return value.toUpperCase(Locale.ENGLISH);
     }
 
 

@@ -24,7 +24,7 @@ public class RedisDriverPropertyInfoHelper {
         addPropInfo(propInfos, SOCKET_TIMEOUT, String.valueOf(CONFIG.getSocketTimeoutMillis()), "Socket timeout in milliseconds.");
         addPropInfo(propInfos, BLOCKING_SOCKET_TIMEOUT, String.valueOf(CONFIG.getBlockingSocketTimeoutMillis()), "Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever.");
         addPropInfo(propInfos, CLIENT_NAME, CONFIG.getClientName(), "Client name.");
-        addPropInfo(propInfos, MAX_ATTEMPTS, String.valueOf(CONFIG.getMaxAttempts()), "Maximum number of attempts (cluser only).");
+        addPropInfo(propInfos, MAX_ATTEMPTS, String.valueOf(CONFIG.getMaxAttempts()), "Maximum number of attempts (cluster only).");
         return propInfos.toArray(new DriverPropertyInfo[0]);
     }
 

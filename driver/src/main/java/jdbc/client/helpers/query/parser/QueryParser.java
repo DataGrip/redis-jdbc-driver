@@ -58,7 +58,7 @@ public class QueryParser {
         CompositeCommand compositeCommand = new CompositeCommand(redisCommand, redisKeyword, commandLine.params);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
-        ColumnHint columnHint = new ColumnHint(columnHintLine.name, columnHintLine.values);
+        ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
 
         return createQuery(compositeCommand, columnHint);
     }

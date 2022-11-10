@@ -46,8 +46,8 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
     }
 
     @Override
-    protected Object getObject(@NotNull Object row, String columnLabel) throws SQLException {
-        int columnIndex = getMetaData().findColumn(columnLabel);
+    protected Object getResultsObject(@NotNull Object row, String columnLabel) throws SQLException {
+        int columnIndex = findResultsColumn(columnLabel);
         return columnIndex == 1 ? row : null;
     }
 }

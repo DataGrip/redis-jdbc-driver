@@ -36,7 +36,7 @@ public class RedisObjectResultSet extends RedisResultSetBase<ObjectType<?>, List
     }
 
     @Override
-    protected Object getObject(@NotNull Map<String, Object> row, String columnLabel) throws SQLException {
+    protected Object getResultsObject(@NotNull Map<String, Object> row, String columnLabel) throws SQLException {
         return row.get(columnLabel);
     }
 }

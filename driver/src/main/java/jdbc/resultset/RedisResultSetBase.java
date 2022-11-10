@@ -48,7 +48,9 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
     }
 
     protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<T, RR> result) {
-        List<ColumnMetaData> resultColumns = createResultColumns(result.getQuery(), result.getType(), result.getResult());
+        RedisQuery query = result.getQuery();
+        List<ColumnMetaData> resultColumns = createResultColumns(query, result.getType(), result.getResult());
+        ColumnHint columnHint = query.getColumnHint();
         if (columnHint == null) return resultColumns;
         return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
     }
@@ -293,15 +295,15 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         checkClosed();
         if (index > rows.size()) throw new SQLException("Exhausted ResultSet.");
         if (columnHint != null && columnHint.getName().equals(columnLabel)) return getColumnHintObject(columnHint, index);
-        return currentRow != null ? getObject(currentRow, columnLabel) : null;
+        return currentRow != null ? getResultsObject(currentRow, columnLabel) : null;
     }
 
     private @Nullable Object getColumnHintObject(@NotNull ColumnHint columnHint, int index) {
         String[] values = columnHint.getValues();
-        return index < values.length ? values[index] : null;
+        return index <= values.length ? values[index - 1] : null;
     }
 
-    protected abstract Object getObject(@NotNull R row, String columnLabel) throws SQLException;
+    protected abstract Object getResultsObject(@NotNull R row, String columnLabel) throws SQLException;
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {
@@ -309,6 +311,11 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         int col = getMetaData().findColumn(columnLabel);
         if (col == -1) throw new SQLException("No such column " + columnLabel);
         return col;
+    }
+
+    protected int findResultsColumn(String columnLabel) throws SQLException {
+        int index = findColumn(columnLabel);
+        return columnHint != null ? index - 1 : index;
     }
 
     @Override

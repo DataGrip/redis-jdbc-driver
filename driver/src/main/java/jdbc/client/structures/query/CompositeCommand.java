@@ -11,8 +11,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static jdbc.Utils.toUpperCase;
-
 public class CompositeCommand {
     private final Command command;
     private final Keyword keyword;
@@ -51,7 +49,7 @@ public class CompositeCommand {
         if (paramsSet == null) {
             paramsSet = Arrays.stream(params).map(Utils::toUpperCase).collect(Collectors.toSet());
         }
-        return paramsSet.contains(toUpperCase(keywordParam.name()));
+        return paramsSet.contains(keywordParam.name());
     }
 
     public static CompositeCommand create(@NotNull Command command, @Nullable Keyword keyword) {
