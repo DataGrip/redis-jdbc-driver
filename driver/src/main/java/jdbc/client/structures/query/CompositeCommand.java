@@ -1,16 +1,23 @@
 package jdbc.client.structures.query;
 
+import jdbc.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static jdbc.Utils.toUpperCase;
 
 public class CompositeCommand {
     private final Command command;
     private final Keyword keyword;
     private final String[] params;
+    private Set<String> paramsSet;
 
     public CompositeCommand(@NotNull Command command, @Nullable Keyword keyword, @NotNull String[] params) {
         this.command = command;
@@ -38,6 +45,13 @@ public class CompositeCommand {
     @NotNull
     public String[] getParams() {
         return params;
+    }
+
+    public boolean containsParam(@NotNull Keyword keywordParam) {
+        if (paramsSet == null) {
+            paramsSet = Arrays.stream(params).map(Utils::toUpperCase).collect(Collectors.toSet());
+        }
+        return paramsSet.contains(toUpperCase(keywordParam.name()));
     }
 
     public static CompositeCommand create(@NotNull Command command, @Nullable Keyword keyword) {

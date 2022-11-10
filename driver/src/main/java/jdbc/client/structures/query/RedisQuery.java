@@ -2,6 +2,7 @@ package jdbc.client.structures.query;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Command;
 
 public class RedisQuery {
@@ -26,6 +27,10 @@ public class RedisQuery {
     @NotNull
     public String[] getParams() {
         return compositeCommand.getParams();
+    }
+
+    public boolean containsParam(@NotNull Protocol.Keyword keywordParam) {
+        return compositeCommand.containsParam(keywordParam);
     }
 
     public ColumnHint getColumnHint() {
