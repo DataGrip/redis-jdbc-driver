@@ -9,7 +9,6 @@ import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,21 +22,14 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<String, List<Object>> result) {
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<String, List<Object>> result) {
         RedisQuery query = result.getQuery();
         ColumnHint columnHint = query.getColumnHint();
-        if (columnHint != null && columnHint.getName().equals(VALUE)) {
-            String command = toLowerCase(query.getCommand().name());
-            return Arrays.asList(createHintColumn(columnHint), createColumn(command, result.getType()));
+        String resultColumnName = VALUE;
+        if (columnHint != null && columnHint.getName().equals(resultColumnName)) {
+            resultColumnName = toLowerCase(query.getCommand().name());
         }
-        return super.createColumns(result);
-    }
-
-    @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
-                                                                @NotNull String type,
-                                                                @NotNull List<Object> result) {
-        return Collections.singletonList(createColumn(VALUE, type));
+        return Collections.singletonList(createColumn(resultColumnName, result.getType()));
     }
 
     @Override
@@ -46,8 +38,8 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
     }
 
     @Override
-    protected Object getResultsObject(@NotNull Object row, String columnLabel) throws SQLException {
-        int columnIndex = findResultsColumn(columnLabel);
+    protected Object getResultObject(@NotNull Object row, String columnLabel) throws SQLException {
+        int columnIndex = findResultColumn(columnLabel);
         return columnIndex == 1 ? row : null;
     }
 }

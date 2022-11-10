@@ -2,7 +2,6 @@ package jdbc.resultset;
 
 import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.resultset.types.ArrayImpl;
@@ -47,21 +46,18 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         this.columnHint = result.getQuery().getColumnHint();
     }
 
-    protected @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<T, RR> result) {
-        RedisQuery query = result.getQuery();
-        List<ColumnMetaData> resultColumns = createResultColumns(query, result.getType(), result.getResult());
-        ColumnHint columnHint = query.getColumnHint();
+    private @NotNull List<ColumnMetaData> createColumns(@NotNull RedisResultBase<T, RR> result) {
+        List<ColumnMetaData> resultColumns = createResultColumns(result);
+        ColumnHint columnHint = result.getQuery().getColumnHint();
         if (columnHint == null) return resultColumns;
         return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
     }
 
-    protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
-                                                                         @NotNull T type,
-                                                                         @NotNull RR result);
-
     protected ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
         return createColumn(columnHint.getName(), "string");
     }
+
+    protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<T, RR> result);
 
     protected abstract @NotNull List<R> createRows(@NotNull RR result);
 
@@ -295,7 +291,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         checkClosed();
         if (index > rows.size()) throw new SQLException("Exhausted ResultSet.");
         if (columnHint != null && columnHint.getName().equals(columnLabel)) return getColumnHintObject(columnHint, index);
-        return currentRow != null ? getResultsObject(currentRow, columnLabel) : null;
+        return currentRow != null ? getResultObject(currentRow, columnLabel) : null;
     }
 
     private @Nullable Object getColumnHintObject(@NotNull ColumnHint columnHint, int index) {
@@ -303,7 +299,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         return index <= values.length ? values[index - 1] : null;
     }
 
-    protected abstract Object getResultsObject(@NotNull R row, String columnLabel) throws SQLException;
+    protected abstract Object getResultObject(@NotNull R row, String columnLabel) throws SQLException;
 
     @Override
     public int findColumn(String columnLabel) throws SQLException {
@@ -313,7 +309,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         return col;
     }
 
-    protected int findResultsColumn(String columnLabel) throws SQLException {
+    protected int findResultColumn(String columnLabel) throws SQLException {
         int index = findColumn(columnLabel);
         return columnHint != null ? index - 1 : index;
     }

@@ -1,8 +1,8 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisMapResult;
+import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,10 +23,8 @@ public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Ob
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
-                                                                @NotNull String type,
-                                                                @NotNull Map<String, Object> result) {
-        return Arrays.asList(createColumn(FIELD, "string"), createColumn(VALUE, type));
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<String, Map<String, Object>> result) {
+        return Arrays.asList(createColumn(FIELD, "string"), createColumn(VALUE, result.getType()));
     }
 
     @Override
@@ -35,8 +33,8 @@ public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Ob
     }
 
     @Override
-    protected Object getResultsObject(@NotNull Map.Entry<String, Object> row, String columnLabel) throws SQLException {
-        int columnIndex = findResultsColumn(columnLabel);
+    protected Object getResultObject(@NotNull Map.Entry<String, Object> row, String columnLabel) throws SQLException {
+        int columnIndex = findResultColumn(columnLabel);
         return columnIndex == 1 ? row.getKey() : columnIndex == 2 ? row.getValue() : null;
     }
 }

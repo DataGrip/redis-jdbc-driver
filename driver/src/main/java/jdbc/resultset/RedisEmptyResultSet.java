@@ -1,7 +1,7 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +16,7 @@ public class RedisEmptyResultSet extends RedisResultSetBase<String, Void, Void> 
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
-                                                                @NotNull String type,
-                                                                @NotNull Void result) {
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<String, Void> result) {
         return Collections.emptyList();
     }
 
@@ -28,7 +26,7 @@ public class RedisEmptyResultSet extends RedisResultSetBase<String, Void, Void> 
     }
 
     @Override
-    protected Object getResultsObject(@NotNull Void row, String columnLabel) throws SQLException {
+    protected Object getResultObject(@NotNull Void row, String columnLabel) throws SQLException {
         return null;
     }
 }

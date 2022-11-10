@@ -1,9 +1,9 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.ObjectType;
 import jdbc.client.structures.result.RedisObjectResult;
+import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,11 +21,9 @@ public class RedisObjectResultSet extends RedisResultSetBase<ObjectType<?>, List
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisQuery query,
-                                                                @NotNull ObjectType<?> type,
-                                                                @NotNull List<Map<String, Object>> result) {
-        return type.stream()
-                .filter(e -> e.isPresent(query))
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<ObjectType<?>, List<Map<String, Object>>> result) {
+        return result.getType().stream()
+                .filter(e -> e.isPresent(result.getQuery()))
                 .map(e -> createColumn(e.getName(), e.getTypeName()))
                 .collect(Collectors.toList());
     }
@@ -36,7 +34,7 @@ public class RedisObjectResultSet extends RedisResultSetBase<ObjectType<?>, List
     }
 
     @Override
-    protected Object getResultsObject(@NotNull Map<String, Object> row, String columnLabel) throws SQLException {
+    protected Object getResultObject(@NotNull Map<String, Object> row, String columnLabel) throws SQLException {
         return row.get(columnLabel);
     }
 }
