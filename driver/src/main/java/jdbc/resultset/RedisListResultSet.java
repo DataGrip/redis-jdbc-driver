@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-import static jdbc.Utils.toLowerCase;
+import static jdbc.Utils.getColumnTitle;
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
 public class RedisListResultSet extends RedisResultSetBase<String, List<Object>, Object> {
@@ -27,7 +27,7 @@ public class RedisListResultSet extends RedisResultSetBase<String, List<Object>,
         ColumnHint columnHint = query.getColumnHint();
         String resultColumnName = VALUE;
         if (columnHint != null && columnHint.getName().equals(resultColumnName)) {
-            resultColumnName = toLowerCase(query.getCommand().name());
+            resultColumnName = getColumnTitle(query.getCommand());
         }
         return Collections.singletonList(createColumn(resultColumnName, result.getType()));
     }

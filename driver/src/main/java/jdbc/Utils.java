@@ -2,6 +2,7 @@ package jdbc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Protocol;
 
 import java.util.Locale;
 import java.util.Map;
@@ -13,11 +14,11 @@ public class Utils {
     }
 
 
-    public static String toLowerCase(String value) {
+    public static @NotNull String toLowerCase(@NotNull String value) {
         return value.toLowerCase(Locale.ENGLISH);
     }
 
-    public static String toUpperCase(String value) {
+    public static @NotNull String toUpperCase(@NotNull String value) {
         return value.toUpperCase(Locale.ENGLISH);
     }
 
@@ -45,5 +46,12 @@ public class Utils {
             if (option != null) return valueGetter.apply(option.toString());
         }
         return defaultValue;
+    }
+
+
+    public static @NotNull String getColumnTitle(@NotNull Protocol.Command command) {
+        String lowerName = toLowerCase(command.name());
+        if (lowerName.equals("zscore") || lowerName.equals("zmscore")) return "score"; // for consistency with ObjectType<Tuple>
+        return lowerName;
     }
 }
