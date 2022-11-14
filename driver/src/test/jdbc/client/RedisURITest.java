@@ -6,8 +6,10 @@ import redis.clients.jedis.HostAndPort;
 import java.util.Comparator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class RedisURITest {
+
     @Test
     public void testURI() {
         RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380/7", null);
@@ -17,6 +19,54 @@ public class RedisURITest {
         assertEquals("user", uri.getUser());
         assertEquals("password", uri.getPassword());
         assertEquals(7, uri.getDatabase());
+    }
+
+    @Test
+    public void testURIEmptyUser() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://password@server:6380/7", null);
+        assertNull(uri.getUser());
+        assertEquals("password", uri.getPassword());
+    }
+
+    @Test
+    public void testURIEmptyAuth() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://server:6380/7", null);
+        assertNull(uri.getUser());
+        assertNull(uri.getPassword());
+    }
+
+    @Test
+    public void testURIEmptyDatabase() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://server:6380", null);
+        assertEquals(0, uri.getDatabase());
+    }
+
+    @Test
+    public void testURIEmptyDatabaseAfterSlash() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380/", null);
+        assertEquals(0, uri.getDatabase());
+    }
+
+    @Test
+    public void testURIParamsAfterDatabase() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380/7?connectionTimeout=1000&socketTimeout=3000", null);
+        assertEquals(1000, uri.getConnectionTimeoutMillis());
+        assertEquals(3000, uri.getSocketTimeoutMillis());
+    }
+
+    @Test
+    public void testURIParamsAfterSlash() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380/?connectionTimeout=1000&socketTimeout=3000", null);
+        assertEquals(1000, uri.getConnectionTimeoutMillis());
+        assertEquals(3000, uri.getSocketTimeoutMillis());
+    }
+
+
+    @Test
+    public void testURIParamsAfterHostAndPort() {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380?connectionTimeout=1000&socketTimeout=3000", null);
+        assertEquals(1000, uri.getConnectionTimeoutMillis());
+        assertEquals(3000, uri.getSocketTimeoutMillis());
     }
 
     @Test

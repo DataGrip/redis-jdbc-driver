@@ -42,10 +42,10 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
         int questionIndex = uri.indexOf('?');
         if (slashIndex >= 0) {
             hostAndPortBlock = uri.substring(0, slashIndex);
-            uri = uri.substring(slashIndex);
+            uri = uri.substring(slashIndex + 1);
         } else if (questionIndex >= 0) {
             hostAndPortBlock = uri.substring(0, questionIndex);
-            uri = uri.substring(questionIndex);
+            uri = uri.substring(questionIndex + 1);
         } else {
             hostAndPortBlock = uri;
             uri = "";
@@ -54,10 +54,10 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
 
         String databaseBlock = "";
         if (slashIndex >= 0) {
-            uri = uri.replaceFirst("/", "");
+            questionIndex = uri.indexOf('?');
             if (questionIndex >= 0) {
                 databaseBlock = uri.substring(0, questionIndex);
-                uri = uri.substring(questionIndex);
+                uri = uri.substring(questionIndex + 1);
             } else {
                 databaseBlock = uri;
                 uri = "";
@@ -67,7 +67,6 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
 
         String parametersBlock = "";
         if (questionIndex >= 0) {
-            uri = uri.replaceFirst("\\?", "");
             parametersBlock = uri;
         }
         setParameters(parametersBlock, info);
@@ -118,7 +117,7 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
 
     private void setParameters(@NotNull String parametersBlock, Properties info) {
         Map<String, String> parameters = new HashMap<>();
-        String[] parametersParts = parametersBlock.split(",");
+        String[] parametersParts = parametersBlock.split("&");
         for (String parameterBlock : parametersParts) {
             if (!parameterBlock.isEmpty()) {
                 String[] nodeParts = parameterBlock.split("=", 2);
