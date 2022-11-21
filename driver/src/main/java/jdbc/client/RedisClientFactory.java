@@ -14,7 +14,9 @@ public class RedisClientFactory {
 
     public static RedisClient create(String url, Properties info) throws SQLException {
         if (RedisJedisURI.acceptsURL(url)) return new RedisJedisClient(new RedisJedisURI(url, info));
-        if (RedisJedisClusterURI.acceptsURL(url)) return new RedisJedisClusterClient(new RedisJedisClusterURI(url, info));
+        // TODO: support Redis Cluster
+        // if (RedisJedisClusterURI.acceptsURL(url)) return new RedisJedisClusterClient(new RedisJedisClusterURI(url, info));
+        if (RedisJedisClusterURI.acceptsURL(url)) throw  new SQLException("Redis Cluster is not supported.");
         return null;
     }
 }
