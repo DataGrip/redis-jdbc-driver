@@ -514,6 +514,23 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser ENTRY_SCAN_RESULT = new ObjectListResultParser<ScanResult<Map.Entry<String, String>>>() {
+        @Override
+        protected @NotNull ObjectType<ScanResult<Map.Entry<String, String>>> getType() {
+            return TypeFactory.ENTRY_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull BuilderWrapper<List<ScanResult<Map.Entry<String, String>>>> getBuilder() {
+            return BuilderWrapperFactory.ENTRY_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<ScanResult<Map.Entry<String, String>>> getConverter() {
+            return ConverterFactory.ENTRY_SCAN_RESULT;
+        }
+    };
+
 
     private static abstract class ListResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();

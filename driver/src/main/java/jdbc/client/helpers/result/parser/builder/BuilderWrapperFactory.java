@@ -265,43 +265,41 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final BuilderWrapper<List<ScanResult<String>>> STRING_SCAN_RESULT = new ScanResultBuilder<>() {
+    public static final BuilderWrapper<List<ScanResult<String>>> STRING_SCAN_RESULT = new ListBuilderWrapper<>() {
         @Override
-        protected @NotNull Builder<List<String>> getResultsBuilder() {
-            return BuilderFactory.STRING_LIST;
-        }
-    };
-
-    public static final BuilderWrapper<List<ScanResult<Tuple>>> TUPLE_SCAN_RESULT = new ScanResultBuilder<>() {
-        @Override
-        protected @NotNull Builder<List<Tuple>> getResultsBuilder() {
-            return BuilderFactory.TUPLE_LIST;
-        }
-    };
-
-    private static abstract class ScanResultBuilder<T> extends ListBuilderWrapper<ScanResult<T>> {
-
-        abstract protected @NotNull Builder<List<T>> getResultsBuilder();
-
-        protected @Nullable Builder<ScanResult<T>> getBuilder() {
-            return new Builder<>() {
-                @Override
-                public ScanResult<T> build(Object data) {
-                    if (data == null) return null;
-                    List<?> l = (List<?>) data;
-                    String cursor = BuilderFactory.STRING.build(l.get(0));
-                    List<T> results = getResultsBuilder().build(l.get(1));
-                    return new ScanResult<>(cursor, results);
-                }
-            };
+        protected Builder<ScanResult<String>> getBuilder() {
+            return BuilderFactory.SCAN_RESPONSE;
         }
 
         @Override
         public String toString() {
-            return getResultsBuilder().toString().replaceFirst("List", "ScanResult");
+            return "ScanResult<String>";
         }
-    }
+    };
 
+    public static final BuilderWrapper<List<ScanResult<Tuple>>> TUPLE_SCAN_RESULT = new ListBuilderWrapper<>() {
+        @Override
+        protected Builder<ScanResult<Tuple>> getBuilder() {
+            return BuilderFactory.ZSCAN_RESPONSE;
+        }
+
+        @Override
+        public String toString() {
+            return "ScanResult<Tuple>";
+        }
+    };
+
+    public static final BuilderWrapper<List<ScanResult<Map.Entry<String, String>>>> ENTRY_SCAN_RESULT = new ListBuilderWrapper<>() {
+        @Override
+        protected Builder<ScanResult<Map.Entry<String, String>>> getBuilder() {
+            return BuilderFactory.HSCAN_RESPONSE;
+        }
+
+        @Override
+        public String toString() {
+            return "ScanResult<Map.Entry<String, String>>";
+        }
+    };
 
     private static abstract class ListBuilderWrapper<T> extends BuilderWrapper<List<T>> {
 

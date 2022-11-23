@@ -184,6 +184,8 @@ public class TypeFactory {
 
     public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>();
 
+    public static final ObjectType<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultType<>();
+
     private static class ScanResultType<T> extends ObjectType<ScanResult<T>> {
         ScanResultType() {
             add("cursor", STRING);

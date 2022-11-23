@@ -290,9 +290,11 @@ public class ConverterFactory {
     };
     
     public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultConverter<>() {
+        private final Converter<String, ?, ?> STRING = new IdentityConverter<>();
+
         @Override
         protected @NotNull Converter<String, ?, ?> getResultsConvertor() {
-            return new IdentityConverter<>();
+            return STRING;
         }
     };
 
@@ -300,6 +302,23 @@ public class ConverterFactory {
         @Override
         protected @NotNull Converter<Tuple, ?, ?> getResultsConvertor() {
             return TUPLE;
+        }
+    };
+
+    public static final ObjectConverter<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultConverter<>() {
+        private final Converter<Map.Entry<String, String>, ?, ?> ENTRY = new ObjectConverter<>() {
+            @Override
+            protected @NotNull Map<String, Object> convertImpl(Map.@NotNull Entry<String, String> encoded) {
+                return new HashMap<>() {{
+                    put("field", encoded.getKey());
+                    put("value", encoded.getValue());
+                }};
+            }
+        };
+
+        @Override
+        protected @NotNull Converter<Map.Entry<String, String>, ?, ?> getResultsConvertor() {
+            return ENTRY;
         }
     };
 

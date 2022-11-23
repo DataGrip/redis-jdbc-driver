@@ -67,7 +67,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.HINCRBYFLOAT), ResultParserFactory.DOUBLE);
         put(CompositeCommand.create(Command.HLEN), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.HRANDFIELD, Keyword.WITHVALUES), ResultParserFactory.STRING_MAP);
-        // TODO: put(RedisCompositeCommand.create(Protocol.Command.HSCAN), ???); - Builder with ScanResult
+        put(CompositeCommand.create(Command.HSCAN), ResultParserFactory.ENTRY_SCAN_RESULT);
         put(CompositeCommand.create(Command.HSET), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.HSETNX), ResultParserFactory.BOOLEAN);
         put(CompositeCommand.create(Command.HSTRLEN), ResultParserFactory.LONG);
