@@ -6,7 +6,9 @@ import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
 import redis.clients.jedis.resps.*;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static redis.clients.jedis.BuilderFactory.RAW_OBJECT_LIST;
 
@@ -80,20 +82,6 @@ public class BuilderWrapperFactory {
         }
     };
 
-    // TODO: use Iterable instead of conversation list to set
-    private static final Builder<List<Tuple>> TUPLE_LIST = new Builder<>() {
-        @Override
-        public List<Tuple> build(Object data) {
-            Set<Tuple> tupleSet = BuilderFactory.TUPLE_ZSET.build(data);
-            return tupleSet == null ? null : new ArrayList<>(tupleSet);
-        }
-
-        @Override
-        public String toString() {
-            return "List<Tuple>";
-        }
-    };
-
     public static final BuilderWrapper<List<Tuple>> TUPLE_RESULT = new ListBuilderWrapper<>() {
         @Override
         protected Builder<Tuple> getBuilder() {
@@ -102,7 +90,7 @@ public class BuilderWrapperFactory {
 
         @Override
         protected Builder<List<Tuple>> getListBuilder() {
-            return BuilderWrapperFactory.TUPLE_LIST;
+            return BuilderFactory.TUPLE_LIST;
         }
     };
 
@@ -287,7 +275,7 @@ public class BuilderWrapperFactory {
     public static final BuilderWrapper<List<ScanResult<Tuple>>> TUPLE_SCAN_RESULT = new ScanResultBuilder<>() {
         @Override
         protected @NotNull Builder<List<Tuple>> getResultsBuilder() {
-            return BuilderWrapperFactory.TUPLE_LIST;
+            return BuilderFactory.TUPLE_LIST;
         }
     };
 
