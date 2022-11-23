@@ -105,6 +105,86 @@ public class ConverterFactory {
         }
     };
 
+    public static final ObjectConverter<CommandDocument> COMMAND_DOCUMENT = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull CommandDocument encoded) {
+            return new HashMap<>() {{
+                put("summary", encoded.getSummary());
+                put("since", encoded.getSince());
+                put("group", encoded.getGroup());
+                put("complexity", encoded.getComplexity());
+                put("history", encoded.getHistory());
+            }};
+        }
+
+        @Override
+        protected @NotNull Map<String, Object> convertEntryImpl(@NotNull Map.Entry<String, CommandDocument> encoded) {
+            Map<String, Object> converted = super.convertEntryImpl(encoded);
+            converted.put("command-name", encoded.getKey());
+            return converted;
+        }
+    };
+
+    public static final ObjectConverter<CommandInfo> COMMAND_INFO = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull CommandInfo encoded) {
+            return new HashMap<>() {{
+                put("arity", encoded.getArity());
+                put("flags", encoded.getFlags());
+                put("firstKey", encoded.getFirstKey());
+                put("lastKey", encoded.getLastKey());
+                put("step", encoded.getStep());
+                put("acl-categories", encoded.getAclCategories());
+                put("tips", encoded.getTips());
+                put("subcommands", encoded.getSubcommands());
+            }};
+        }
+
+        @Override
+        protected @NotNull Map<String, Object> convertEntryImpl(@NotNull Map.Entry<String, CommandInfo> encoded) {
+            Map<String, Object> converted = super.convertEntryImpl(encoded);
+            converted.put("command-name", encoded.getKey());
+            return converted;
+        }
+    };
+
+    public static final ObjectConverter<FunctionStats> FUNCTION_STATS = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull FunctionStats encoded) {
+            return new HashMap<>() {{
+                put("running-script", encoded.getRunningScript());
+                put("engines", encoded.getEngines());
+            }};
+        }
+    };
+
+    public static final ObjectConverter<LibraryInfo> LIBRARY_INFO = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull LibraryInfo encoded) {
+            return new HashMap<>() {{
+                put("library-name", encoded.getLibraryName());
+                put("engine", encoded.getEngine());
+                put("functions", encoded.getFunctions());
+                put("library-code", encoded.getLibraryCode());
+            }};
+        }
+    };
+
+    public static final ObjectConverter<Slowlog> SLOW_LOG = new ObjectConverter<>() {
+        @Override
+        protected @NotNull Map<String, Object> convertImpl(@NotNull Slowlog encoded) {
+            return new HashMap<>() {{
+                put("id", encoded.getId());
+                put("timestamp", encoded.getTimeStamp());
+                put("execution-time", encoded.getExecutionTime());
+                put("args", encoded.getArgs());
+                // TODO: host and port converter?
+                put("client-ip-port", encoded.getClientIpPort().toString());
+                put("client-name", encoded.getClientName());
+            }};
+        }
+    };
+
     public static final SimpleConverter<StreamEntryID> STREAM_ENTRY_ID = new SimpleConverter<>() {
         @Override
         public @NotNull Object convertImpl(@NotNull StreamEntryID encoded) {
@@ -122,27 +202,12 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ = new ObjectConverter<>() {
+    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectConverter<>() {
         @Override
         public @NotNull Map<String, Object> convertImpl(@NotNull Map.Entry<String, List<StreamEntry>> encoded) {
             return new HashMap<>() {{
                 put("key", encoded.getKey());
-                put("value", STREAM_ENTRY.convert(encoded.getValue()));
-            }};
-        }
-    };
-
-    public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
-        @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamInfo encoded) {
-            return new HashMap<>() {{
-                put("length", encoded.getLength());
-                put("radix-tree-keys", encoded.getRadixTreeKeys());
-                put("radix-tree-nodes", encoded.getRadixTreeNodes());
-                put("groups", encoded.getGroups());
-                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
-                put("first-entry", STREAM_ENTRY.convert(encoded.getFirstEntry()));
-                put("last-entry", STREAM_ENTRY.convert(encoded.getLastEntry()));
+                put("entries", STREAM_ENTRY.convert(encoded.getValue()));
             }};
         }
     };
@@ -170,23 +235,77 @@ public class ConverterFactory {
         }
     };
 
+    public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamInfo encoded) {
+            return new HashMap<>() {{
+                put("length", encoded.getLength());
+                put("radix-tree-keys", encoded.getRadixTreeKeys());
+                put("radix-tree-nodes", encoded.getRadixTreeNodes());
+                put("groups", encoded.getGroups());
+                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
+                put("first-entry", STREAM_ENTRY.convert(encoded.getFirstEntry()));
+                put("last-entry", STREAM_ENTRY.convert(encoded.getLastEntry()));
+            }};
+        }
+    };
+
+    public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamFullInfo encoded) {
+            return new HashMap<>() {{
+                put("length", encoded.getLength());
+                put("radix-tree-keys", encoded.getRadixTreeKeys());
+                put("radix-tree-nodes", encoded.getRadixTreeNodes());
+                // TODO: STREAM_GROUP_FULL_INFO + STREAM_CONSUMER_FULL_INFO  Converters
+                put("groups", encoded.getGroups());
+                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
+                put("entries", STREAM_ENTRY.convert(encoded.getEntries()));
+            }};
+        }
+    };
+
+    public static final ObjectConverter<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamPendingEntry encoded) {
+            return new HashMap<>() {{
+                put("id", STREAM_ENTRY_ID.convert(encoded.getID()));
+                put("consumer-name", encoded.getConsumerName());
+                put("idle-time", encoded.getIdleTime());
+                put("delivered-times", encoded.getDeliveredTimes());
+            }};
+        }
+    };
+
+    public static final ObjectConverter<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamPendingSummary encoded) {
+            return new HashMap<>() {{
+                put("total", encoded.getTotal());
+                put("min-id", STREAM_ENTRY_ID.convert(encoded.getMinId()));
+                put("max-id", STREAM_ENTRY_ID.convert(encoded.getMaxId()));
+                put("consumer-message-count", encoded.getConsumerMessageCount());
+            }};
+        }
+    };
+    
     public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultConverter<>() {
         @Override
-        protected @NotNull Converter<String, ?> getResultsConvertor() {
+        protected @NotNull Converter<String, ?, ?> getResultsConvertor() {
             return new IdentityConverter<>();
         }
     };
 
     public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultConverter<>() {
         @Override
-        protected @NotNull Converter<Tuple, ?> getResultsConvertor() {
+        protected @NotNull Converter<Tuple, ?, ?> getResultsConvertor() {
             return TUPLE;
         }
     };
 
     private abstract static class ScanResultConverter<T> extends ObjectConverter<ScanResult<T>> {
 
-        protected abstract @NotNull Converter<T, ?> getResultsConvertor();
+        protected abstract @NotNull Converter<T, ?, ?> getResultsConvertor();
 
         @Override
         protected @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<T> encoded) {

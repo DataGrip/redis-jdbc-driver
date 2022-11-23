@@ -35,6 +35,11 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.BZPOPMIN), ResultParserFactory.KEYED_ZSET_ELEMENT);
         put(CompositeCommand.create(Command.CLIENT, Keyword.ID), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.CLIENT, Keyword.UNBLOCK), ResultParserFactory.LONG);
+        put(CompositeCommand.create(Command.COMMAND, Keyword.COUNT), ResultParserFactory.LONG);
+        put(CompositeCommand.create(Command.COMMAND, Keyword.DOCS), ResultParserFactory.COMMAND_DOCUMENT);
+        // TODO: KeyValue
+        // TODO: put(CompositeCommand.create(Command.COMMAND, Keyword.GETKEYSANDFLAGS), ???);
+        put(CompositeCommand.create(Command.COMMAND, Keyword.INFO), ResultParserFactory.COMMAND_INFO);
         put(CompositeCommand.create(Command.CONFIG, Keyword.GET), ResultParserFactory.STRING_MAP);
         put(CompositeCommand.create(Command.COPY), ResultParserFactory.BOOLEAN);
         put(CompositeCommand.create(Command.DBSIZE), ResultParserFactory.LONG);
@@ -45,6 +50,8 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.EXISTS), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.EXPIRE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.EXPIREAT), ResultParserFactory.LONG);
+        put(CompositeCommand.create(Command.FUNCTION, Keyword.LIST), ResultParserFactory.LIBRARY_INFO);
+        put(CompositeCommand.create(Command.FUNCTION, Keyword.STATS), ResultParserFactory.FUNCTION_STATS);
         put(CompositeCommand.create(Command.GEOADD), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.GEODIST), ResultParserFactory.DOUBLE);
         put(CompositeCommand.create(Command.GEOPOS), ResultParserFactory.GEO_COORDINATE);
@@ -74,7 +81,8 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.LPUSH), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LPUSHX), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.LREM), ResultParserFactory.LONG);
-        // TODO: put(RedisCompositeCommand.create(Protocol.Command.Memory, Protocol.Keyword.STATS), ResultParserFactory.STRING_MAP); - need KeywordEx
+        // TODO: EncodedObject instead of StringMap
+        put(CompositeCommand.create(Command.MEMORY, Keyword.STATS), ResultParserFactory.STRING_MAP);
         put(CompositeCommand.create(Command.MEMORY, Keyword.USAGE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.MODULE, Keyword.LIST), ResultParserFactory.MODULE);
         put(CompositeCommand.create(Command.MOVE), ResultParserFactory.BOOLEAN);
@@ -102,9 +110,11 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.SETRANGE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SINTERSTORE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SISMEMBER), ResultParserFactory.BOOLEAN);
-        // TODO: put(RedisCompositeCommand.create(Command.SLOWLOG, Keyword.GET), ResultParserFactory.SLOW_LOG);
+        put(CompositeCommand.create(Command.SLOWLOG, Keyword.GET), ResultParserFactory.SLOW_LOG);
+        put(CompositeCommand.create(Command.SLOWLOG, Keyword.LEN), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SMISMEMBER), ResultParserFactory.BOOLEAN);
         put(CompositeCommand.create(Command.SMOVE), ResultParserFactory.BOOLEAN);
+        // TODO: sort with store & without store
         // TODO: ? put(RedisCompositeCommand.create(Command.SORT), ResultParserFactory.?);
         // TODO: ? put(RedisCompositeCommand.create(Command.SORT_RO), ResultParserFactory.?);
         put(CompositeCommand.create(Command.SREM), ResultParserFactory.LONG);
@@ -112,7 +122,6 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.STRLEN), ResultParserFactory.LONG);
         // TODO: ? put(RedisCompositeCommand.create(Command.SUBSCRIBE), ResultParserFactory.?);
         put(CompositeCommand.create(Command.SUNIONSTORE), ResultParserFactory.LONG);
-        // TODO: ? put(RedisCompositeCommand.create(Command.TIME), ResultParserFactory.?); - 2 elements
         put(CompositeCommand.create(Command.SUNIONSTORE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.TOUCH), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.TTL), ResultParserFactory.LONG);
@@ -128,7 +137,10 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.XINFO, Keyword.CONSUMERS), ResultParserFactory.STREAM_CONSUMERS_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.GROUPS), ResultParserFactory.STREAM_GROUP_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.STREAM), ResultParserFactory.STREAM_INFO);
+        // TODO: contains FILL Keyword
+        // put(CompositeCommand.create(Command.XINFO, Keyword.STREAM + Keyword.FULL), ResultParserFactory.STREAM_INFO_FULL);
         put(CompositeCommand.create(Command.XLEN), ResultParserFactory.LONG);
+        // TODO: xpending depends on the number of arguments
         // TODO: put(RedisCompositeCommand.create(Command.XPENDING), ResultParserFactory.?);
         put(CompositeCommand.create(Command.XRANGE), ResultParserFactory.STREAM_ENTRY);
         put(CompositeCommand.create(Command.XREAD), ResultParserFactory.STREAM_READ);

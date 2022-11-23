@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-abstract class Converter<T, V> {
+abstract class Converter<T, V, MV> {
 
     @Contract("null -> null; !null -> !null")
     public final V convert(T encoded) {
@@ -26,11 +26,9 @@ abstract class Converter<T, V> {
     }
 
     @Contract("null -> null; !null -> !null")
-    public final Map<String, V> convert(Map<String, T> encoded) {
+    public final MV convert(Map<String, T> encoded) {
         return encoded != null ? convertImpl(encoded) : null;
     }
 
-    protected @NotNull Map<String, V> convertImpl(@NotNull Map<String, T> encoded) {
-        return encoded.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> convertImpl(e.getValue())));
-    }
+    abstract protected @NotNull MV convertImpl(@NotNull Map<String, T> encoded);
 }

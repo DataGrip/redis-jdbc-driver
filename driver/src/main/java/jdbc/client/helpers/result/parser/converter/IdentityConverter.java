@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class IdentityConverter<T> extends SimpleConverter<T> {
+
     @Override
     protected @NotNull T convertImpl(@NotNull T encoded) {
         return encoded;

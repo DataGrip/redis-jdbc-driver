@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TypeFactory {
-    
+
+    // TODO: combine Type & Converter for objects
     private TypeFactory() {
     }
 
@@ -78,6 +79,49 @@ public class TypeFactory {
         add("client-info", MAP);
     }};
 
+    // TODO: CommandDocument: arguments?
+    public static final ObjectType<CommandDocument> COMMAND_DOCUMENT = new ObjectType<>() {{
+        add("command-name", STRING);
+        add("summary", STRING);
+        add("since", STRING);
+        add("group", STRING);
+        add("complexity", STRING);
+        add("history", ARRAY);
+    }};
+
+    public static final ObjectType<CommandInfo> COMMAND_INFO = new ObjectType<>() {{
+        add("command-name", STRING);
+        add("arity", LONG);
+        add("flags", STRING);
+        add("firstKey", LONG);
+        add("lastKey", LONG);
+        add("step", LONG);
+        add("acl-categories", ARRAY);
+        add("tips", ARRAY);
+        add("subcommands", ARRAY);
+    }};
+
+    public static final ObjectType<FunctionStats> FUNCTION_STATS = new ObjectType<>() {{
+        add("running-script", MAP);
+        add("engines", MAP);
+    }};
+
+    public static final ObjectType<LibraryInfo> LIBRARY_INFO = new ObjectType<>() {{
+        add("library-name", STRING);
+        add("engine", STRING);
+        add("functions", MAP);
+        add("library-code", STRING, q -> q.containsParam(Keyword.WITHCODE));
+    }};
+
+    public static final ObjectType<Slowlog> SLOW_LOG = new ObjectType<>() {{
+        add("id", LONG);
+        add("timestamp", LONG);
+        add("execution-time", LONG);
+        add("args", ARRAY);
+        add("client-ip-port", STRING);
+        add("client-name", STRING);
+    }};
+
     public static final String STREAM_ENTRY_ID = STRING;
 
     public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
@@ -85,19 +129,9 @@ public class TypeFactory {
         add("fields", MAP);
     }};
 
-    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ = new ObjectType<>() {{
+    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectType<>() {{
         add("key", STRING);
-        add("value", MAP);
-    }};
-
-    public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{
-        add("length", LONG);
-        add("radix-tree-keys", LONG);
-        add("radix-tree-nodes", LONG);
-        add("groups", LONG);
-        add("last-generated-id", STRING);
-        add("first-entry", MAP);
-        add("last-entry", MAP);
+        add("entries", MAP);
     }};
 
     public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
@@ -111,6 +145,39 @@ public class TypeFactory {
         add("name", STRING);
         add("idle", LONG);
         add("pending", LONG);
+    }};
+
+    public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{
+        add("length", LONG);
+        add("radix-tree-keys", LONG);
+        add("radix-tree-nodes", LONG);
+        add("groups", LONG);
+        add("last-generated-id", STRING);
+        add("first-entry", MAP);
+        add("last-entry", MAP);
+    }};
+
+    public static final ObjectType<StreamFullInfo> STREAM_INFO_FULL = new ObjectType<>() {{
+        add("length", LONG);
+        add("radix-tree-keys", LONG);
+        add("radix-tree-nodes", LONG);
+        add("groups", ARRAY);
+        add("last-generated-id", STRING);
+        add("entries", ARRAY);
+    }};
+
+    public static final ObjectType<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectType<>() {{
+        add("id", STRING);
+        add("consumer-name", STRING);
+        add("idle-time", LONG);
+        add("delivered-times", LONG);
+    }};
+
+    public static final ObjectType<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectType<>() {{
+        add("total", LONG);
+        add("min-id", STRING);
+        add("max-id", STRING);
+        add("consumer-message-count", MAP);
     }};
 
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>();
