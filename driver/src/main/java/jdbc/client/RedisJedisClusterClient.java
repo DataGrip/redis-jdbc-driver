@@ -1,5 +1,6 @@
 package jdbc.client;
 
+import jdbc.client.structures.query.RedisBlockingQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,12 @@ class RedisJedisClusterClient extends RedisClientBase {
     protected synchronized Object execute(@NotNull RedisQuery query) {
         return jedisCluster.sendCommand(query.getCommand(), query.getParams());
     }
+
+    @Override
+    protected Object execute(@NotNull RedisBlockingQuery query) {
+        return jedisCluster.sendBlockingCommand(query.getCommand(), query.getParams());
+    }
+
 
     @Override
     protected String setDatabase(int index) {

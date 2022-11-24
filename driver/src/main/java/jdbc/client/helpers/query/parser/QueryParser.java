@@ -1,10 +1,7 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.helpers.query.parser.lexer.Lexer;
-import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.query.CompositeCommand;
-import jdbc.client.structures.query.RedisQuery;
-import jdbc.client.structures.query.RedisSetDatabaseQuery;
+import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol;
@@ -26,6 +23,11 @@ public class QueryParser {
 
     private static final Map<String, Protocol.Keyword> KEYWORDS =
             Arrays.stream(Protocol.Keyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
+
+    private static final Set<Protocol.Command> BLOCKING_COMMANDS = Set.of(
+            Protocol.Command.BLMOVE, Protocol.Command.BLMPOP, Protocol.Command.BLPOP, Protocol.Command.BRPOP,
+            Protocol.Command.BRPOPLPUSH, Protocol.Command.BZMPOP,Protocol.Command.BZPOPMAX, Protocol.Command.BZPOPMIN
+    );
 
     private static final Set<Protocol.Command> COMMANDS_WITH_PREFIX_KEYWORDS = Set.of(
             Protocol.Command.ACL, Protocol.Command.CLIENT, Protocol.Command.CLUSTER, Protocol.Command.CONFIG,
@@ -102,7 +104,8 @@ public class QueryParser {
 
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @Nullable ColumnHint columnHint) throws SQLException {
-        if (compositeCommand.getCommand() == Protocol.Command.SELECT) {
+        Protocol.Command redisCommand = compositeCommand.getCommand();
+        if (redisCommand == Protocol.Command.SELECT) {
             String db = getFirst(compositeCommand.getParams());
             if (db == null) throw new SQLException("Database should be specified.");
             try {
@@ -111,6 +114,9 @@ public class QueryParser {
             } catch (NumberFormatException e) {
                 throw new SQLException(String.format("Database should be a number: %s.", db));
             }
+        }
+        if (BLOCKING_COMMANDS.contains(redisCommand)) {
+            return new RedisBlockingQuery(compositeCommand, columnHint);
         }
         return new RedisQuery(compositeCommand, columnHint);
     }
