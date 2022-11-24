@@ -66,7 +66,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.HINCRBY), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.HINCRBYFLOAT), ResultParserFactory.DOUBLE);
         put(CompositeCommand.create(Command.HLEN), ResultParserFactory.LONG);
-        put(CompositeCommand.create(Command.HRANDFIELD, Keyword.WITHVALUES), ResultParserFactory.STRING_MAP);
+        put(CompositeCommand.create(Command.HRANDFIELD, null, Keyword.WITHVALUES), ResultParserFactory.STRING_MAP);
         put(CompositeCommand.create(Command.HSCAN), ResultParserFactory.ENTRY_SCAN_RESULT);
         put(CompositeCommand.create(Command.HSET), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.HSETNX), ResultParserFactory.BOOLEAN);
@@ -114,9 +114,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.SLOWLOG, Keyword.LEN), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SMISMEMBER), ResultParserFactory.BOOLEAN);
         put(CompositeCommand.create(Command.SMOVE), ResultParserFactory.BOOLEAN);
-        // TODO: sort with store & without store
-        // TODO: ? put(RedisCompositeCommand.create(Command.SORT), ResultParserFactory.?);
-        // TODO: ? put(RedisCompositeCommand.create(Command.SORT_RO), ResultParserFactory.?);
+        put(CompositeCommand.create(Command.SORT, null, Keyword.STORE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SREM), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.SSCAN), ResultParserFactory.STRING_SCAN_RESULT);
         put(CompositeCommand.create(Command.STRLEN), ResultParserFactory.LONG);
@@ -137,8 +135,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.XINFO, Keyword.CONSUMERS), ResultParserFactory.STREAM_CONSUMER_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.GROUPS), ResultParserFactory.STREAM_GROUP_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.STREAM), ResultParserFactory.STREAM_INFO);
-        // TODO: contains FILL Keyword
-        // put(CompositeCommand.create(Command.XINFO, Keyword.STREAM + Keyword.FULL), ResultParserFactory.STREAM_INFO_FULL);
+        put(CompositeCommand.create(Command.XINFO, Keyword.STREAM, Keyword.FULL), ResultParserFactory.STREAM_INFO_FULL);
         put(CompositeCommand.create(Command.XLEN), ResultParserFactory.LONG);
         // TODO: xpending depends on the number of arguments
         // TODO: put(RedisCompositeCommand.create(Command.XPENDING), ResultParserFactory.?);
@@ -150,24 +147,24 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.ZADD), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZCARD), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZCOUNT), ResultParserFactory.LONG);
-        put(CompositeCommand.create(Command.ZDIFF, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZDIFF, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZDIFFSTORE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZINCRBY), ResultParserFactory.DOUBLE);
-        put(CompositeCommand.create(Command.ZINTER, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZINTER, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZINTERSTORE), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZLEXCOUNT), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZMSCORE), ResultParserFactory.DOUBLE);
         put(CompositeCommand.create(Command.ZPOPMAX), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZPOPMIN), ResultParserFactory.TUPLE);
-        put(CompositeCommand.create(Command.ZRANDMEMBER, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
-        put(CompositeCommand.create(Command.ZRANGE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
-        put(CompositeCommand.create(Command.ZRANGEBYSCORE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZRANDMEMBER, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZRANGE, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZRANGEBYSCORE, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZRANK), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZREM), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZREMRANGEBYRANK), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZREMRANGEBYSCORE), ResultParserFactory.LONG);
-        put(CompositeCommand.create(Command.ZREVRANGE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
-        put(CompositeCommand.create(Command.ZREVRANGEBYSCORE, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZREVRANGE, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
+        put(CompositeCommand.create(Command.ZREVRANGEBYSCORE, null, Keyword.WITHSCORES), ResultParserFactory.TUPLE);
         put(CompositeCommand.create(Command.ZREVRANK), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.ZSCAN), ResultParserFactory.TUPLE_SCAN_RESULT);
         put(CompositeCommand.create(Command.ZSCORE), ResultParserFactory.DOUBLE);

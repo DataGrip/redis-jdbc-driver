@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static jdbc.Utils.*;
+import static jdbc.Utils.getFirst;
+import static jdbc.Utils.toUpperCase;
 
 public class QueryParser {
 
@@ -29,17 +30,22 @@ public class QueryParser {
             Protocol.Command.BRPOPLPUSH, Protocol.Command.BZMPOP,Protocol.Command.BZPOPMAX, Protocol.Command.BZPOPMIN
     );
 
-    private static final Set<Protocol.Command> COMMANDS_WITH_PREFIX_KEYWORDS = Set.of(
+    private static final Set<Protocol.Command> COMMANDS_WITH_KEYWORDS = Set.of(
             Protocol.Command.ACL, Protocol.Command.CLIENT, Protocol.Command.CLUSTER, Protocol.Command.COMMAND,
             Protocol.Command.CONFIG, Protocol.Command.FUNCTION, Protocol.Command.MEMORY, Protocol.Command.MODULE,
             Protocol.Command.OBJECT, Protocol.Command.PUBSUB, Protocol.Command.SCRIPT, Protocol.Command.SLOWLOG,
             Protocol.Command.XGROUP, Protocol.Command.XINFO
     );
 
-    private static final Set<Protocol.Command> COMMANDS_WITH_POSTFIX_KEYWORDS = Set.of(
-            Protocol.Command.ZDIFF, Protocol.Command.ZINTER, Protocol.Command.ZRANDMEMBER, Protocol.Command.ZRANGE,
-            Protocol.Command.ZRANGEBYSCORE, Protocol.Command.ZREVRANGE, Protocol.Command.ZREVRANGEBYSCORE,
-            Protocol.Command.HRANDFIELD
+    private static final Map<Protocol.Command, Protocol.Keyword> COMMAND_RESULT_KEYWORDS = Map.of(
+            Protocol.Command.ZDIFF, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZINTER, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZRANDMEMBER, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZRANGE, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZRANGEBYSCORE, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZREVRANGE, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.ZREVRANGEBYSCORE, Protocol.Keyword.WITHSCORES,
+            Protocol.Command.HRANDFIELD, Protocol.Keyword.WITHVALUES
     );
 
     private static @Nullable Protocol.Command getCommand(@NotNull String command) {
@@ -57,9 +63,10 @@ public class QueryParser {
         RawQuery rawQuery = createRawQuery(tokens);
 
         CommandLine commandLine = rawQuery.commandLine;
-        Protocol.Command redisCommand = parseCommand(commandLine.command);
-        Protocol.Keyword redisKeyword = parseKeyword(redisCommand, commandLine.params);
-        CompositeCommand compositeCommand = new CompositeCommand(redisCommand, redisKeyword, commandLine.params);
+        Protocol.Command command = parseCommand(commandLine.command);
+        Protocol.Keyword commandKeyword = parseCommandKeyword(command, commandLine.params);
+        Protocol.Keyword resultKeyword = parseResultKeyword(command, commandLine.params);
+        CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword, resultKeyword, commandLine.params);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
         ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
@@ -67,47 +74,42 @@ public class QueryParser {
         return createQuery(compositeCommand, columnHint);
     }
 
-    private static @NotNull Protocol.Command parseCommand(@NotNull String command) throws SQLException {
-        Protocol.Command redisCommand = getCommand(command);
-        if (redisCommand == null)
-            throw new SQLException(String.format("Query contains an unknown command: %s.", command));
-        return redisCommand;
+    private static @NotNull Protocol.Command parseCommand(@NotNull String commandStr) throws SQLException {
+        Protocol.Command command = getCommand(commandStr);
+        if (command == null)
+            throw new SQLException(String.format("Query contains an unknown command: %s.", commandStr));
+        return command;
     }
 
-    private static @Nullable Protocol.Keyword parseKeyword(@NotNull Protocol.Command redisCommand,
-                                                           @NotNull String[] params) throws SQLException {
-        if (COMMANDS_WITH_PREFIX_KEYWORDS.contains(redisCommand)) {
-            return parsePrefixKeyword(redisCommand, getFirst(params));
-        }
-        if (COMMANDS_WITH_POSTFIX_KEYWORDS.contains(redisCommand)) {
-            return parseSuffixKeyword(redisCommand, getLast(params));
-        }
-        return null;
-    }
-
-    private static @NotNull Protocol.Keyword parsePrefixKeyword(@NotNull Protocol.Command redisCommand,
-                                                                @Nullable String keyword) throws SQLException {
-        if (keyword == null)
-            throw new SQLException(String.format("Query does not contain a keyword for the command %s.", redisCommand));
-        Protocol.Keyword redisKeyword = getKeyword(keyword);
-        if (redisKeyword == null)
+    private static @Nullable Protocol.Keyword parseCommandKeyword(@NotNull Protocol.Command command,
+                                                                  @NotNull String[] params) throws SQLException {
+        if (!COMMANDS_WITH_KEYWORDS.contains(command)) return null;
+        String commandKeywordStr = getFirst(params);
+        if (commandKeywordStr == null)
+            throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
+        Protocol.Keyword commandKeyword = getKeyword(commandKeywordStr);
+        if (commandKeyword == null)
             throw new SQLException(String.format(
                     "Query contains an unknown keyword for the command %s: %s.",
-                    redisCommand,
-                    keyword
+                    command,
+                    commandKeyword
             ));
-        return redisKeyword;
+        return commandKeyword;
     }
 
-    private static @Nullable Protocol.Keyword parseSuffixKeyword(@NotNull Protocol.Command redisCommand, @Nullable String keyword) {
-        return keyword == null ? null : getKeyword(keyword);
+    private static @Nullable Protocol.Keyword parseResultKeyword(@NotNull Protocol.Command command,
+                                                                 @NotNull String[] params) {
+        Protocol.Keyword resultKeyword = COMMAND_RESULT_KEYWORDS.get(command);
+        if (resultKeyword == null) return null;
+        String resultKeywordStr = resultKeyword.name();
+        return Arrays.stream(params).anyMatch(p -> resultKeywordStr.equals(toUpperCase(p))) ? resultKeyword : null;
     }
 
 
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @Nullable ColumnHint columnHint) throws SQLException {
-        Protocol.Command redisCommand = compositeCommand.getCommand();
-        if (redisCommand == Protocol.Command.SELECT) {
+        Protocol.Command command = compositeCommand.getCommand();
+        if (command == Protocol.Command.SELECT) {
             String db = getFirst(compositeCommand.getParams());
             if (db == null) throw new SQLException("Database should be specified.");
             try {
@@ -117,7 +119,7 @@ public class QueryParser {
                 throw new SQLException(String.format("Database should be a number: %s.", db));
             }
         }
-        if (BLOCKING_COMMANDS.contains(redisCommand)) {
+        if (BLOCKING_COMMANDS.contains(command)) {
             return new RedisBlockingQuery(compositeCommand, columnHint);
         }
         return new RedisQuery(compositeCommand, columnHint);
