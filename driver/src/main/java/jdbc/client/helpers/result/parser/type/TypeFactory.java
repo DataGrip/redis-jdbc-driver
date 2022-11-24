@@ -9,6 +9,8 @@ import redis.clients.jedis.resps.*;
 import java.util.List;
 import java.util.Map;
 
+import static jdbc.Utils.param;
+
 public class TypeFactory {
 
     // TODO: combine Type & Converter for objects
@@ -52,9 +54,9 @@ public class TypeFactory {
 
     public static final ObjectType<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectType<>() {{
         add("member", STRING);
-        add("distance", DOUBLE, q -> q.containsParam(Keyword.WITHDIST));
-        add("coordinate", MAP, q -> q.containsParam(Keyword.WITHCOORD));
-        add("raw-score", LONG, q -> q.containsParam(Keyword.WITHHASH));
+        add("distance", DOUBLE, param(Keyword.WITHDIST));
+        add("coordinate", MAP, param(Keyword.WITHCOORD));
+        add("raw-score", LONG, param(Keyword.WITHHASH));
     }};
 
     public static final ObjectType<Module> MODULE = new ObjectType<>() {{
@@ -110,7 +112,7 @@ public class TypeFactory {
         add("library-name", STRING);
         add("engine", STRING);
         add("functions", MAP);
-        add("library-code", STRING, q -> q.containsParam(Keyword.WITHCODE));
+        add("library-code", STRING, param(Keyword.WITHCODE));
     }};
 
     public static final ObjectType<Slowlog> SLOW_LOG = new ObjectType<>() {{

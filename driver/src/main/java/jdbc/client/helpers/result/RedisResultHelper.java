@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static jdbc.Utils.param;
+import static jdbc.Utils.paramCount;
 import static jdbc.client.helpers.result.parser.ResultParserFactory.*;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrap;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrapList;
@@ -74,7 +76,7 @@ public class RedisResultHelper {
         put(create(Command.HINCRBY), wrapList(LONG));
         put(create(Command.HINCRBYFLOAT), wrapList(DOUBLE));
         put(create(Command.HLEN), wrapList(LONG));
-        put(create(Command.HRANDFIELD), wrapList(STRING_MAP, q -> q.containsParam(Keyword.WITHVALUES)));
+        put(create(Command.HRANDFIELD), wrapList(STRING_MAP, param(Keyword.WITHVALUES)));
         put(create(Command.HSCAN), wrapList(ENTRY_SCAN_RESULT));
         put(create(Command.HSET), wrapList(LONG));
         put(create(Command.HSETNX), wrapList(BOOLEAN));
@@ -122,7 +124,7 @@ public class RedisResultHelper {
         put(create(Command.SLOWLOG, Keyword.LEN), wrapList(LONG));
         put(create(Command.SMISMEMBER), wrapList(BOOLEAN));
         put(create(Command.SMOVE), wrapList(BOOLEAN));
-        put(create(Command.SORT), wrapList(LONG, q -> q.containsParam(Keyword.STORE)));
+        put(create(Command.SORT), wrapList(LONG, param(Keyword.STORE)));
         put(create(Command.SREM), wrapList(LONG));
         put(create(Command.SSCAN), wrapList(STRING_SCAN_RESULT));
         put(create(Command.STRLEN), wrapList(LONG));
@@ -142,11 +144,9 @@ public class RedisResultHelper {
         put(create(Command.XGROUP, Keyword.DESTROY), wrapList(LONG));
         put(create(Command.XINFO, Keyword.CONSUMERS), wrapList(STREAM_CONSUMER_INFO));
         put(create(Command.XINFO, Keyword.GROUPS), wrapList(STREAM_GROUP_INFO));
-        put(create(Command.XINFO, Keyword.STREAM),
-                asList(wrap(STREAM_INFO_FULL, q -> q.containsParam(Keyword.FULL)), wrap(STREAM_INFO)));
+        put(create(Command.XINFO, Keyword.STREAM), asList(wrap(STREAM_INFO_FULL, param(Keyword.FULL)), wrap(STREAM_INFO)));
         put(create(Command.XLEN), wrapList(LONG));
-        put(create(Command.XPENDING),
-                asList(wrap(STREAM_PENDING_SUMMARY, q -> q.getParams().length == 2), wrap(STREAM_PENDING_ENTRY)));
+        put(create(Command.XPENDING), asList(wrap(STREAM_PENDING_SUMMARY, paramCount(2)), wrap(STREAM_PENDING_ENTRY)));
         put(create(Command.XRANGE), wrapList(STREAM_ENTRY));
         put(create(Command.XREAD), wrapList(STREAM_READ));
         put(create(Command.XREADGROUP), wrapList(STREAM_READ));
@@ -155,24 +155,24 @@ public class RedisResultHelper {
         put(create(Command.ZADD), wrapList(LONG));
         put(create(Command.ZCARD), wrapList(LONG));
         put(create(Command.ZCOUNT), wrapList(LONG));
-        put(create(Command.ZDIFF), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
+        put(create(Command.ZDIFF), wrapList(TUPLE, param(Keyword.WITHSCORES)));
         put(create(Command.ZDIFFSTORE), wrapList(LONG));
         put(create(Command.ZINCRBY), wrapList(DOUBLE));
-        put(create(Command.ZINTER), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
+        put(create(Command.ZINTER), wrapList(TUPLE, param(Keyword.WITHSCORES)));
         put(create(Command.ZINTERSTORE), wrapList(LONG));
         put(create(Command.ZLEXCOUNT), wrapList(LONG));
         put(create(Command.ZMSCORE), wrapList(DOUBLE));
         put(create(Command.ZPOPMAX), wrapList(TUPLE));
         put(create(Command.ZPOPMIN), wrapList(TUPLE));
-        put(create(Command.ZRANDMEMBER), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
-        put(create(Command.ZRANGE), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
-        put(create(Command.ZRANGEBYSCORE), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
+        put(create(Command.ZRANDMEMBER), wrapList(TUPLE, param(Keyword.WITHSCORES)));
+        put(create(Command.ZRANGE), wrapList(TUPLE, param(Keyword.WITHSCORES)));
+        put(create(Command.ZRANGEBYSCORE), wrapList(TUPLE, param(Keyword.WITHSCORES)));
         put(create(Command.ZRANK), wrapList(LONG));
         put(create(Command.ZREM), wrapList(LONG));
         put(create(Command.ZREMRANGEBYRANK), wrapList(LONG));
         put(create(Command.ZREMRANGEBYSCORE), wrapList(LONG));
-        put(create(Command.ZREVRANGE), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
-        put(create(Command.ZREVRANGEBYSCORE), wrapList(TUPLE, q -> q.containsParam(Keyword.WITHSCORES)));
+        put(create(Command.ZREVRANGE), wrapList(TUPLE, param(Keyword.WITHSCORES)));
+        put(create(Command.ZREVRANGEBYSCORE), wrapList(TUPLE, param(Keyword.WITHSCORES)));
         put(create(Command.ZREVRANK), wrapList(LONG));
         put(create(Command.ZSCAN), wrapList(TUPLE_SCAN_RESULT));
         put(create(Command.ZSCORE), wrapList(DOUBLE));

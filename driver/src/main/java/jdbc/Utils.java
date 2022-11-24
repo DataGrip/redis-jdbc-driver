@@ -1,13 +1,16 @@
 package jdbc;
 
+import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol;
+import redis.clients.jedis.Protocol.Keyword;
 
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Utils {
 
@@ -65,6 +68,15 @@ public class Utils {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(String.format("Database should be a number: %s.", db));
         }
+    }
+
+
+    public static @NotNull Predicate<RedisQuery> param(@NotNull Keyword keyword) {
+        return q -> q.containsParam(keyword);
+    }
+
+    public static @NotNull Predicate<RedisQuery> paramCount(int count) {
+        return q -> q.getParams().length == count;
     }
 
 
