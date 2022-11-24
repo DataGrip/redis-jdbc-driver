@@ -1,7 +1,8 @@
 package jdbc.client.helpers.result.parser;
 
-import jdbc.client.helpers.result.parser.builder.BuilderWrapper;
 import jdbc.client.helpers.result.parser.builder.BuilderWrapperFactory;
+import jdbc.client.helpers.result.parser.builder.ListBuilderWrapper;
+import jdbc.client.helpers.result.parser.builder.MapBuilderWrapper;
 import jdbc.client.helpers.result.parser.converter.ConverterFactory;
 import jdbc.client.helpers.result.parser.converter.IdentityConverter;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
@@ -32,7 +33,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Object>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Object> getBuilder() {
             return BuilderWrapperFactory.RESULT;
         }
     };
@@ -44,7 +45,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Long>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Long> getBuilder() {
             return BuilderWrapperFactory.LONG_RESULT;
         }
     };
@@ -56,7 +57,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Double>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Double> getBuilder() {
             return BuilderWrapperFactory.DOUBLE_RESULT;
         }
     };
@@ -68,7 +69,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Boolean>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Boolean> getBuilder() {
             return BuilderWrapperFactory.BOOLEAN_RESULT;
         }
     };
@@ -80,7 +81,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<byte[]>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<byte[]> getBuilder() {
             return BuilderWrapperFactory.BYTE_ARRAY_RESULT;
         }
     };
@@ -92,7 +93,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<Map<String, String>> getBuilder() {
+        protected @NotNull MapBuilderWrapper<String> getBuilder() {
             return BuilderWrapperFactory.STRING_MAP;
         }
     };
@@ -104,7 +105,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Tuple>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Tuple> getBuilder() {
             return BuilderWrapperFactory.TUPLE_RESULT;
         }
 
@@ -121,7 +122,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<KeyedListElement>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<KeyedListElement> getBuilder() {
             return BuilderWrapperFactory.KEYED_LIST_ELEMENT_RESULT;
         }
 
@@ -138,7 +139,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<KeyedZSetElement>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<KeyedZSetElement> getBuilder() {
             return BuilderWrapperFactory.KEYED_ZSET_ELEMENT_RESULT;
         }
 
@@ -155,7 +156,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<GeoCoordinate>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<GeoCoordinate> getBuilder() {
             return BuilderWrapperFactory.GEO_COORDINATE;
         }
 
@@ -172,7 +173,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<GeoRadiusResponse>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<GeoRadiusResponse> getBuilder() {
             return BuilderWrapperFactory.GEORADIUS_RESPONSE;
         }
 
@@ -189,7 +190,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Module>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Module> getBuilder() {
             return BuilderWrapperFactory.MODULE;
         }
 
@@ -206,7 +207,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<AccessControlUser>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<AccessControlUser> getBuilder() {
             return BuilderWrapperFactory.ACCESS_CONTROL_USER;
         }
 
@@ -223,7 +224,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<AccessControlLogEntry>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<AccessControlLogEntry> getBuilder() {
             return BuilderWrapperFactory.ACCESS_CONTROL_LOG_ENTRY;
         }
 
@@ -241,7 +242,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<Map<String, CommandDocument>> getBuilder() {
+        protected @NotNull MapBuilderWrapper<CommandDocument> getBuilder() {
             return BuilderWrapperFactory.COMMAND_DOCUMENT;
         }
 
@@ -259,7 +260,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<Map<String, CommandInfo>> getBuilder() {
+        protected @NotNull MapBuilderWrapper<CommandInfo> getBuilder() {
             return BuilderWrapperFactory.COMMAND_INFO;
         }
 
@@ -277,7 +278,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<FunctionStats>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<FunctionStats> getBuilder() {
             return BuilderWrapperFactory.FUNCTION_STATS;
         }
 
@@ -296,7 +297,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<LibraryInfo>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<LibraryInfo> getBuilder() {
             return BuilderWrapperFactory.LIBRARY_INFO;
         }
 
@@ -314,7 +315,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Slowlog>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Slowlog> getBuilder() {
             return BuilderWrapperFactory.SLOW_LOG;
         }
 
@@ -331,7 +332,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamEntryID>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamEntryID> getBuilder() {
             return BuilderWrapperFactory.STREAM_ENTRY_ID;
         }
 
@@ -348,7 +349,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamEntry>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamEntry> getBuilder() {
             return BuilderWrapperFactory.STREAM_ENTRY;
         }
 
@@ -365,7 +366,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<Map.Entry<String, List<StreamEntry>>>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<Map.Entry<String, List<StreamEntry>>> getBuilder() {
             return BuilderWrapperFactory.STREAM_READ_ENTRY;
         }
 
@@ -382,7 +383,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamConsumersInfo>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamConsumersInfo> getBuilder() {
             return BuilderWrapperFactory.STREAM_CONSUMER_INFO;
         }
 
@@ -399,7 +400,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamGroupInfo>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamGroupInfo> getBuilder() {
             return BuilderWrapperFactory.STREAM_GROUP_INFO;
         }
 
@@ -416,7 +417,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamInfo>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamInfo> getBuilder() {
             return BuilderWrapperFactory.STREAM_INFO;
         }
 
@@ -434,7 +435,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamFullInfo>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamFullInfo> getBuilder() {
             return BuilderWrapperFactory.STREAM_INFO_FULL;
         }
 
@@ -452,7 +453,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamPendingEntry>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamPendingEntry> getBuilder() {
             return BuilderWrapperFactory.STREAM_PENDING_ENTRY;
         }
 
@@ -470,7 +471,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<StreamPendingSummary>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<StreamPendingSummary> getBuilder() {
             return BuilderWrapperFactory.STREAM_PENDING_SUMMARY;
         }
 
@@ -487,7 +488,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<ScanResult<String>>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<ScanResult<String>> getBuilder() {
             return BuilderWrapperFactory.STRING_SCAN_RESULT;
         }
 
@@ -504,7 +505,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<ScanResult<Tuple>>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<ScanResult<Tuple>> getBuilder() {
             return BuilderWrapperFactory.TUPLE_SCAN_RESULT;
         }
 
@@ -521,7 +522,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull BuilderWrapper<List<ScanResult<Map.Entry<String, String>>>> getBuilder() {
+        protected @NotNull ListBuilderWrapper<ScanResult<Map.Entry<String, String>>> getBuilder() {
             return BuilderWrapperFactory.ENTRY_SCAN_RESULT;
         }
 
@@ -534,7 +535,7 @@ public class ResultParserFactory {
 
     private static abstract class ListResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();
-        protected abstract @NotNull BuilderWrapper<List<T>> getBuilder();
+        protected abstract @NotNull ListBuilderWrapper<T> getBuilder();
         protected @NotNull SimpleConverter<T> getConverter() {
             return new IdentityConverter<>();
         }
@@ -549,7 +550,7 @@ public class ResultParserFactory {
 
     private static abstract class MapResultParser<T> implements ResultParser {
         protected abstract @NotNull String getType();
-        protected abstract @NotNull BuilderWrapper<Map<String, T>> getBuilder();
+        protected abstract @NotNull MapBuilderWrapper<T> getBuilder();
         protected @NotNull SimpleConverter<T> getConverter() {
             return new IdentityConverter<>();
         }
@@ -564,7 +565,7 @@ public class ResultParserFactory {
 
     private static abstract class ObjectListResultParser<T> implements ResultParser {
         protected abstract @NotNull ObjectType<T> getType();
-        protected abstract @NotNull BuilderWrapper<List<T>> getBuilder();
+        protected abstract @NotNull ListBuilderWrapper<T> getBuilder();
         protected abstract @NotNull ObjectConverter<T> getConverter();
 
         @Override
@@ -577,7 +578,7 @@ public class ResultParserFactory {
 
     private static abstract class ObjectMapResultParser<T> implements ResultParser {
         protected abstract @NotNull ObjectType<T> getType();
-        protected abstract @NotNull BuilderWrapper<Map<String, T>> getBuilder();
+        protected abstract @NotNull MapBuilderWrapper<T> getBuilder();
         protected abstract @NotNull ObjectConverter<T> getConverter();
 
         @Override
