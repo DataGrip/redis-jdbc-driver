@@ -234,7 +234,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser COMMAND_DOCUMENT = new ObjectMapResultParser<CommandDocument>() {
         @Override
         protected @NotNull ObjectType<CommandDocument> getType() {
@@ -252,7 +251,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser COMMAND_INFO = new ObjectMapResultParser<CommandInfo>() {
         @Override
         protected @NotNull ObjectType<CommandInfo> getType() {
@@ -270,7 +268,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser FUNCTION_STATS = new ObjectListResultParser<FunctionStats>() {
         @Override
         protected @NotNull ObjectType<FunctionStats> getType() {
@@ -288,7 +285,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser LIBRARY_INFO = new ObjectListResultParser<LibraryInfo>() {
 
         @Override
@@ -307,7 +303,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser SLOW_LOG = new ObjectListResultParser<Slowlog>() {
         @Override
         protected @NotNull ObjectType<Slowlog> getType() {
@@ -427,7 +422,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser STREAM_INFO_FULL = new ObjectListResultParser<StreamFullInfo>() {
         @Override
         protected @NotNull ObjectType<StreamFullInfo> getType() {
@@ -445,7 +439,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser STREAM_PENDING_ENTRY = new ObjectListResultParser<StreamPendingEntry>() {
         @Override
         protected @NotNull ObjectType<StreamPendingEntry> getType() {
@@ -463,7 +456,6 @@ public class ResultParserFactory {
         }
     };
 
-    // TODO (new) Helper + Builder + Type + Converter
     public static final ResultParser STREAM_PENDING_SUMMARY = new ObjectListResultParser<StreamPendingSummary>() {
         @Override
         protected @NotNull ObjectType<StreamPendingSummary> getType() {
