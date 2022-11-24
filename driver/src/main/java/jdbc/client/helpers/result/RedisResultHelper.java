@@ -134,7 +134,7 @@ public class RedisResultHelper {
         put(CompositeCommand.create(Command.XDEL), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.XGROUP, Keyword.DELCONSUMER), ResultParserFactory.LONG);
         put(CompositeCommand.create(Command.XGROUP, Keyword.DESTROY), ResultParserFactory.LONG);
-        put(CompositeCommand.create(Command.XINFO, Keyword.CONSUMERS), ResultParserFactory.STREAM_CONSUMERS_INFO);
+        put(CompositeCommand.create(Command.XINFO, Keyword.CONSUMERS), ResultParserFactory.STREAM_CONSUMER_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.GROUPS), ResultParserFactory.STREAM_GROUP_INFO);
         put(CompositeCommand.create(Command.XINFO, Keyword.STREAM), ResultParserFactory.STREAM_INFO);
         // TODO: contains FILL Keyword

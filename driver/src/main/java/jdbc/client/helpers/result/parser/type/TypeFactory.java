@@ -134,17 +134,17 @@ public class TypeFactory {
         add("entries", MAP);
     }};
 
+    public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectType<>() {{
+        add("name", STRING);
+        add("idle", LONG);
+        add("pending", LONG);
+    }};
+
     public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
         add("name", STRING);
         add("consumers", LONG);
         add("pending", LONG);
         add("last-delivered-id", STRING);
-    }};
-
-    public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMERS_INFO = new ObjectType<>() {{
-        add("name", STRING);
-        add("idle", LONG);
-        add("pending", LONG);
     }};
 
     public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{

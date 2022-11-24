@@ -2,6 +2,7 @@ package jdbc.client.helpers.result.parser.converter;
 
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.GeoCoordinate;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
@@ -170,6 +171,13 @@ public class ConverterFactory {
         }
     };
 
+    private static final SimpleConverter<HostAndPort> HOST_AND_PORT = new SimpleConverter<>() {
+        @Override
+        protected @NotNull Object convertImpl(@NotNull HostAndPort encoded) {
+            return encoded.toString();
+        }
+    };
+
     public static final ObjectConverter<Slowlog> SLOW_LOG = new ObjectConverter<>() {
         @Override
         protected @NotNull Map<String, Object> convertImpl(@NotNull Slowlog encoded) {
@@ -178,8 +186,7 @@ public class ConverterFactory {
                 put("timestamp", encoded.getTimeStamp());
                 put("execution-time", encoded.getExecutionTime());
                 put("args", encoded.getArgs());
-                // TODO: host and port converter?
-                put("client-ip-port", encoded.getClientIpPort().toString());
+                put("client-ip-port", HOST_AND_PORT.convert(encoded.getClientIpPort()));
                 put("client-name", encoded.getClientName());
             }};
         }
@@ -212,6 +219,29 @@ public class ConverterFactory {
         }
     };
 
+    public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamConsumersInfo encoded) {
+            return new HashMap<>() {{
+                put("name", encoded.getName());
+                put("idle", encoded.getIdle());
+                put("pending", encoded.getPending());
+            }};
+        }
+    };
+
+    private static final ObjectConverter<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectConverter<>() {
+        @Override
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamConsumerFullInfo encoded) {
+            return new HashMap<>() {{
+                put("name", encoded.getName());
+                put("seen-time", encoded.getSeenTime());
+                put("pel-count", encoded.getPelCount());
+                put("pending", encoded.getPending());
+            }};
+        }
+    };
+
     public static final ObjectConverter<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectConverter<>() {
         @Override
         public @NotNull Map<String, Object> convertImpl(@NotNull StreamGroupInfo encoded) {
@@ -224,13 +254,16 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMERS_INFO = new ObjectConverter<>() {
+    private static final ObjectConverter<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamConsumersInfo encoded) {
+        public @NotNull Map<String, Object> convertImpl(@NotNull StreamGroupFullInfo encoded) {
             return new HashMap<>() {{
                 put("name", encoded.getName());
-                put("idle", encoded.getIdle());
+                put("consumers", STREAM_CONSUMER_INFO_FULL.convert(encoded.getConsumers()));
                 put("pending", encoded.getPending());
+                put("pel-count", encoded.getPelCount());
+                put("last-delivered-id", STREAM_ENTRY_ID.convert(encoded.getLastDeliveredId()));
+
             }};
         }
     };
@@ -250,15 +283,14 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
+   public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
         @Override
         public @NotNull Map<String, Object> convertImpl(@NotNull StreamFullInfo encoded) {
             return new HashMap<>() {{
                 put("length", encoded.getLength());
                 put("radix-tree-keys", encoded.getRadixTreeKeys());
                 put("radix-tree-nodes", encoded.getRadixTreeNodes());
-                // TODO: STREAM_GROUP_FULL_INFO + STREAM_CONSUMER_FULL_INFO  Converters
-                put("groups", encoded.getGroups());
+                put("groups", STREAM_GROUP_INFO_FULL.convert(encoded.getGroups()));
                 put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
                 put("entries", STREAM_ENTRY.convert(encoded.getEntries()));
             }};

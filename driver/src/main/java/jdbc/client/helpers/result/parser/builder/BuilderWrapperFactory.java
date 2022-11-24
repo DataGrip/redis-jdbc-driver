@@ -164,7 +164,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final BuilderWrapper<List<LibraryInfo>> LIBRARY_INFO = new ListBuilderWrapper<LibraryInfo>() {
+    public static final BuilderWrapper<List<LibraryInfo>> LIBRARY_INFO = new ListBuilderWrapper<>() {
         @Override
         protected Builder<List<LibraryInfo>> getListBuilder() {
             return BuilderFactory.LIBRARY_LIST;
@@ -223,17 +223,17 @@ public class BuilderWrapperFactory {
         }
     };
 
+    public static final BuilderWrapper<List<StreamConsumersInfo>> STREAM_CONSUMER_INFO = new ListBuilderWrapper<>() {
+        @Override
+        protected Builder<List<StreamConsumersInfo>> getListBuilder() {
+            return BuilderFactory.STREAM_CONSUMERS_INFO_LIST;
+        }
+    };
+
     public static final BuilderWrapper<List<StreamGroupInfo>> STREAM_GROUP_INFO = new ListBuilderWrapper<>() {
         @Override
         protected Builder<List<StreamGroupInfo>> getListBuilder() {
             return BuilderFactory.STREAM_GROUP_INFO_LIST;
-        }
-    };
-
-    public static final BuilderWrapper<List<StreamConsumersInfo>> STREAM_CONSUMERS_INFO = new ListBuilderWrapper<>() {
-        @Override
-        protected Builder<List<StreamConsumersInfo>> getListBuilder() {
-            return BuilderFactory.STREAM_CONSUMERS_INFO_LIST;
         }
     };
 

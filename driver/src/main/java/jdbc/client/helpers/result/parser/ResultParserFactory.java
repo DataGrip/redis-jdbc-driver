@@ -375,6 +375,23 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser STREAM_CONSUMER_INFO = new ObjectListResultParser<StreamConsumersInfo>() {
+        @Override
+        protected @NotNull ObjectType<StreamConsumersInfo> getType() {
+            return TypeFactory.STREAM_CONSUMER_INFO;
+        }
+
+        @Override
+        protected @NotNull BuilderWrapper<List<StreamConsumersInfo>> getBuilder() {
+            return BuilderWrapperFactory.STREAM_CONSUMER_INFO;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamConsumersInfo> getConverter() {
+            return ConverterFactory.STREAM_CONSUMER_INFO;
+        }
+    };
+
     public static final ResultParser STREAM_GROUP_INFO = new ObjectListResultParser<StreamGroupInfo>() {
         @Override
         protected @NotNull ObjectType<StreamGroupInfo> getType() {
@@ -389,23 +406,6 @@ public class ResultParserFactory {
         @Override
         protected @NotNull ObjectConverter<StreamGroupInfo> getConverter() {
             return ConverterFactory.STREAM_GROUP_INFO;
-        }
-    };
-
-    public static final ResultParser STREAM_CONSUMERS_INFO = new ObjectListResultParser<StreamConsumersInfo>() {
-        @Override
-        protected @NotNull ObjectType<StreamConsumersInfo> getType() {
-            return TypeFactory.STREAM_CONSUMERS_INFO;
-        }
-
-        @Override
-        protected @NotNull BuilderWrapper<List<StreamConsumersInfo>> getBuilder() {
-            return BuilderWrapperFactory.STREAM_CONSUMERS_INFO;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamConsumersInfo> getConverter() {
-            return ConverterFactory.STREAM_CONSUMERS_INFO;
         }
     };
 
