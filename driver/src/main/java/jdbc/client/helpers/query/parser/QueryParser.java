@@ -55,12 +55,12 @@ public class QueryParser {
         CommandLine commandLine = rawQuery.commandLine;
         Command command = parseCommand(commandLine.command);
         Keyword commandKeyword = parseCommandKeyword(command, commandLine.params);
-        CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword, commandLine.params);
+        CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
         ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
 
-        return createQuery(compositeCommand, columnHint);
+        return createQuery(compositeCommand, commandLine.params, columnHint);
     }
 
     private static @NotNull Command parseCommand(@NotNull String commandStr) throws SQLException {
@@ -87,10 +87,11 @@ public class QueryParser {
     }
 
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
+                                                   @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint) throws SQLException {
         Command command = compositeCommand.getCommand();
         if (command == Command.SELECT) {
-            String db = getFirst(compositeCommand.getParams());
+            String db = getFirst(params);
             if (db == null) throw new SQLException("Database should be specified.");
             try {
                 int dbIndex = Integer.parseInt(db);
@@ -100,9 +101,9 @@ public class QueryParser {
             }
         }
         if (BLOCKING_COMMANDS.contains(command)) {
-            return new RedisBlockingQuery(compositeCommand, columnHint);
+            return new RedisBlockingQuery(compositeCommand, params, columnHint);
         }
-        return new RedisQuery(compositeCommand, columnHint);
+        return new RedisQuery(compositeCommand, params, columnHint);
     }
 
 
