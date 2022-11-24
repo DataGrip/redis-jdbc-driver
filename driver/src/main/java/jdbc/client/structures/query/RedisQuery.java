@@ -2,8 +2,8 @@ package jdbc.client.structures.query;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Command;
+import redis.clients.jedis.Protocol.Keyword;
 
 public class RedisQuery {
     private final CompositeCommand compositeCommand;
@@ -29,7 +29,7 @@ public class RedisQuery {
         return compositeCommand.getParams();
     }
 
-    public boolean containsParam(@NotNull Protocol.Keyword keywordParam) {
+    public boolean containsParam(@NotNull Keyword keywordParam) {
         return compositeCommand.containsParam(keywordParam);
     }
 
