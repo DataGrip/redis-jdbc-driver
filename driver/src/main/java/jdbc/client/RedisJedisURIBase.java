@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static jdbc.Utils.parseDbIndex;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
 
@@ -109,7 +110,7 @@ abstract class RedisJedisURIBase implements JedisClientConfig {
         int database = CONFIG.getDatabase();
 
         if (!databaseBlock.isEmpty()) {
-            database = Integer.parseInt(databaseBlock);
+            database = parseDbIndex(databaseBlock);
         }
 
         this.database = Utils.getInt(info, DATABASE, database);

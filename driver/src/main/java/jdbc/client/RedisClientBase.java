@@ -11,6 +11,8 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
+import static jdbc.Utils.parseSqlDbIndex;
+
 abstract class RedisClientBase implements RedisClient {
 
     @Override
@@ -38,9 +40,7 @@ abstract class RedisClientBase implements RedisClient {
     @Override
     public void setDatabase(String db) throws SQLException {
         try {
-            setDatabase(Integer.parseInt(db));
-        } catch (NumberFormatException e) {
-            throw new SQLException(String.format("Database should be a number: %s.", db));
+            setDatabase(parseSqlDbIndex(db));
         } catch (JedisException e) {
             throw new SQLException(e);
         }

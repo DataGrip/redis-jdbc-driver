@@ -11,8 +11,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static jdbc.Utils.getFirst;
-import static jdbc.Utils.toUpperCase;
+import static jdbc.Utils.*;
 
 public class QueryParser {
 
@@ -90,15 +89,8 @@ public class QueryParser {
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint) throws SQLException {
         Command command = compositeCommand.getCommand();
-        if (command == Command.SELECT) {
-            String db = getFirst(params);
-            if (db == null) throw new SQLException("Database should be specified.");
-            try {
-                int dbIndex = Integer.parseInt(db);
-                return new RedisSetDatabaseQuery(compositeCommand, dbIndex, columnHint);
-            } catch (NumberFormatException e) {
-                throw new SQLException(String.format("Database should be a number: %s.", db));
-            }
+        if (command == Command.SELECT && params.length == 1) {
+            return new RedisSetDatabaseQuery(compositeCommand, parseSqlDbIndex(getFirst(params)), columnHint);
         }
         if (BLOCKING_COMMANDS.contains(command)) {
             return new RedisBlockingQuery(compositeCommand, params, columnHint);

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol;
 
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
@@ -46,6 +47,24 @@ public class Utils {
             if (option != null) return valueGetter.apply(option.toString());
         }
         return defaultValue;
+    }
+
+
+    public static int parseSqlDbIndex(@Nullable String db) throws SQLException {
+        if (db == null) throw new SQLException("Database should be specified.");
+        try {
+            return parseDbIndex(db);
+        } catch (IllegalArgumentException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    public static int parseDbIndex(@NotNull String db) {
+        try {
+            return Integer.parseInt(db);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Database should be a number: %s.", db));
+        }
     }
 
 
