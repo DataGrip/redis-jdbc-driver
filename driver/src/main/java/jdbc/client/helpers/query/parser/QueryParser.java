@@ -30,14 +30,16 @@ public class QueryParser {
     );
 
     private static final Set<Protocol.Command> COMMANDS_WITH_PREFIX_KEYWORDS = Set.of(
-            Protocol.Command.ACL, Protocol.Command.CLIENT, Protocol.Command.CLUSTER, Protocol.Command.CONFIG,
-            Protocol.Command.MEMORY, Protocol.Command.MODULE, Protocol.Command.OBJECT, Protocol.Command.PUBSUB,
-            Protocol.Command.SCRIPT, Protocol.Command.SLOWLOG, Protocol.Command.XGROUP, Protocol.Command.XINFO
+            Protocol.Command.ACL, Protocol.Command.CLIENT, Protocol.Command.CLUSTER, Protocol.Command.COMMAND,
+            Protocol.Command.CONFIG, Protocol.Command.FUNCTION, Protocol.Command.MEMORY, Protocol.Command.MODULE,
+            Protocol.Command.OBJECT, Protocol.Command.PUBSUB, Protocol.Command.SCRIPT, Protocol.Command.SLOWLOG,
+            Protocol.Command.XGROUP, Protocol.Command.XINFO
     );
 
     private static final Set<Protocol.Command> COMMANDS_WITH_POSTFIX_KEYWORDS = Set.of(
-            Protocol.Command.ZDIFF, Protocol.Command.ZINTER, Protocol.Command.ZRANDMEMBER, Protocol.Command.ZRANGE, Protocol.Command.ZRANGEBYSCORE,
-            Protocol.Command.ZREVRANGE, Protocol.Command.ZREVRANGEBYSCORE, Protocol.Command.HRANDFIELD
+            Protocol.Command.ZDIFF, Protocol.Command.ZINTER, Protocol.Command.ZRANDMEMBER, Protocol.Command.ZRANGE,
+            Protocol.Command.ZRANGEBYSCORE, Protocol.Command.ZREVRANGE, Protocol.Command.ZREVRANGEBYSCORE,
+            Protocol.Command.HRANDFIELD
     );
 
     private static @Nullable Protocol.Command getCommand(@NotNull String command) {
