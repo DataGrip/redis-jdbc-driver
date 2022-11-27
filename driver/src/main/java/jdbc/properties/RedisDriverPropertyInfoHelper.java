@@ -15,6 +15,9 @@ public class RedisDriverPropertyInfoHelper {
     public static final String CLIENT_NAME = "clientName";
     public static final String MAX_ATTEMPTS = "maxAttempts";
 
+    private RedisDriverPropertyInfoHelper() {
+    }
+
     public static DriverPropertyInfo[] getPropertyInfo() {
         ArrayList<DriverPropertyInfo> propInfos = new ArrayList<>();
         addPropInfo(propInfos, USER, CONFIG.getUser(), "ACL user.");

@@ -1,6 +1,7 @@
 package jdbc.resultset;
 
-import jdbc.resultset.types.RedisColumnTypeHelper;
+import jdbc.client.structures.result.SimpleType;
+import jdbc.types.RedisColumnTypeHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSetMetaData;
@@ -22,6 +23,14 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
         this.columnMetaDatas = columnMetaDatas;
     }
 
+    public static ColumnMetaData createColumn(@NotNull String name, @NotNull String typeName) {
+        return new ColumnMetaData(name, typeName);
+    }
+
+    public static ColumnMetaData createColumn(@NotNull String name, @NotNull SimpleType<?> type) {
+        return new ColumnMetaData(name, type.getTypeName());
+    }
+
     public int findColumn(String columnLabel) {
         for (int i = 0; i < columnMetaDatas.size(); ++i) {
             if (columnMetaDatas.get(i).name.equals(columnLabel)) {
@@ -29,10 +38,6 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
             }
         }
         return -1;
-    }
-
-    public static ColumnMetaData createColumn(String name, String typeName) {
-        return new ColumnMetaData(name, typeName);
     }
 
     @Override

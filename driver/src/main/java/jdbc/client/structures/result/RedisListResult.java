@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RedisListResult extends RedisResultBase<String, List<Object>> {
+public class RedisListResult extends RedisResultBase<SimpleType<?>, List<Object>> {
     public RedisListResult(@NotNull RedisQuery query,
-                           @NotNull String type,
+                           @NotNull SimpleType<?> type,
                            @NotNull List<Object> result) {
         super(query, type, result);
     }

@@ -24,7 +24,7 @@ public class RedisObjectResultSet extends RedisResultSetBase<ObjectType<?>, List
     protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<ObjectType<?>, List<Map<String, Object>>> result) {
         return result.getType().stream()
                 .filter(e -> e.isPresent(result.getQuery()))
-                .map(e -> createColumn(e.getName(), e.getTypeName()))
+                .map(e -> createColumn(e.getName(), e.getSimpleType()))
                 .collect(Collectors.toList());
     }
 

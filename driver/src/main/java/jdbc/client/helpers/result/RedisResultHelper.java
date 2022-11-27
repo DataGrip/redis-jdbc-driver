@@ -36,7 +36,6 @@ public class RedisResultHelper {
         put(create(Command.BITCOUNT), wrapList(LONG));
         put(create(Command.BITFIELD), wrapList(LONG));
         put(create(Command.BITFIELD_RO), wrapList(LONG));
-        put(create(Command.BITFIELD_RO), wrapList(LONG));
         put(create(Command.BITOP), wrapList(LONG));
         put(create(Command.BITPOS), wrapList(LONG));
         put(create(Command.BLPOP), wrapList(KEYED_LIST_ELEMENT));

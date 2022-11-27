@@ -3,7 +3,9 @@ package jdbc.resultset;
 import jdbc.RedisStatement;
 import jdbc.client.structures.result.RedisMapResult;
 import jdbc.client.structures.result.RedisResultBase;
+import jdbc.client.structures.result.SimpleType;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
+import jdbc.types.RedisColumnTypeHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
-public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Object>, Map.Entry<String, Object>> {
+public class RedisMapResultSet extends RedisResultSetBase<SimpleType<?>, Map<String, Object>, Map.Entry<String, Object>> {
 
     private static final String FIELD = "field";
 
@@ -23,8 +25,8 @@ public class RedisMapResultSet extends RedisResultSetBase<String, Map<String, Ob
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<String, Map<String, Object>> result) {
-        return Arrays.asList(createColumn(FIELD, "string"), createColumn(VALUE, result.getType()));
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<SimpleType<?>, Map<String, Object>> result) {
+        return Arrays.asList(createColumn(FIELD, RedisColumnTypeHelper.STRING), createColumn(VALUE, result.getType()));
     }
 
     @Override

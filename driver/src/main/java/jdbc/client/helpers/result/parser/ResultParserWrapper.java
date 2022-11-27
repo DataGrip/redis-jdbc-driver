@@ -26,6 +26,7 @@ public class ResultParserWrapper {
         return isApplicable == null || isApplicable.test(query);
     }
 
+
     public static ResultParserWrapper wrap(@NotNull ResultParser resultParser,
                                            @Nullable Predicate<RedisQuery> isApplicable) {
         return new ResultParserWrapper(resultParser, isApplicable);

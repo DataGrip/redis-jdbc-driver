@@ -1,4 +1,4 @@
-package jdbc.resultset.types;
+package jdbc.types;
 
 import java.sql.Array;
 import java.sql.ResultSet;

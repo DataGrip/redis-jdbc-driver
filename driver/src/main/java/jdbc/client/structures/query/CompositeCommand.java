@@ -35,7 +35,7 @@ public class CompositeCommand {
 
 
     public static CompositeCommand create(@NotNull Command command, @Nullable Keyword keyword) {
-        return  new CompositeCommand(command, keyword);
+        return new CompositeCommand(command, keyword);
     }
 
     public static CompositeCommand create(@NotNull Command command) {

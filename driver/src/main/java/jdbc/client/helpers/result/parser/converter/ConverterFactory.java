@@ -1,5 +1,8 @@
 package jdbc.client.helpers.result.parser.converter;
 
+import jdbc.client.helpers.result.parser.converter.type.TypeFactory;
+import jdbc.client.structures.result.ObjectType;
+import jdbc.client.structures.result.SimpleType;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.HostAndPort;
@@ -7,7 +10,6 @@ import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,354 +18,258 @@ public class ConverterFactory {
     private ConverterFactory() {
     }
 
+    public static final IdentityConverter<Object> OBJECT = new IdentityConverter<>() {
+        @Override
+        public SimpleType<Object> getSimpleType() {
+            return TypeFactory.OBJECT;
+        }
+    };
+
+    public static final IdentityConverter<String> STRING = new IdentityConverter<>() {
+        @Override
+        public SimpleType<String> getSimpleType() {
+            return TypeFactory.STRING;
+        }
+    };
+
+    public static final IdentityConverter<Long> LONG = new IdentityConverter<>() {
+        @Override
+        public SimpleType<Long> getSimpleType() {
+            return TypeFactory.LONG;
+        }
+    };
+
+    public static final IdentityConverter<Double> DOUBLE = new IdentityConverter<>() {
+        @Override
+        public SimpleType<Double> getSimpleType() {
+            return TypeFactory.DOUBLE;
+        }
+    };
+
+    public static final IdentityConverter<Boolean> BOOLEAN = new IdentityConverter<>() {
+        @Override
+        public SimpleType<Boolean> getSimpleType() {
+            return TypeFactory.BOOLEAN;
+        }
+    };
+
+    public static final IdentityConverter<byte[]> BYTE_ARRAY = new IdentityConverter<>() {
+        @Override
+        public SimpleType<byte[]> getSimpleType() {
+            return TypeFactory.BYTE_ARRAY;
+        }
+    };
+
     public static final ObjectConverter<Tuple> TUPLE = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull Tuple encoded) {
-            return new HashMap<>() {{
-                put("value", encoded.getElement());
-                put("score", encoded.getScore());
-            }};
+        public ObjectType<Tuple> getObjectType() {
+            return TypeFactory.TUPLE;
         }
     };
 
     public static final ObjectConverter<KeyedListElement> KEYED_LIST_ELEMENT = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull KeyedListElement encoded) {
-            return new HashMap<>() {{
-                put("key", encoded.getKey());
-                put("value", encoded.getElement());
-            }};
+        public ObjectType<KeyedListElement> getObjectType() {
+            return TypeFactory.KEYED_LIST_ELEMENT;
         }
     };
 
     public static final ObjectConverter<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull KeyedZSetElement encoded) {
-            return new HashMap<>() {{
-                put("key", encoded.getKey());
-                put("value", encoded.getElement());
-                put("score", encoded.getScore());
-            }};
+        public ObjectType<KeyedZSetElement> getObjectType() {
+            return TypeFactory.KEYED_ZSET_ELEMENT;
         }
     };
 
     public static final ObjectConverter<GeoCoordinate> GEO_COORDINATE = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull GeoCoordinate encoded) {
-            return new HashMap<>() {{
-                put("longitude", encoded.getLongitude());
-                put("latitude", encoded.getLatitude());
-            }};
+        public ObjectType<GeoCoordinate> getObjectType() {
+            return TypeFactory.GEO_COORDINATE;
         }
     };
 
     public static final ObjectConverter<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull GeoRadiusResponse encoded) {
-            return new HashMap<>() {{
-                put("member", encoded.getMemberByString());
-                put("distance", encoded.getDistance());
-                put("coordinate", GEO_COORDINATE.convert(encoded.getCoordinate()));
-                put("raw-score", encoded.getRawScore());
-            }};
+        public ObjectType<GeoRadiusResponse> getObjectType() {
+            return TypeFactory.GEORADIUS_RESPONSE;
         }
     };
 
     public static final ObjectConverter<Module> MODULE = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull Module encoded) {
-            return new HashMap<>() {{
-                put("name", encoded.getName());
-                put("version", encoded.getVersion());
-            }};
+        public ObjectType<Module> getObjectType() {
+            return TypeFactory.MODULE;
         }
     };
 
     public static final ObjectConverter<AccessControlUser> ACCESS_CONTROL_USER = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull AccessControlUser encoded) {
-            return new HashMap<>() {{
-                put("flags", encoded.getFlags());
-                put("keys", encoded.getKeys());
-                put("passwords", encoded.getPassword());
-                put("commands", encoded.getCommands());
-            }};
+        public ObjectType<AccessControlUser> getObjectType() {
+            return TypeFactory.ACCESS_CONTROL_USER;
         }
     };
 
     public static final ObjectConverter<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull AccessControlLogEntry encoded) {
-            return new HashMap<>() {{
-                put("count", encoded.getCount());
-                put("reason", encoded.getReason());
-                put("context", encoded.getContext());
-                put("object", encoded.getObject());
-                put("username", encoded.getUsername());
-                put("age-seconds", encoded.getAgeSeconds());
-                put("client-info", encoded.getClientInfo());
-            }};
+        public ObjectType<AccessControlLogEntry> getObjectType() {
+            return TypeFactory.ACCESS_CONTROL_LOG_ENTRY;
         }
     };
 
     public static final ObjectConverter<CommandDocument> COMMAND_DOCUMENT = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull CommandDocument encoded) {
-            return new HashMap<>() {{
-                put("summary", encoded.getSummary());
-                put("since", encoded.getSince());
-                put("group", encoded.getGroup());
-                put("complexity", encoded.getComplexity());
-                put("history", encoded.getHistory());
-            }};
-        }
-
-        @Override
-        protected @NotNull Map<String, Object> convertEntryImpl(@NotNull Map.Entry<String, CommandDocument> encoded) {
-            Map<String, Object> converted = super.convertEntryImpl(encoded);
-            converted.put("command-name", encoded.getKey());
-            return converted;
+        public ObjectType<CommandDocument> getObjectType() {
+            return TypeFactory.COMMAND_DOCUMENT;
         }
     };
 
     public static final ObjectConverter<CommandInfo> COMMAND_INFO = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull CommandInfo encoded) {
-            return new HashMap<>() {{
-                put("arity", encoded.getArity());
-                put("flags", encoded.getFlags());
-                put("firstKey", encoded.getFirstKey());
-                put("lastKey", encoded.getLastKey());
-                put("step", encoded.getStep());
-                put("acl-categories", encoded.getAclCategories());
-                put("tips", encoded.getTips());
-                put("subcommands", encoded.getSubcommands());
-            }};
-        }
-
-        @Override
-        protected @NotNull Map<String, Object> convertEntryImpl(@NotNull Map.Entry<String, CommandInfo> encoded) {
-            Map<String, Object> converted = super.convertEntryImpl(encoded);
-            converted.put("command-name", encoded.getKey());
-            return converted;
+        public ObjectType<CommandInfo> getObjectType() {
+            return TypeFactory.COMMAND_INFO;
         }
     };
 
     public static final ObjectConverter<FunctionStats> FUNCTION_STATS = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull FunctionStats encoded) {
-            return new HashMap<>() {{
-                put("running-script", encoded.getRunningScript());
-                put("engines", encoded.getEngines());
-            }};
+        public ObjectType<FunctionStats> getObjectType() {
+            return TypeFactory.FUNCTION_STATS;
         }
     };
 
     public static final ObjectConverter<LibraryInfo> LIBRARY_INFO = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull LibraryInfo encoded) {
-            return new HashMap<>() {{
-                put("library-name", encoded.getLibraryName());
-                put("engine", encoded.getEngine());
-                put("functions", encoded.getFunctions());
-                put("library-code", encoded.getLibraryCode());
-            }};
+        public ObjectType<LibraryInfo> getObjectType() {
+            return TypeFactory.LIBRARY_INFO;
         }
     };
 
-    private static final SimpleConverter<HostAndPort> HOST_AND_PORT = new SimpleConverter<>() {
+    public static final SimpleConverter<HostAndPort, String> HOST_AND_PORT = new SimpleConverter<>() {
         @Override
-        protected @NotNull Object convertImpl(@NotNull HostAndPort encoded) {
+        public SimpleType<String> getSimpleType() {
+            return TypeFactory.STRING;
+        }
+
+        @Override
+        protected @NotNull String convertImpl(@NotNull HostAndPort encoded) {
             return encoded.toString();
         }
     };
 
     public static final ObjectConverter<Slowlog> SLOW_LOG = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull Slowlog encoded) {
-            return new HashMap<>() {{
-                put("id", encoded.getId());
-                put("timestamp", encoded.getTimeStamp());
-                put("execution-time", encoded.getExecutionTime());
-                put("args", encoded.getArgs());
-                put("client-ip-port", HOST_AND_PORT.convert(encoded.getClientIpPort()));
-                put("client-name", encoded.getClientName());
-            }};
+        public ObjectType<Slowlog> getObjectType() {
+            return TypeFactory.SLOW_LOG;
         }
     };
 
-    public static final SimpleConverter<StreamEntryID> STREAM_ENTRY_ID = new SimpleConverter<>() {
+    public static final SimpleConverter<StreamEntryID, String> STREAM_ENTRY_ID = new SimpleConverter<>() {
         @Override
-        public @NotNull Object convertImpl(@NotNull StreamEntryID encoded) {
+        public SimpleType<String> getSimpleType() {
+            return TypeFactory.STRING;
+        }
+
+        @Override
+        public @NotNull String convertImpl(@NotNull StreamEntryID encoded) {
             return encoded.toString();
         }
     };
 
     public static final ObjectConverter<StreamEntry> STREAM_ENTRY = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamEntry encoded) {
-            return new HashMap<>() {{
-                put("id", STREAM_ENTRY_ID.convert(encoded.getID()));
-                put("fields", encoded.getFields());
-            }};
+        public ObjectType<StreamEntry> getObjectType() {
+            return TypeFactory.STREAM_ENTRY;
         }
     };
 
     public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull Map.Entry<String, List<StreamEntry>> encoded) {
-            return new HashMap<>() {{
-                put("key", encoded.getKey());
-                put("entries", STREAM_ENTRY.convert(encoded.getValue()));
-            }};
+        public ObjectType<Map.Entry<String, List<StreamEntry>>> getObjectType() {
+            return TypeFactory.STREAM_READ_ENTRY;
         }
     };
 
     public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamConsumersInfo encoded) {
-            return new HashMap<>() {{
-                put("name", encoded.getName());
-                put("idle", encoded.getIdle());
-                put("pending", encoded.getPending());
-            }};
+        public ObjectType<StreamConsumersInfo> getObjectType() {
+            return TypeFactory.STREAM_CONSUMER_INFO;
         }
     };
 
-    private static final ObjectConverter<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectConverter<>() {
+    public static final ObjectConverter<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamConsumerFullInfo encoded) {
-            return new HashMap<>() {{
-                put("name", encoded.getName());
-                put("seen-time", encoded.getSeenTime());
-                put("pel-count", encoded.getPelCount());
-                put("pending", encoded.getPending());
-            }};
+        public ObjectType<StreamConsumerFullInfo> getObjectType() {
+            return TypeFactory.STREAM_CONSUMER_INFO_FULL;
         }
     };
 
     public static final ObjectConverter<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamGroupInfo encoded) {
-            return new HashMap<>() {{
-                put("name", encoded.getName());
-                put("consumers", encoded.getConsumers());
-                put("pending", encoded.getPending());
-                put("last-delivered-id", STREAM_ENTRY_ID.convert(encoded.getLastDeliveredId()));
-            }};
+        public ObjectType<StreamGroupInfo> getObjectType() {
+            return TypeFactory.STREAM_GROUP_INFO;
         }
     };
 
-    private static final ObjectConverter<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectConverter<>() {
+    public static final ObjectConverter<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamGroupFullInfo encoded) {
-            return new HashMap<>() {{
-                put("name", encoded.getName());
-                put("consumers", STREAM_CONSUMER_INFO_FULL.convert(encoded.getConsumers()));
-                put("pending", encoded.getPending());
-                put("pel-count", encoded.getPelCount());
-                put("last-delivered-id", STREAM_ENTRY_ID.convert(encoded.getLastDeliveredId()));
-
-            }};
+        public ObjectType<StreamGroupFullInfo> getObjectType() {
+            return TypeFactory.STREAM_GROUP_INFO_FULL;
         }
     };
 
     public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamInfo encoded) {
-            return new HashMap<>() {{
-                put("length", encoded.getLength());
-                put("radix-tree-keys", encoded.getRadixTreeKeys());
-                put("radix-tree-nodes", encoded.getRadixTreeNodes());
-                put("groups", encoded.getGroups());
-                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
-                put("first-entry", STREAM_ENTRY.convert(encoded.getFirstEntry()));
-                put("last-entry", STREAM_ENTRY.convert(encoded.getLastEntry()));
-            }};
+        public ObjectType<StreamInfo> getObjectType() {
+            return TypeFactory.STREAM_INFO;
         }
     };
 
    public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
-        @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamFullInfo encoded) {
-            return new HashMap<>() {{
-                put("length", encoded.getLength());
-                put("radix-tree-keys", encoded.getRadixTreeKeys());
-                put("radix-tree-nodes", encoded.getRadixTreeNodes());
-                put("groups", STREAM_GROUP_INFO_FULL.convert(encoded.getGroups()));
-                put("last-generated-id", STREAM_ENTRY_ID.convert(encoded.getLastGeneratedId()));
-                put("entries", STREAM_ENTRY.convert(encoded.getEntries()));
-            }};
-        }
+       @Override
+       public ObjectType<StreamFullInfo> getObjectType() {
+           return TypeFactory.STREAM_INFO_FULL;
+       }
     };
 
     public static final ObjectConverter<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamPendingEntry encoded) {
-            return new HashMap<>() {{
-                put("id", STREAM_ENTRY_ID.convert(encoded.getID()));
-                put("consumer-name", encoded.getConsumerName());
-                put("idle-time", encoded.getIdleTime());
-                put("delivered-times", encoded.getDeliveredTimes());
-            }};
+        public ObjectType<StreamPendingEntry> getObjectType() {
+            return TypeFactory.STREAM_PENDING_ENTRY;
         }
     };
 
     public static final ObjectConverter<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectConverter<>() {
         @Override
-        public @NotNull Map<String, Object> convertImpl(@NotNull StreamPendingSummary encoded) {
-            return new HashMap<>() {{
-                put("total", encoded.getTotal());
-                put("min-id", STREAM_ENTRY_ID.convert(encoded.getMinId()));
-                put("max-id", STREAM_ENTRY_ID.convert(encoded.getMaxId()));
-                put("consumer-message-count", encoded.getConsumerMessageCount());
-            }};
+        public ObjectType<StreamPendingSummary> getObjectType() {
+            return TypeFactory.STREAM_PENDING_SUMMARY;
         }
     };
     
-    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultConverter<>() {
-        private final Converter<String, ?, ?> STRING = new IdentityConverter<>();
-
+    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
         @Override
-        protected @NotNull Converter<String, ?, ?> getResultsConvertor() {
-            return STRING;
+        public ObjectType<ScanResult<String>> getObjectType() {
+            return TypeFactory.STRING_SCAN_RESULT;
         }
     };
 
-    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultConverter<>() {
+    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ObjectConverter<>() {
         @Override
-        protected @NotNull Converter<Tuple, ?, ?> getResultsConvertor() {
-            return TUPLE;
+        public ObjectType<ScanResult<Tuple>> getObjectType() {
+            return TypeFactory.TUPLE_SCAN_RESULT;
         }
     };
 
-    public static final ObjectConverter<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultConverter<>() {
-        private final Converter<Map.Entry<String, String>, ?, ?> ENTRY = new ObjectConverter<>() {
-            @Override
-            protected @NotNull Map<String, Object> convertImpl(Map.@NotNull Entry<String, String> encoded) {
-                return new HashMap<>() {{
-                    put("field", encoded.getKey());
-                    put("value", encoded.getValue());
-                }};
-            }
-        };
-
+    public static final ObjectConverter<Map.Entry<String, String>> ENTRY = new ObjectConverter<>() {
         @Override
-        protected @NotNull Converter<Map.Entry<String, String>, ?, ?> getResultsConvertor() {
-            return ENTRY;
+        public ObjectType<Map.Entry<String, String>> getObjectType() {
+            return TypeFactory.ENTRY;
         }
     };
 
-    private abstract static class ScanResultConverter<T> extends ObjectConverter<ScanResult<T>> {
-
-        protected abstract @NotNull Converter<T, ?, ?> getResultsConvertor();
-
+    public static final ObjectConverter<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ObjectConverter<>() {
         @Override
-        protected @NotNull Map<String, Object> convertImpl(@NotNull ScanResult<T> encoded) {
-            return new HashMap<>() {{
-                put("cursor", encoded.getCursor());
-                put("results", getResultsConvertor().convert(encoded.getResult()));
-            }};
+        public ObjectType<ScanResult<Map.Entry<String, String>>> getObjectType() {
+            return TypeFactory.ENTRY_SCAN_RESULT;
         }
-    }
+    };
 }

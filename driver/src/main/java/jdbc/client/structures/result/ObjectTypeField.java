@@ -4,29 +4,36 @@ import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ObjectTypeField {
+public class ObjectTypeField<T> {
+
     private final String name;
-    private final String typeName;
+    private final SimpleType<?> simpleType;
+    private final Function<T, ?> getter;
     private final Predicate<RedisQuery> isPresent;
 
-    ObjectTypeField(@NotNull String name, @NotNull String typeName, @Nullable Predicate<RedisQuery> isPresent) {
+    <S> ObjectTypeField(@NotNull String name,
+                        @NotNull SimpleType<S> simpleType,
+                        @NotNull Function<T, S> getter,
+                        @Nullable Predicate<RedisQuery> isPresent) {
         this.name = name;
-        this.typeName = typeName;
+        this.simpleType = simpleType;
+        this.getter = getter;
         this.isPresent = isPresent;
-    }
-
-    ObjectTypeField(@NotNull String name, @NotNull String typeName) {
-        this(name, typeName, null);
     }
 
     public @NotNull String getName() {
         return name;
     }
 
-    public @NotNull String getTypeName() {
-        return typeName;
+    public @NotNull SimpleType<?> getSimpleType() {
+        return simpleType;
+    }
+
+    public @NotNull Function<T, ?> getGetter() {
+        return getter;
     }
 
     public boolean isPresent(@NotNull RedisQuery query) {

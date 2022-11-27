@@ -4,7 +4,8 @@ import jdbc.RedisStatement;
 import jdbc.client.structures.query.ColumnHint;
 import jdbc.client.structures.result.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
-import jdbc.resultset.types.ArrayImpl;
+import jdbc.types.ArrayImpl;
+import jdbc.types.RedisColumnTypeHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +55,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
     }
 
     protected ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
-        return createColumn(columnHint.getName(), "string");
+        return createColumn(columnHint.getName(), RedisColumnTypeHelper.STRING);
     }
 
     protected abstract @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<T, RR> result);

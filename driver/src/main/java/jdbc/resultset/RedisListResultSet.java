@@ -5,6 +5,7 @@ import jdbc.client.structures.query.ColumnHint;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisListResult;
 import jdbc.client.structures.result.RedisResultBase;
+import jdbc.client.structures.result.SimpleType;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,14 +16,14 @@ import java.util.List;
 import static jdbc.Utils.getColumnTitle;
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
 
-public class RedisListResultSet extends RedisResultSetBase<String, List<Object>, Object> {
+public class RedisListResultSet extends RedisResultSetBase<SimpleType<?>, List<Object>, Object> {
 
     public RedisListResultSet(RedisStatement statement, @NotNull RedisListResult result) {
         super(statement, result);
     }
 
     @Override
-    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<String, List<Object>> result) {
+    protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<SimpleType<?>, List<Object>> result) {
         RedisQuery query = result.getQuery();
         ColumnHint columnHint = query.getColumnHint();
         String resultColumnName = VALUE;

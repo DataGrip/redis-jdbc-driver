@@ -17,18 +17,18 @@ abstract class Converter<T, V, MV> {
     protected abstract @NotNull V convertImpl(@NotNull T encoded);
 
     @Contract("null -> null; !null -> !null")
-    public final List<V> convert(List<T> encoded) {
-        return encoded != null ? convertImpl(encoded) : null;
+    public final List<V> convertList(List<T> encoded) {
+        return encoded != null ? convertListImpl(encoded) : null;
     }
 
-    protected @NotNull List<V> convertImpl(@NotNull List<T> encoded) {
+    protected @NotNull List<V> convertListImpl(@NotNull List<T> encoded) {
         return encoded.stream().map(this::convert).collect(Collectors.toList());
     }
 
     @Contract("null -> null; !null -> !null")
-    public final MV convert(Map<String, T> encoded) {
-        return encoded != null ? convertImpl(encoded) : null;
+    public final MV convertMap(Map<String, T> encoded) {
+        return encoded != null ? convertMapImpl(encoded) : null;
     }
 
-    abstract protected @NotNull MV convertImpl(@NotNull Map<String, T> encoded);
+    abstract protected @NotNull MV convertMapImpl(@NotNull Map<String, T> encoded);
 }
