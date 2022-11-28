@@ -177,17 +177,17 @@ public class TypeFactory {
         add("radix-tree-nodes", LONG, StreamInfo::getRadixTreeNodes);
         add("groups", LONG, StreamInfo::getGroups);
         add("last-generated-id", STRING, StreamInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("first-entry", MAP, e -> ConverterFactory.STREAM_ENTRY.convert(e.getFirstEntry()));
-        add("last-entry", MAP, e -> ConverterFactory.STREAM_ENTRY.convert(e.getLastEntry()));
+        add("first-entry", MAP, StreamInfo::getFirstEntry, ConverterFactory.STREAM_ENTRY::convert);
+        add("last-entry", MAP, StreamInfo::getLastEntry, ConverterFactory.STREAM_ENTRY::convert);
     }};
 
     public static final ObjectType<StreamFullInfo> STREAM_INFO_FULL = new ObjectType<>() {{
         add("length", LONG, StreamFullInfo::getLength);
         add("radix-tree-keys", LONG, StreamFullInfo::getRadixTreeKeys);
         add("radix-tree-nodes", LONG, StreamFullInfo::getRadixTreeNodes);
-        add("groups", LIST, e -> ConverterFactory.STREAM_GROUP_INFO_FULL.convertList(e.getGroups()));
+        add("groups", LIST, StreamFullInfo::getGroups, ConverterFactory.STREAM_GROUP_INFO_FULL::convertList);
         add("last-generated-id", STRING, StreamFullInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("entries", LIST, e -> ConverterFactory.STREAM_ENTRY.convertList(e.getEntries()));
+        add("entries", LIST, StreamFullInfo::getEntries, ConverterFactory.STREAM_ENTRY::convertList);
     }};
 
     public static final ObjectType<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectType<>() {{
@@ -206,14 +206,14 @@ public class TypeFactory {
 
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<String>, List<?>> getConverter() {
+        protected Function<List<String>, List<?>> getResultsConverter() {
             return ConverterFactory.STRING::convertList;
         }
     };
 
     public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<Tuple>, List<?>> getConverter() {
+        protected Function<List<Tuple>, List<?>> getResultsConverter() {
             return ConverterFactory.TUPLE::convertList;
         }
     };
@@ -225,7 +225,7 @@ public class TypeFactory {
 
     public static final ObjectType<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<Map.Entry<String, String>>, List<?>> getConverter() {
+        protected Function<List<Map.Entry<String, String>>, List<?>> getResultsConverter() {
             return ConverterFactory.ENTRY::convertList;
         }
     };
@@ -233,9 +233,9 @@ public class TypeFactory {
     private static abstract class ScanResultType<T> extends ObjectType<ScanResult<T>> {
         ScanResultType() {
             add("cursor", STRING, ScanResult::getCursor);
-            add("results", LIST, ScanResult::getResult, getConverter());
+            add("results", LIST, ScanResult::getResult, getResultsConverter());
         }
 
-        protected abstract Function<List<T>, List<?>> getConverter();
+        protected abstract Function<List<T>, List<?>> getResultsConverter();
     }
 }
