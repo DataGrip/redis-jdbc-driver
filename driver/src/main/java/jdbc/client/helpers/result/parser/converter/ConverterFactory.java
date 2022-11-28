@@ -79,6 +79,13 @@ public class ConverterFactory {
     }
 
 
+    public static final ObjectConverter<KeyedListElement> KEYED_STRING = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyedListElement> getObjectType() {
+            return TypeFactory.KEYED_STRING;
+        }
+    };
+
     public static final ObjectConverter<Tuple> TUPLE = new ObjectConverter<>() {
         @Override
         public ObjectType<Tuple> getObjectType() {
@@ -89,7 +96,7 @@ public class ConverterFactory {
     public static final ObjectConverter<KeyedZSetElement> KEYED_TUPLE = new ObjectConverter<>() {
         @Override
         public ObjectType<KeyedZSetElement> getObjectType() {
-            return TypeFactory.KEYED_ZSET_ELEMENT;
+            return TypeFactory.KEYED_TUPLE;
         }
     };
 

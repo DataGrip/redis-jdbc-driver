@@ -119,6 +119,18 @@ public class ResultParserFactory {
     };
 
 
+    public static final ResultParser KEYED_STRING = new ObjectListResultParser<KeyedListElement>() {
+        @Override
+        protected @NotNull ListEncoder<KeyedListElement> getBuilder() {
+            return EncoderFactory.KEYED_STRING;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyedListElement> getConverter() {
+            return ConverterFactory.KEYED_STRING;
+        }
+    };
+
     public static final ResultParser TUPLE = new ObjectListResultParser<Tuple>() {
         @Override
         protected @NotNull ListEncoder<Tuple> getBuilder() {

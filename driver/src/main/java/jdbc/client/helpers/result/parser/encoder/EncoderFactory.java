@@ -108,6 +108,13 @@ public class EncoderFactory {
     };
 
 
+    public static final ListEncoder<KeyedListElement> KEYED_STRING = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyedListElement> getBuilder() {
+            return BuilderFactory.KEYED_LIST_ELEMENT;
+        }
+    };
+
     public static final ListEncoder<Tuple> TUPLE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<Tuple>> getListBuilder() {
