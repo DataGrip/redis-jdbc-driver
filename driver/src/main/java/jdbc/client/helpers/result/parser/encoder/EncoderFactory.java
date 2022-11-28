@@ -81,6 +81,13 @@ public class EncoderFactory {
     };
 
 
+    public static final MapEncoder<Object> OBJECT_MAP = new SimpleMapEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map<String, Object>> getMapBuilder() {
+            return BuilderFactory.ENCODED_OBJECT_MAP;
+        }
+    };
+
     public static final MapEncoder<String> STRING_MAP = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, String>> getMapBuilder() {

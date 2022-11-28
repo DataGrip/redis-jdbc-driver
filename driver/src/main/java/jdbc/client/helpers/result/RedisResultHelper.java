@@ -90,8 +90,7 @@ public class RedisResultHelper {
         put(create(Command.LPUSH), wrapList(LONG));
         put(create(Command.LPUSHX), wrapList(LONG));
         put(create(Command.LREM), wrapList(LONG));
-        // TODO: EncodedObject instead of StringMap
-        put(create(Command.MEMORY, Keyword.STATS), wrapList(STRING_MAP));
+        put(create(Command.MEMORY, Keyword.STATS), wrapList(OBJECT_MAP));
         put(create(Command.MEMORY, Keyword.USAGE), wrapList(LONG));
         put(create(Command.MODULE, Keyword.LIST), wrapList(MODULE));
         put(create(Command.MOVE), wrapList(BOOLEAN));

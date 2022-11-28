@@ -82,6 +82,18 @@ public class ResultParserFactory {
     };
 
 
+    public static final ResultParser OBJECT_MAP = new MapResultParser<>() {
+        @Override
+        protected @NotNull MapEncoder<Object> getBuilder() {
+            return EncoderFactory.OBJECT_MAP;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<Object, Object> getConverter() {
+            return ConverterFactory.OBJECT;
+        }
+    };
+
     public static final ResultParser STRING_MAP = new MapResultParser<String, String>() {
         @Override
         protected @NotNull MapEncoder<String> getBuilder() {
