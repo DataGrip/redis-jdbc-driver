@@ -10,7 +10,6 @@ import redis.clients.jedis.Protocol;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.util.KeyValue;
 
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -46,11 +45,6 @@ public class TypeFactory {
     public static final ObjectType<Tuple> TUPLE = new ObjectType<>() {{
         add("value", STRING, Tuple::getElement);
         add("score", DOUBLE, Tuple::getScore);
-    }};
-
-    public static final ObjectType<KeyedListElement> KEYED_LIST_ELEMENT = new ObjectType<>() {{
-        add("key", STRING, AbstractMap.SimpleImmutableEntry::getKey);
-        add("value", STRING, KeyedListElement::getElement);
     }};
 
     public static final ObjectType<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ObjectType<>() {{

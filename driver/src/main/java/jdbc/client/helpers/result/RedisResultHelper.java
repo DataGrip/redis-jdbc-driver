@@ -83,6 +83,7 @@ public class RedisResultHelper {
         put(create(Command.INCRBY), wrapList(LONG));
         put(create(Command.INCRBYFLOAT), wrapList(DOUBLE));
         put(create(Command.LASTSAVE), wrapList(LONG));
+        // TODO: put(create(Command.LCS), wrapList(???)) - LCSMatchResult (MatchedPosition, Position)
         put(create(Command.LINSERT), wrapList(LONG));
         put(create(Command.LLEN), wrapList(LONG));
         put(create(Command.LMPOP), wrapList(KEYED_STRING_LIST));
@@ -126,13 +127,11 @@ public class RedisResultHelper {
         put(create(Command.SREM), wrapList(LONG));
         put(create(Command.SSCAN), wrapList(STRING_SCAN_RESULT));
         put(create(Command.STRLEN), wrapList(LONG));
-        // TODO: ? put(RedisCompositeCommand.create(Command.SUBSCRIBE), wrapList(?));
         put(create(Command.SUNIONSTORE), wrapList(LONG));
         put(create(Command.SUNIONSTORE), wrapList(LONG));
         put(create(Command.TOUCH), wrapList(LONG));
         put(create(Command.TTL), wrapList(LONG));
         put(create(Command.UNLINK), wrapList(LONG));
-        // TODO: ? put(RedisCompositeCommand.create(Command.UNSUBSCRIBE), wrapList(?));
         put(create(Command.WAIT), wrapList(LONG));
         put(create(Command.XACK), wrapList(LONG));
         put(create(Command.XADD), wrapList(STREAM_ENTRY_ID));

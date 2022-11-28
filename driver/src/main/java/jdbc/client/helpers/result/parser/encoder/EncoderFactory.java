@@ -173,8 +173,6 @@ public class EncoderFactory {
         }
     };
 
-    // TODO: LCSMatchResult (MatchedPosition, Position)
-
     public static final ListEncoder<Slowlog> SLOW_LOG = new SimpleListEncoder<>() {
         private final Builder<List<Slowlog>> SLOW_LOG_LIST = new Builder<>() {
             @Override
