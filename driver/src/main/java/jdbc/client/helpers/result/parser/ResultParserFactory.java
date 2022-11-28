@@ -21,15 +21,27 @@ import java.util.Map;
 
 public class ResultParserFactory {
 
-    public static final ResultParser RESULT = new ListResultParser<>() {
+    public static final ResultParser OBJECT = new ListResultParser<>() {
         @Override
         protected @NotNull ListEncoder<Object> getBuilder() {
-            return EncoderFactory.RESULT;
+            return EncoderFactory.OBJECT;
         }
 
         @Override
         protected @NotNull SimpleConverter<Object, Object> getConverter() {
             return ConverterFactory.OBJECT;
+        }
+    };
+
+    public static final ResultParser STRING = new ListResultParser<String, String>() {
+        @Override
+        protected @NotNull ListEncoder<String> getBuilder() {
+            return EncoderFactory.STRING;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<String, String> getConverter() {
+            return ConverterFactory.STRING;
         }
     };
 

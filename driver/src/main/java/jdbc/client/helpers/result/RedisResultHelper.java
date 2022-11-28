@@ -182,7 +182,7 @@ public class RedisResultHelper {
             Optional<ResultParserWrapper> wrapper = wrappers.stream().filter(p -> p.isApplicable(query)).findFirst();
             if (wrapper.isPresent()) return wrapper.get().getResultParser();
         }
-        return RESULT;
+        return OBJECT;
     }
 
     public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {

@@ -22,8 +22,7 @@ public class TypeFactory {
     }
 
 
-    // TODO: think about it
-    public static final SimpleType<Object> OBJECT = new SimpleType<>(RedisColumnTypeHelper.STRING); // object.toString()
+    public static final SimpleType<Object> OBJECT = new SimpleType<>(RedisColumnTypeHelper.OBJECT);
 
     public static final SimpleType<String> STRING = new SimpleType<>(RedisColumnTypeHelper.STRING);
 

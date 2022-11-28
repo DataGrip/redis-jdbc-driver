@@ -20,7 +20,7 @@ public class EncoderFactory {
     }
 
 
-    public static final ListEncoder<Object> RESULT = new ElementListEncoder<>() {
+    public static final ListEncoder<Object> OBJECT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<Object> getBuilder() {
             return BuilderFactory.ENCODED_OBJECT;
@@ -29,6 +29,18 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<List<Object>> getListBuilder() {
             return BuilderFactory.ENCODED_OBJECT_LIST;
+        }
+    };
+
+    public static final ListEncoder<String> STRING = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<String> getBuilder() {
+            return BuilderFactory.STRING;
+        }
+
+        @Override
+        protected @NotNull Builder<List<String>> getListBuilder() {
+            return BuilderFactory.STRING_LIST;
         }
     };
 
