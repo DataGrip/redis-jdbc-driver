@@ -38,16 +38,15 @@ public class RedisResultHelper {
         put(create(Command.BITFIELD_RO), wrapList(LONG));
         put(create(Command.BITOP), wrapList(LONG));
         put(create(Command.BITPOS), wrapList(LONG));
-        put(create(Command.BLPOP), wrapList(KEYED_LIST_ELEMENT));
-        put(create(Command.BRPOP), wrapList(KEYED_LIST_ELEMENT));
-        put(create(Command.BZPOPMAX), wrapList(KEYED_ZSET_ELEMENT));
-        put(create(Command.BZPOPMIN), wrapList(KEYED_ZSET_ELEMENT));
+        put(create(Command.BLMPOP), wrapList(KEYED_STRING_LIST));
+        put(create(Command.BZMPOP), wrapList(KEYED_TUPLE_LIST));
+        put(create(Command.BZPOPMAX), wrapList(KEYED_TUPLE));
+        put(create(Command.BZPOPMIN), wrapList(KEYED_TUPLE));
         put(create(Command.CLIENT, Keyword.ID), wrapList(LONG));
         put(create(Command.CLIENT, Keyword.UNBLOCK), wrapList(LONG));
         put(create(Command.COMMAND, Keyword.COUNT), wrapList(LONG));
         put(create(Command.COMMAND, Keyword.DOCS), wrapList(COMMAND_DOCUMENT));
-        // TODO: KeyValue
-        // TODO: put(CompositeCommand.create(Command.COMMAND, Keyword.GETKEYSANDFLAGS), wrapList(???));
+        put(create(Command.COMMAND, Keyword.GETKEYSANDFLAGS), wrapList(KEYED_STRING_LIST));
         put(create(Command.COMMAND, Keyword.INFO), wrapList(COMMAND_INFO));
         put(create(Command.CONFIG, Keyword.GET), wrapList(STRING_MAP));
         put(create(Command.COPY), wrapList(BOOLEAN));
@@ -86,6 +85,7 @@ public class RedisResultHelper {
         put(create(Command.LASTSAVE), wrapList(LONG));
         put(create(Command.LINSERT), wrapList(LONG));
         put(create(Command.LLEN), wrapList(LONG));
+        put(create(Command.LMPOP), wrapList(KEYED_STRING_LIST));
         put(create(Command.LPOS), wrapList(LONG));
         put(create(Command.LPUSH), wrapList(LONG));
         put(create(Command.LPUSHX), wrapList(LONG));
@@ -160,6 +160,7 @@ public class RedisResultHelper {
         put(create(Command.ZINTER), wrapList(TUPLE, param(Keyword.WITHSCORES)));
         put(create(Command.ZINTERSTORE), wrapList(LONG));
         put(create(Command.ZLEXCOUNT), wrapList(LONG));
+        put(create(Command.ZMPOP), wrapList(KEYED_TUPLE_LIST));
         put(create(Command.ZMSCORE), wrapList(DOUBLE));
         put(create(Command.ZPOPMAX), wrapList(TUPLE));
         put(create(Command.ZPOPMIN), wrapList(TUPLE));

@@ -5,10 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.util.KeyValue;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static redis.clients.jedis.BuilderFactory.RAW_OBJECT_LIST;
 
@@ -16,6 +18,7 @@ public class EncoderFactory {
 
     private EncoderFactory() {
     }
+
 
     public static final ListEncoder<Object> RESULT = new ElementListEncoder<>() {
         @Override
@@ -77,12 +80,14 @@ public class EncoderFactory {
         }
     };
 
+
     public static final MapEncoder<String> STRING_MAP = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, String>> getMapBuilder() {
             return BuilderFactory.STRING_MAP;
         }
     };
+
 
     public static final ListEncoder<Tuple> TUPLE = new SimpleListEncoder<>() {
         @Override
@@ -91,14 +96,7 @@ public class EncoderFactory {
         }
     };
 
-    public static final ListEncoder<KeyedListElement> KEYED_LIST_ELEMENT = new ElementListEncoder<>() {
-        @Override
-        protected @NotNull Builder<KeyedListElement> getBuilder() {
-            return BuilderFactory.KEYED_LIST_ELEMENT;
-        }
-    };
-
-    public static final ListEncoder<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ElementListEncoder<>() {
+    public static final ListEncoder<KeyedZSetElement> KEYED_TUPLE = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyedZSetElement> getBuilder() {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
@@ -257,6 +255,34 @@ public class EncoderFactory {
         }
     };
 
+
+    public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder() {
+            return BuilderFactory.KEYED_STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder() {
+            return BuilderFactory.KEYED_STRING_LIST_LIST;
+        }
+
+        @Override
+        protected boolean isElementList(@NotNull Object data) {
+            if (!super.isElementList(data)) return false;
+            List<?> dataList = (List<?>) data;
+            return dataList.isEmpty() || dataList.get(0) instanceof List;
+        }
+    };
+
+    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder() {
+            return BuilderFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
+
     public static final ListEncoder<ScanResult<String>> STRING_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<ScanResult<String>> getBuilder() {
@@ -302,11 +328,14 @@ public class EncoderFactory {
             return null;
         }
 
+        protected boolean isElementList(@NotNull Object data) {
+            return getListBuilder() != null && data instanceof List;
+        }
+
         @Override
         public @NotNull List<T> encode(@Nullable Object data) {
             if (data == null) return Collections.singletonList(null);
-            Builder<List<T>> listBuilder = getListBuilder();
-            if (listBuilder != null && data instanceof List) return listBuilder.build(data);
+            if (isElementList(data)) return Objects.requireNonNull(getListBuilder()).build(data);
             return Collections.singletonList(getBuilder().build(data));
         }
 

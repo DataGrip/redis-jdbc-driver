@@ -8,6 +8,7 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.util.KeyValue;
 
 import java.util.AbstractMap;
 import java.util.List;
@@ -203,6 +204,32 @@ public class TypeFactory {
         add("max-id", STRING, StreamPendingSummary::getMaxId, ConverterFactory.STREAM_ENTRY_ID::convert);
         add("consumer-message-count", MAP, StreamPendingSummary::getConsumerMessageCount);
     }};
+
+
+    public static final ObjectType<KeyValue<String, List<String>>> KEYED_STRING_LIST = new KeyedListType<>() {
+        @Override
+        protected Function<List<String>, List<?>> getValuesConverter() {
+            return ConverterFactory.STRING::convertList;
+        }
+    };
+
+    public static final ObjectType<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new KeyedListType<>() {
+        @Override
+        protected Function<List<Tuple>, List<?>> getValuesConverter() {
+            return ConverterFactory.TUPLE::convertList;
+        }
+    };
+
+    private static abstract class KeyedListType<T> extends ObjectType<KeyValue<String, List<T>>> {
+        KeyedListType() {
+            add("key", STRING, KeyValue::getKey);
+            add("values", LIST, KeyValue::getValue, getValuesConverter());
+        }
+
+        protected abstract Function<List<T>, List<?>> getValuesConverter();
+    }
+
+
 
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
         @Override

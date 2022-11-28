@@ -9,6 +9,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,24 @@ public class ConverterFactory {
         }
     };
 
+    public abstract static class IdentityConverter<T> extends SimpleConverter<T, T> {
+        @Override
+        protected @NotNull T convertImpl(@NotNull T encoded) {
+            return encoded;
+        }
+
+        @Override
+        public @NotNull List<T> convertListImpl(@NotNull List<T> encoded) {
+            return encoded;
+        }
+
+        @Override
+        public @NotNull Map<String, T> convertMapImpl(@NotNull Map<String, T> encoded) {
+            return encoded;
+        }
+    }
+
+
     public static final ObjectConverter<Tuple> TUPLE = new ObjectConverter<>() {
         @Override
         public ObjectType<Tuple> getObjectType() {
@@ -67,14 +86,7 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<KeyedListElement> KEYED_LIST_ELEMENT = new ObjectConverter<>() {
-        @Override
-        public ObjectType<KeyedListElement> getObjectType() {
-            return TypeFactory.KEYED_LIST_ELEMENT;
-        }
-    };
-
-    public static final ObjectConverter<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ObjectConverter<>() {
+    public static final ObjectConverter<KeyedZSetElement> KEYED_TUPLE = new ObjectConverter<>() {
         @Override
         public ObjectType<KeyedZSetElement> getObjectType() {
             return TypeFactory.KEYED_ZSET_ELEMENT;
@@ -244,7 +256,23 @@ public class ConverterFactory {
             return TypeFactory.STREAM_PENDING_SUMMARY;
         }
     };
-    
+
+
+    public static final ObjectConverter<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyValue<String, List<String>>> getObjectType() {
+            return TypeFactory.KEYED_STRING_LIST;
+        }
+    };
+
+    public static final ObjectConverter<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyValue<String, List<Tuple>>> getObjectType() {
+            return TypeFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
+
     public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
         @Override
         public ObjectType<ScanResult<String>> getObjectType() {
@@ -272,22 +300,4 @@ public class ConverterFactory {
             return TypeFactory.ENTRY_SCAN_RESULT;
         }
     };
-
-
-    public abstract static class IdentityConverter<T> extends SimpleConverter<T, T> {
-        @Override
-        protected @NotNull T convertImpl(@NotNull T encoded) {
-            return encoded;
-        }
-
-        @Override
-        public @NotNull List<T> convertListImpl(@NotNull List<T> encoded) {
-            return encoded;
-        }
-
-        @Override
-        public @NotNull Map<String, T> convertMapImpl(@NotNull Map<String, T> encoded) {
-            return encoded;
-        }
-    }
 }

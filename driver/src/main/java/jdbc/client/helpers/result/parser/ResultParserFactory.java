@@ -14,6 +14,7 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class ResultParserFactory {
         }
     };
 
+
     public static final ResultParser STRING_MAP = new MapResultParser<String, String>() {
         @Override
         protected @NotNull MapEncoder<String> getBuilder() {
@@ -91,6 +93,7 @@ public class ResultParserFactory {
             return ConverterFactory.STRING;
         }
     };
+
 
     public static final ResultParser TUPLE = new ObjectListResultParser<Tuple>() {
         @Override
@@ -104,27 +107,15 @@ public class ResultParserFactory {
         }
     };
 
-    public static final ResultParser KEYED_LIST_ELEMENT = new ObjectListResultParser<KeyedListElement>() {
-        @Override
-        protected @NotNull ListEncoder<KeyedListElement> getBuilder() {
-            return EncoderFactory.KEYED_LIST_ELEMENT;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<KeyedListElement> getConverter() {
-            return ConverterFactory.KEYED_LIST_ELEMENT;
-        }
-    };
-
-    public static final ResultParser KEYED_ZSET_ELEMENT = new ObjectListResultParser<KeyedZSetElement>() {
+    public static final ResultParser KEYED_TUPLE = new ObjectListResultParser<KeyedZSetElement>() {
         @Override
         protected @NotNull ListEncoder<KeyedZSetElement> getBuilder() {
-            return EncoderFactory.KEYED_ZSET_ELEMENT;
+            return EncoderFactory.KEYED_TUPLE;
         }
 
         @Override
         protected @NotNull ObjectConverter<KeyedZSetElement> getConverter() {
-            return ConverterFactory.KEYED_ZSET_ELEMENT;
+            return ConverterFactory.KEYED_TUPLE;
         }
     };
 
@@ -355,6 +346,32 @@ public class ResultParserFactory {
             return ConverterFactory.STREAM_PENDING_SUMMARY;
         }
     };
+
+
+    public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<String, List<String>>> getBuilder() {
+            return EncoderFactory.KEYED_STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<String, List<String>>> getConverter() {
+            return ConverterFactory.KEYED_STRING_LIST;
+        }
+    };
+
+    public static final ResultParser KEYED_TUPLE_LIST = new ObjectListResultParser<KeyValue<String, List<Tuple>>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<String, List<Tuple>>> getBuilder() {
+            return EncoderFactory.KEYED_TUPLE_LIST;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<String, List<Tuple>>> getConverter() {
+            return ConverterFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
 
     public static final ResultParser STRING_SCAN_RESULT = new ObjectListResultParser<ScanResult<String>>() {
         @Override
