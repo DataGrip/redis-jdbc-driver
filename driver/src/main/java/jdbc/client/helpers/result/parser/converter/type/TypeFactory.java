@@ -37,7 +37,7 @@ public class TypeFactory {
 
     public static final SimpleType<byte[]> BYTE_ARRAY = new SimpleType<>(RedisColumnTypeHelper.BINARY);
 
-    public static final SimpleType<List<?>> ARRAY = new SimpleType<>(RedisColumnTypeHelper.ARRAY);
+    public static final SimpleType<List<?>> LIST = new SimpleType<>(RedisColumnTypeHelper.ARRAY);
 
     public static final SimpleType<Map<String, ?>> MAP = new SimpleType<>(RedisColumnTypeHelper.MAP);
 
@@ -76,9 +76,9 @@ public class TypeFactory {
     }};
 
     public static final ObjectType<AccessControlUser> ACCESS_CONTROL_USER = new ObjectType<>() {{
-        add("flags", ARRAY, AccessControlUser::getFlags);
-        add("keys", ARRAY, AccessControlUser::getKeys);
-        add("passwords", ARRAY, AccessControlUser::getPassword);
+        add("flags", LIST, AccessControlUser::getFlags);
+        add("keys", LIST, AccessControlUser::getKeys);
+        add("passwords", LIST, AccessControlUser::getPassword);
         add("commands", STRING, AccessControlUser::getCommands);
     }};
 
@@ -98,18 +98,18 @@ public class TypeFactory {
         add("since", STRING, CommandDocument::getSince);
         add("group", STRING, CommandDocument::getGroup);
         add("complexity", STRING, CommandDocument::getComplexity);
-        add("history", ARRAY, CommandDocument::getHistory);
+        add("history", LIST, CommandDocument::getHistory);
     }};
 
     public static final ObjectType<CommandInfo> COMMAND_INFO = new ObjectType<>("command-name") {{
         add("arity", LONG, CommandInfo::getArity);
-        add("flags", ARRAY, CommandInfo::getFlags);
+        add("flags", LIST, CommandInfo::getFlags);
         add("firstKey", LONG, CommandInfo::getFirstKey);
         add("lastKey", LONG, CommandInfo::getLastKey);
         add("step", LONG, CommandInfo::getStep);
-        add("acl-categories", ARRAY, CommandInfo::getAclCategories);
-        add("tips", ARRAY, CommandInfo::getTips);
-        add("subcommands", ARRAY, CommandInfo::getSubcommands);
+        add("acl-categories", LIST, CommandInfo::getAclCategories);
+        add("tips", LIST, CommandInfo::getTips);
+        add("subcommands", LIST, CommandInfo::getSubcommands);
     }};
 
     public static final ObjectType<FunctionStats> FUNCTION_STATS = new ObjectType<>() {{
@@ -120,7 +120,7 @@ public class TypeFactory {
     public static final ObjectType<LibraryInfo> LIBRARY_INFO = new ObjectType<>() {{
         add("library-name", STRING, LibraryInfo::getLibraryName);
         add("engine", STRING, LibraryInfo::getEngine);
-        add("functions", ARRAY, LibraryInfo::getFunctions);
+        add("functions", LIST, LibraryInfo::getFunctions);
         add("library-code", STRING, LibraryInfo::getLibraryCode, param(Protocol.Keyword.WITHCODE));
     }};
 
@@ -128,7 +128,7 @@ public class TypeFactory {
         add("id", LONG, Slowlog::getId);
         add("timestamp", LONG, Slowlog::getTimeStamp);
         add("execution-time", LONG, Slowlog::getExecutionTime);
-        add("args", ARRAY, Slowlog::getArgs);
+        add("args", LIST, Slowlog::getArgs);
         add("client-ip-port", STRING, Slowlog::getClientIpPort, ConverterFactory.HOST_AND_PORT::convert);
         add("client-name", STRING, Slowlog::getClientName);
     }};
@@ -140,7 +140,7 @@ public class TypeFactory {
 
     public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectType<>() {{
         add("key", STRING, Map.Entry::getKey);
-        add("entries", ARRAY, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
+        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
     }};
 
     public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectType<>() {{
@@ -153,7 +153,7 @@ public class TypeFactory {
         add("name", STRING, StreamConsumerFullInfo::getName);
         add("seen-time", LONG, StreamConsumerFullInfo::getSeenTime);
         add("pel-count", LONG, StreamConsumerFullInfo::getPelCount);
-        add("pending", ARRAY, StreamConsumerFullInfo::getPending);
+        add("pending", LIST, StreamConsumerFullInfo::getPending);
     }};
 
     public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
@@ -165,8 +165,8 @@ public class TypeFactory {
 
     public static final ObjectType<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectType<>() {{
         add("name", STRING, StreamGroupFullInfo::getName);
-        add("consumers", ARRAY, StreamGroupFullInfo::getConsumers, ConverterFactory.STREAM_CONSUMER_INFO_FULL::convertList);
-        add("pending", ARRAY, StreamGroupFullInfo::getPending);
+        add("consumers", LIST, StreamGroupFullInfo::getConsumers, ConverterFactory.STREAM_CONSUMER_INFO_FULL::convertList);
+        add("pending", LIST, StreamGroupFullInfo::getPending);
         add("pel-count", LONG, StreamGroupFullInfo::getPelCount);
         add("last-delivered-id", STRING, StreamGroupFullInfo::getLastDeliveredId, ConverterFactory.STREAM_ENTRY_ID::convert);
     }};
@@ -185,9 +185,9 @@ public class TypeFactory {
         add("length", LONG, StreamFullInfo::getLength);
         add("radix-tree-keys", LONG, StreamFullInfo::getRadixTreeKeys);
         add("radix-tree-nodes", LONG, StreamFullInfo::getRadixTreeNodes);
-        add("groups", ARRAY, e -> ConverterFactory.STREAM_GROUP_INFO_FULL.convertList(e.getGroups()));
+        add("groups", LIST, e -> ConverterFactory.STREAM_GROUP_INFO_FULL.convertList(e.getGroups()));
         add("last-generated-id", STRING, StreamFullInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("entries", ARRAY, e -> ConverterFactory.STREAM_ENTRY.convertList(e.getEntries()));
+        add("entries", LIST, e -> ConverterFactory.STREAM_ENTRY.convertList(e.getEntries()));
     }};
 
     public static final ObjectType<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectType<>() {{
@@ -233,7 +233,7 @@ public class TypeFactory {
     private static abstract class ScanResultType<T> extends ObjectType<ScanResult<T>> {
         ScanResultType() {
             add("cursor", STRING, ScanResult::getCursor);
-            add("results", ARRAY, ScanResult::getResult, getConverter());
+            add("results", LIST, ScanResult::getResult, getConverter());
         }
 
         protected abstract Function<List<T>, List<?>> getConverter();

@@ -1,4 +1,4 @@
-package jdbc.client.helpers.result.parser.builder;
+package jdbc.client.helpers.result.parser.encoder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,12 +12,12 @@ import java.util.Map;
 
 import static redis.clients.jedis.BuilderFactory.RAW_OBJECT_LIST;
 
-public class BuilderWrapperFactory {
+public class EncoderFactory {
 
-    private BuilderWrapperFactory() {
+    private EncoderFactory() {
     }
 
-    public static final ListBuilderWrapper<Object> RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<Object> RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<Object> getBuilder() {
             return BuilderFactory.ENCODED_OBJECT;
@@ -29,7 +29,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<Long> LONG_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<Long> LONG = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<Long> getBuilder() {
             return BuilderFactory.LONG;
@@ -41,7 +41,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<Double> DOUBLE_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<Double> DOUBLE = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<Double> getBuilder() {
             return BuilderFactory.DOUBLE;
@@ -53,7 +53,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<Boolean> BOOLEAN_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<Boolean> BOOLEAN = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<Boolean> getBuilder() {
             return BuilderFactory.BOOLEAN;
@@ -65,7 +65,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<byte[]> BYTE_ARRAY_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<byte[]> BYTE_ARRAY = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<byte[]> getBuilder() {
             return BuilderFactory.BYTE_ARRAY;
@@ -77,91 +77,91 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final MapBuilderWrapper<String> STRING_MAP = new SimpleMapBuilderWrapper<>() {
+    public static final MapEncoder<String> STRING_MAP = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, String>> getMapBuilder() {
             return BuilderFactory.STRING_MAP;
         }
     };
 
-    public static final ListBuilderWrapper<Tuple> TUPLE_RESULT = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<Tuple> TUPLE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<Tuple>> getListBuilder() {
             return BuilderFactory.TUPLE_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<KeyedListElement> KEYED_LIST_ELEMENT_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<KeyedListElement> KEYED_LIST_ELEMENT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyedListElement> getBuilder() {
             return BuilderFactory.KEYED_LIST_ELEMENT;
         }
     };
 
-    public static final ListBuilderWrapper<KeyedZSetElement> KEYED_ZSET_ELEMENT_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<KeyedZSetElement> KEYED_ZSET_ELEMENT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyedZSetElement> getBuilder() {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
         }
     };
 
-    public static final ListBuilderWrapper<GeoCoordinate> GEO_COORDINATE = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<GeoCoordinate> GEO_COORDINATE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<GeoCoordinate>> getListBuilder() {
             return BuilderFactory.GEO_COORDINATE_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<GeoRadiusResponse> GEORADIUS_RESPONSE = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<GeoRadiusResponse> GEORADIUS_RESPONSE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<GeoRadiusResponse>> getListBuilder() {
             return BuilderFactory.GEORADIUS_WITH_PARAMS_RESULT;
         }
     };
 
-    public static final ListBuilderWrapper<Module> MODULE = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<Module> MODULE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<Module>> getListBuilder() {
             return BuilderFactory.MODULE_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<AccessControlUser> ACCESS_CONTROL_USER = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<AccessControlUser> ACCESS_CONTROL_USER = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<AccessControlUser> getBuilder() {
             return BuilderFactory.ACCESS_CONTROL_USER;
         }
     };
 
-    public static final ListBuilderWrapper<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<AccessControlLogEntry> ACCESS_CONTROL_LOG_ENTRY = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<AccessControlLogEntry>> getListBuilder() {
             return BuilderFactory.ACCESS_CONTROL_LOG_ENTRY_LIST;
         }
     };
 
-    public static final MapBuilderWrapper<CommandDocument> COMMAND_DOCUMENT = new SimpleMapBuilderWrapper<>() {
+    public static final MapEncoder<CommandDocument> COMMAND_DOCUMENT = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, CommandDocument>> getMapBuilder() {
             return BuilderFactory.COMMAND_DOCS_RESPONSE;
         }
     };
 
-    public static final MapBuilderWrapper<CommandInfo> COMMAND_INFO = new SimpleMapBuilderWrapper<>() {
+    public static final MapEncoder<CommandInfo> COMMAND_INFO = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, CommandInfo>> getMapBuilder() {
             return BuilderFactory.COMMAND_INFO_RESPONSE;
         }
     };
 
-    public static final ListBuilderWrapper<FunctionStats> FUNCTION_STATS = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<FunctionStats> FUNCTION_STATS = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<FunctionStats> getBuilder() {
             return FunctionStats.FUNCTION_STATS_BUILDER;
         }
     };
 
-    public static final ListBuilderWrapper<LibraryInfo> LIBRARY_INFO = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<LibraryInfo> LIBRARY_INFO = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<LibraryInfo>> getListBuilder() {
             return BuilderFactory.LIBRARY_LIST;
@@ -170,7 +170,7 @@ public class BuilderWrapperFactory {
 
     // TODO: LCSMatchResult (MatchedPosition, Position)
 
-    public static final ListBuilderWrapper<Slowlog> SLOW_LOG = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<Slowlog> SLOW_LOG = new SimpleListEncoder<>() {
         private final Builder<List<Slowlog>> SLOW_LOG_LIST = new Builder<>() {
             @Override
             public List<Slowlog> build(Object data) {
@@ -189,7 +189,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<StreamEntryID> STREAM_ENTRY_ID = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<StreamEntryID> STREAM_ENTRY_ID = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<StreamEntryID> getBuilder() {
             return BuilderFactory.STREAM_ENTRY_ID;
@@ -201,63 +201,63 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<StreamEntry> STREAM_ENTRY = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<StreamEntry> STREAM_ENTRY = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<StreamEntry>> getListBuilder() {
             return BuilderFactory.STREAM_ENTRY_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<Map.Entry<String, List<StreamEntry>>>> getListBuilder() {
             return BuilderFactory.STREAM_READ_RESPONSE;
         }
     };
 
-    public static final ListBuilderWrapper<StreamConsumersInfo> STREAM_CONSUMER_INFO = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<StreamConsumersInfo> STREAM_CONSUMER_INFO = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<StreamConsumersInfo>> getListBuilder() {
             return BuilderFactory.STREAM_CONSUMERS_INFO_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<StreamGroupInfo> STREAM_GROUP_INFO = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<StreamGroupInfo> STREAM_GROUP_INFO = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<StreamGroupInfo>> getListBuilder() {
             return BuilderFactory.STREAM_GROUP_INFO_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<StreamInfo> STREAM_INFO = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<StreamInfo> STREAM_INFO = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<StreamInfo> getBuilder() {
             return BuilderFactory.STREAM_INFO;
         }
     };
 
-    public static final ListBuilderWrapper<StreamFullInfo> STREAM_INFO_FULL = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<StreamFullInfo> STREAM_INFO_FULL = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<StreamFullInfo> getBuilder() {
             return BuilderFactory.STREAM_INFO_FULL;
         }
     };
 
-    public static final ListBuilderWrapper<StreamPendingEntry> STREAM_PENDING_ENTRY = new SimpleListBuilderWrapper<>() {
+    public static final ListEncoder<StreamPendingEntry> STREAM_PENDING_ENTRY = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<StreamPendingEntry>> getListBuilder() {
             return BuilderFactory.STREAM_PENDING_ENTRY_LIST;
         }
     };
 
-    public static final ListBuilderWrapper<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<StreamPendingSummary> getBuilder() {
             return BuilderFactory.STREAM_PENDING_SUMMARY;
         }
     };
 
-    public static final ListBuilderWrapper<ScanResult<String>> STRING_SCAN_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<ScanResult<String>> STRING_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<ScanResult<String>> getBuilder() {
             return BuilderFactory.SCAN_RESPONSE;
@@ -269,7 +269,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<ScanResult<Tuple>> getBuilder() {
             return BuilderFactory.ZSCAN_RESPONSE;
@@ -281,7 +281,7 @@ public class BuilderWrapperFactory {
         }
     };
 
-    public static final ListBuilderWrapper<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ElementListBuilderWrapper<>() {
+    public static final ListEncoder<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<ScanResult<Map.Entry<String, String>>> getBuilder() {
             return BuilderFactory.HSCAN_RESPONSE;
@@ -294,7 +294,7 @@ public class BuilderWrapperFactory {
     };
 
 
-    private static abstract class ElementListBuilderWrapper<T> extends ListBuilderWrapper<T> {
+    private static abstract class ElementListEncoder<T> extends ListEncoder<T> {
 
         protected abstract @NotNull Builder<T> getBuilder();
         
@@ -303,7 +303,7 @@ public class BuilderWrapperFactory {
         }
 
         @Override
-        public @NotNull List<T> build(@Nullable Object data) {
+        public @NotNull List<T> encode(@Nullable Object data) {
             if (data == null) return Collections.singletonList(null);
             Builder<List<T>> listBuilder = getListBuilder();
             if (listBuilder != null && data instanceof List) return listBuilder.build(data);
@@ -316,12 +316,12 @@ public class BuilderWrapperFactory {
         }
     }
 
-    private abstract static class SimpleListBuilderWrapper<T> extends ListBuilderWrapper<T> {
+    private abstract static class SimpleListEncoder<T> extends ListEncoder<T> {
 
         protected abstract @NotNull Builder<List<T>> getListBuilder();
 
         @Override
-        public @NotNull List<T> build(Object data) {
+        public @NotNull List<T> encode(Object data) {
             if (data == null) return Collections.emptyList();
             return getListBuilder().build(data);
         }
@@ -332,12 +332,12 @@ public class BuilderWrapperFactory {
         }
     }
 
-    private abstract static class SimpleMapBuilderWrapper<T> extends MapBuilderWrapper<T> {
+    private abstract static class SimpleMapEncoder<T> extends MapEncoder<T> {
 
         protected abstract @NotNull Builder<Map<String, T>> getMapBuilder();
 
         @Override
-        public @NotNull Map<String, T> build(Object data) {
+        public @NotNull Map<String, T> encode(Object data) {
             if (data == null) return Collections.emptyMap();
             return getMapBuilder().build(data);
         }
