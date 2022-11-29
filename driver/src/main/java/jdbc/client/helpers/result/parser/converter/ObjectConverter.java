@@ -4,6 +4,7 @@ import jdbc.client.structures.result.ObjectType;
 import jdbc.client.structures.result.ObjectTypeField;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,7 +15,10 @@ public abstract class ObjectConverter<T> extends Converter<T, Map<String, Object
 
     @Override
     protected final @NotNull Map<String, Object> convertImpl(@NotNull T encoded) {
-        return getObjectType().stream().collect(Collectors.toMap(ObjectTypeField::getName, t -> t.getGetter().apply(encoded)));
+        return getObjectType().stream()
+                .map(t -> new AbstractMap.SimpleImmutableEntry<>(t.getName(), t.getGetter().apply(encoded)))
+                .filter(e -> e.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     protected final @NotNull Map<String, Object> convertEntryImpl(@NotNull Map.Entry<String, T> encoded) {
@@ -23,7 +27,7 @@ public abstract class ObjectConverter<T> extends Converter<T, Map<String, Object
         if (mainField != null) {
             converted.put(mainField.getName(), encoded.getKey());
         }
-        return convertImpl(encoded.getValue());
+        return converted;
     }
 
     @Override
