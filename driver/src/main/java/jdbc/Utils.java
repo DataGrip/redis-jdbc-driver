@@ -75,8 +75,8 @@ public class Utils {
         return q -> q.containsParam(keyword);
     }
 
-    public static @NotNull Predicate<RedisQuery> paramCount(int count) {
-        return q -> q.getParams().length == count;
+    public static @NotNull Predicate<RedisQuery> length(int length) {
+        return q -> 1 /* command */ + q.getParams().length == length;
     }
 
 
