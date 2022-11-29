@@ -1,5 +1,6 @@
-package jdbc.client;
+package jdbc.client.impl.cluster;
 
+import jdbc.client.impl.RedisClientBase;
 import jdbc.client.structures.query.RedisBlockingQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -10,7 +11,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
-class RedisJedisClusterClient extends RedisClientBase {
+public class RedisJedisClusterClient extends RedisClientBase {
 
     private final JedisCluster jedisCluster;
 

@@ -1,12 +1,13 @@
-package jdbc.client;
+package jdbc.client.impl.standalone;
 
+import jdbc.client.impl.RedisJedisURIBase;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 
 import java.util.Properties;
 
-class RedisJedisURI extends RedisJedisURIBase {
+public class RedisJedisURI extends RedisJedisURIBase {
 
     private static final String PREFIX = "jdbc:redis://";
 

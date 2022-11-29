@@ -1,5 +1,6 @@
-package jdbc.client;
+package jdbc.client.impl.cluster;
 
+import jdbc.client.impl.RedisJedisURIBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
@@ -13,7 +14,7 @@ import java.util.Set;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.MAX_ATTEMPTS;
 
-class RedisJedisClusterURI extends RedisJedisURIBase {
+public class RedisJedisClusterURI extends RedisJedisURIBase {
 
     private static final String PREFIX = "jdbc:redis:cluster://";
 

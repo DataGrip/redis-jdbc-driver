@@ -220,7 +220,7 @@ public class TypeFactory {
     };
 
     private static abstract class KeyedListType<T> extends ObjectType<KeyValue<String, List<T>>> {
-        KeyedListType() {
+        protected KeyedListType() {
             add("key", STRING, KeyValue::getKey);
             add("values", LIST, KeyValue::getValue, getValuesConverter());
         }
@@ -257,7 +257,7 @@ public class TypeFactory {
     };
 
     private static abstract class ScanResultType<T> extends ObjectType<ScanResult<T>> {
-        ScanResultType() {
+        protected ScanResultType() {
             add("cursor", STRING, ScanResult::getCursor);
             add("results", LIST, ScanResult::getResult, getResultsConverter());
         }

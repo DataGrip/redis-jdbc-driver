@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-abstract class Converter<T, V, MV> {
+public abstract class Converter<T, V, MV> {
 
     @Contract("null -> null; !null -> !null")
     public final V convert(T encoded) {

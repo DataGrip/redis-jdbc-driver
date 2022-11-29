@@ -1,5 +1,6 @@
-package jdbc.client;
+package jdbc.client.impl.standalone;
 
+import jdbc.client.impl.RedisClientBase;
 import jdbc.client.structures.query.RedisBlockingQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
-class RedisJedisClient extends RedisClientBase {
+public class RedisJedisClient extends RedisClientBase {
 
     private final Jedis jedis;
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import static jdbc.Utils.toLowerCase;
 
 public class RedisColumnTypeHelper {
+    
     public static final String OBJECT = "object";
     public static final String STRING = "string";
     public static final String LONG = "long";

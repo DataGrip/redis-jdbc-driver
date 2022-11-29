@@ -8,6 +8,7 @@ import redis.clients.jedis.Protocol.Keyword;
 import java.util.Objects;
 
 public class CompositeCommand {
+
     private final Command command;
     private final Keyword keyword;
 

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RedisQuery {
+
     private final CompositeCommand compositeCommand;
     private final String[] params;
     private Set<String> paramsSet;

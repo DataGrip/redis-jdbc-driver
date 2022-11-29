@@ -1,5 +1,9 @@
 package jdbc.client;
 
+import jdbc.client.impl.cluster.RedisJedisClusterURI;
+import jdbc.client.impl.standalone.RedisJedisClient;
+import jdbc.client.impl.standalone.RedisJedisURI;
+
 import java.sql.SQLException;
 import java.util.Properties;
 

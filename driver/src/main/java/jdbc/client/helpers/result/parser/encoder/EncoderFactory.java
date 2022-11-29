@@ -374,7 +374,7 @@ public class EncoderFactory {
         protected abstract @NotNull Builder<List<T>> getListBuilder();
 
         @Override
-        public @NotNull List<T> encode(Object data) {
+        public final @NotNull List<T> encode(Object data) {
             if (data == null) return Collections.emptyList();
             return getListBuilder().build(data);
         }
@@ -390,7 +390,7 @@ public class EncoderFactory {
         protected abstract @NotNull Builder<Map<String, T>> getMapBuilder();
 
         @Override
-        public @NotNull Map<String, T> encode(Object data) {
+        public final @NotNull Map<String, T> encode(Object data) {
             if (data == null) return Collections.emptyMap();
             return getMapBuilder().build(data);
         }

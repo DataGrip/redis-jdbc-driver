@@ -1,5 +1,6 @@
-package jdbc.client;
+package jdbc.client.impl;
 
+import jdbc.client.RedisClient;
 import jdbc.client.helpers.query.RedisQueryHelper;
 import jdbc.client.helpers.result.RedisResultHelper;
 import jdbc.client.structures.query.RedisBlockingQuery;
@@ -13,10 +14,10 @@ import java.sql.SQLException;
 
 import static jdbc.Utils.parseSqlDbIndex;
 
-abstract class RedisClientBase implements RedisClient {
+public abstract class RedisClientBase implements RedisClient {
 
     @Override
-    public RedisResult execute(String sql) throws SQLException {
+    public final RedisResult execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
             Object data =
@@ -38,7 +39,7 @@ abstract class RedisClientBase implements RedisClient {
     }
 
     @Override
-    public void setDatabase(String db) throws SQLException {
+    public final void setDatabase(String db) throws SQLException {
         try {
             setDatabase(parseSqlDbIndex(db));
         } catch (JedisException e) {
@@ -49,7 +50,7 @@ abstract class RedisClientBase implements RedisClient {
     protected abstract String setDatabase(int index);
 
     @Override
-    public void close() throws SQLException {
+    public final void close() throws SQLException {
         try {
             doClose();
         } catch (JedisException e) {

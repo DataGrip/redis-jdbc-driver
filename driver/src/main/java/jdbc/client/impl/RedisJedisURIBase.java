@@ -1,4 +1,4 @@
-package jdbc.client;
+package jdbc.client.impl;
 
 import jdbc.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import static jdbc.Utils.parseDbIndex;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
 
-abstract class RedisJedisURIBase implements JedisClientConfig {
+public abstract class RedisJedisURIBase implements JedisClientConfig {
 
     // auth
     private String user;

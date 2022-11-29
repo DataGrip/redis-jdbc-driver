@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ResultParserWrapper {
+
     private final ResultParser resultParser;
     private final Predicate<RedisQuery> isApplicable;
 

@@ -27,7 +27,7 @@ public abstract class ObjectConverter<T> extends Converter<T, Map<String, Object
     }
 
     @Override
-    protected @NotNull List<Map<String, Object>> convertMapImpl(@NotNull Map<String, T> encoded) {
+    protected final @NotNull List<Map<String, Object>> convertMapImpl(@NotNull Map<String, T> encoded) {
         return encoded.entrySet().stream().map(this::convertEntryImpl).collect(Collectors.toList());
     }
 }

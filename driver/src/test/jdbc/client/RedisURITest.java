@@ -1,5 +1,7 @@
 package jdbc.client;
 
+import jdbc.client.impl.cluster.RedisJedisClusterURI;
+import jdbc.client.impl.standalone.RedisJedisURI;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
 

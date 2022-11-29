@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 public class ArrayImpl implements Array {
+
     private Object[] array;
 
     public ArrayImpl(Object[] array) {

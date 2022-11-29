@@ -33,7 +33,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
 
     private boolean isClosed = false;
 
-    public RedisResultSetBase(RedisStatement statement) {
+    protected RedisResultSetBase(RedisStatement statement) {
         this.statement = statement;
         this.metaData = new RedisResultSetMetaData(Collections.emptyList());
         this.rows = Collections.emptyList();

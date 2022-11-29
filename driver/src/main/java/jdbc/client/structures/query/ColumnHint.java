@@ -3,6 +3,7 @@ package jdbc.client.structures.query;
 import org.jetbrains.annotations.NotNull;
 
 public class ColumnHint {
+
     private final String name;
     private final String[] values;
 
