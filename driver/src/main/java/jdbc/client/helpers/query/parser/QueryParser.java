@@ -80,7 +80,7 @@ public class QueryParser {
             throw new SQLException(String.format(
                     "Query contains an unknown keyword for the command %s: %s.",
                     command,
-                    commandKeyword
+                    commandKeywordStr
             ));
         return commandKeyword;
     }
