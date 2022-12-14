@@ -1,0 +1,42 @@
+---
+
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+    branches:
+      - main
+      - '[0-9].[0-9]'
+  pull_request:
+    branches:
+      - main
+      - '[0-9].[0-9]'
+
+jobs:
+  build:
+    services:
+      redis:
+        image: redis/redis-stack-server:latest
+        ports:
+          - 6379:6379
+
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: build
+        run: ./gradlew build
+
+      - name: test
+        run: ./gradlew test
+
+
+      - name: test
+        run: ./gradlew build

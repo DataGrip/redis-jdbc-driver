@@ -1,5 +1,7 @@
 # Redis JDBC Driver
 
+[![CI](https://github.com/datagrip/redis-jdbc-driver/workflows/CI/badge.svg?branch=main)](https://github.com/datagrip/redis-jdbc-driver/actions?query=workflow%3ACI+branch%3Amain)
+
 Type 4 JDBC driver based on [Jedis](https://github.com/redis/jedis) that allows Java programs to connect to a Redis database.
 
 This driver is embedded into [DataGrip](https://www.jetbrains.com/datagrip/).
