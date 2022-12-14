@@ -1,3 +1,6 @@
+[![Apache licensed](https://img.shields.io/badge/license-apache2-blue.svg)](./LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/datagrip/redis-jdbc-driver?label=latest)](https://github.com/redis-stack/datgrip/releases/latest)
+
 # Redis JDBC Driver
 
 Type 4 JDBC driver based on [Jedis](https://github.com/redis/jedis) that allows Java programs to connect to a Redis database.
