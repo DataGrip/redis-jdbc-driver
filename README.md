@@ -55,6 +55,32 @@ jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>][?<property1>=<
 | blockingSocketTimeout | Integer | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
 | clientName            | String  | null    |                                     |
 
+### Getting started
+
+```java
+// Load the driver
+try {
+  Class.forName("jdbc.RedisDriver");
+} catch (ClassNotFoundException e) {
+  e.printStackTrace();
+  return;
+}
+
+// Create a connection
+try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost:6379/0", null, null)) {
+  // Execute a query
+  try (Statement statement = connection.createStatement()) {
+    try (ResultSet resultSet = statement.executeQuery("SET key value")) {
+
+      // Process the result set
+      while (resultSet.next()) {
+        String result = resultSet.getString("value");
+        System.out.println("result: " + result);
+      }
+    }
+  }
+}
+```
 
 ## Commands Execution
 
