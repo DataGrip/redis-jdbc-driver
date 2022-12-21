@@ -1,7 +1,7 @@
 # Redis JDBC Driver
 
 [![Apache licensed](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](./LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/datagrip/redis-jdbc-driver?label=latest)](https://github.com/redis-stack/datgrip/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/datagrip/redis-jdbc-driver?label=latest)](https://github.com/DataGrip/redis-jdbc-driver/releases/tag/v1.2)
 [![CI](https://github.com/datagrip/redis-jdbc-driver/workflows/CI/badge.svg?branch=main)](https://github.com/datagrip/redis-jdbc-driver/actions?query=workflow%3ACI+branch%3Amain)
 
 Type 4 JDBC driver based on [Jedis](https://github.com/redis/jedis) that allows Java programs to connect to a Redis database.
@@ -25,6 +25,33 @@ gradlew.bat jar
 ```
 
 You will find driver jar in ```build/libs```
+
+## Get Started
+
+```java
+// Load the driver
+try {
+  Class.forName("jdbc.RedisDriver");
+} catch (ClassNotFoundException e) {
+  e.printStackTrace();
+  return;
+}
+
+// Create a connection
+try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost:6379/0", null, null)) {
+  // Execute a query
+  try (Statement statement = connection.createStatement()) {
+    try (ResultSet resultSet = statement.executeQuery("SET key value")) {
+
+      // Process the result set
+      while (resultSet.next()) {
+        String result = resultSet.getString("value");
+        System.out.println("result: " + result);
+      }
+    }
+  }
+}
+```
 
 ## Connectivity
 
@@ -54,33 +81,6 @@ jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>][?<property1>=<
 | socketTimeout         | Integer | 2000    | Socket timeout in milliseconds.     |
 | blockingSocketTimeout | Integer | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
 | clientName            | String  | null    |                                     |
-
-### Getting started
-
-```java
-// Load the driver
-try {
-  Class.forName("jdbc.RedisDriver");
-} catch (ClassNotFoundException e) {
-  e.printStackTrace();
-  return;
-}
-
-// Create a connection
-try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost:6379/0", null, null)) {
-  // Execute a query
-  try (Statement statement = connection.createStatement()) {
-    try (ResultSet resultSet = statement.executeQuery("SET key value")) {
-
-      // Process the result set
-      while (resultSet.next()) {
-        String result = resultSet.getString("value");
-        System.out.println("result: " + result);
-      }
-    }
-  }
-}
-```
 
 ## Commands Execution
 
