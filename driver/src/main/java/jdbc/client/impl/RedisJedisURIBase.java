@@ -1,15 +1,21 @@
 package jdbc.client.impl;
 
+import jdbc.utils.SSLUtils.SSLParamsException;
 import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisClientConfig;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import java.security.KeyStore;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
+import static jdbc.utils.SSLUtils.getTrustEverybodySSLContext;
 import static jdbc.utils.Utils.parseDbIndex;
 
 public abstract class RedisJedisURIBase implements JedisClientConfig {
@@ -21,13 +27,17 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     // database
     private int database;
 
-    // parameters
+    // common parameters
     private int connectionTimeout;
     private int socketTimeout;
     private int blockingSocketTimeout;
     private String clientName;
 
-    protected RedisJedisURIBase(String url, Properties info) {
+    // ssl parameters
+    private boolean ssl;
+    private SSLSocketFactory sslSocketFactory;
+
+    protected RedisJedisURIBase(String url, Properties info) throws SQLException {
         String uri = extractURI(url);
 
         String authBlock = "";
@@ -116,7 +126,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         this.database = Utils.getInt(info, DATABASE, database);
     }
 
-    private void setParameters(@NotNull String parametersBlock, Properties info) {
+    private void setParameters(@NotNull String parametersBlock, Properties info) throws SQLException {
         Map<String, String> parameters = new HashMap<>();
         String[] parametersParts = parametersBlock.split("&");
         for (String parameterBlock : parametersParts) {
@@ -127,14 +137,29 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
                 }
             }
         }
-        setParameters(parameters, info);
+        setCommonParameters(parameters, info);
+        setSSLParameters(parameters, info);
     }
 
-    protected void setParameters(@NotNull Map<String, String> parameters, Properties info) {
-        this.connectionTimeout = getInt(parameters, info, CONNECTION_TIMEOUT, CONFIG.getConnectionTimeoutMillis());
-        this.socketTimeout = getInt(parameters, info, SOCKET_TIMEOUT, CONFIG.getSocketTimeoutMillis());
-        this.blockingSocketTimeout = getInt(parameters, info, BLOCKING_SOCKET_TIMEOUT, CONFIG.getBlockingSocketTimeoutMillis());
-        this.clientName = getString(parameters, info, CLIENT_NAME, CONFIG.getClientName());
+    protected void setCommonParameters(@NotNull Map<String, String> parameters, Properties info) {
+        connectionTimeout = getInt(parameters, info, CONNECTION_TIMEOUT, CONFIG.getConnectionTimeoutMillis());
+        socketTimeout = getInt(parameters, info, SOCKET_TIMEOUT, CONFIG.getSocketTimeoutMillis());
+        blockingSocketTimeout = getInt(parameters, info, BLOCKING_SOCKET_TIMEOUT, CONFIG.getBlockingSocketTimeoutMillis());
+        clientName = getString(parameters, info, CLIENT_NAME, CONFIG.getClientName());
+    }
+
+    private void setSSLParameters(@NotNull Map<String, String> parameters, Properties info) throws SSLParamsException {
+        ssl = getBoolean(parameters, info, SSL, CONFIG.isSsl());
+        if (ssl) {
+            boolean verifyServerCertificate = getBoolean(parameters, info, VERIFY_SERVER_CERTIFICATE, CONFIG.isVerifyServerCertificate());
+            if (!verifyServerCertificate) {
+                String keyStoreType = System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
+                String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword", "");
+                String keyStoreUrl = System.getProperty("javax.net.ssl.keyStore", "");
+                SSLContext context = getTrustEverybodySSLContext(keyStoreUrl, keyStoreType, keyStorePassword);
+                sslSocketFactory = context.getSocketFactory();
+            }
+        }
     }
 
     protected String getString(Map<String, String> parameters, Properties info, String name, String defaultValue) {
@@ -145,6 +170,11 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     protected int getInt(Map<String, String> parameters, Properties info, String name, int defaultValue) {
         int parameter = Utils.getInt(parameters, name, defaultValue);
         return Utils.getInt(info, name, parameter);
+    }
+
+    protected boolean getBoolean(Map<String, String> parameters, Properties info, String name, boolean defaultValue) {
+        boolean parameter = Utils.getBoolean(parameters, name, defaultValue);
+        return Utils.getBoolean(info, name, parameter);
     }
 
 
@@ -181,6 +211,16 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     @Override
     public String getClientName() {
         return clientName;
+    }
+
+    @Override
+    public boolean isSsl() {
+        return ssl;
+    }
+
+    @Override
+    public SSLSocketFactory getSslSocketFactory() {
+        return sslSocketFactory;
     }
 }
 

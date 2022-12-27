@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -31,10 +32,10 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
     // host and port
     private Set<HostAndPort> nodes;
 
-    // parameters
+    // common parameters
     private int maxAttempts;
 
-    public RedisJedisClusterURI(String url, Properties info) {
+    public RedisJedisClusterURI(String url, Properties info) throws SQLException {
         super(url, info);
     }
 
@@ -65,9 +66,9 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
     }
 
     @Override
-    protected void setParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {
-        super.setParameters(parameters, info);
-        this.maxAttempts = getInt(parameters, info, MAX_ATTEMPTS, CONFIG.getMaxAttempts());
+    protected void setCommonParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {
+        super.setCommonParameters(parameters, info);
+        maxAttempts = getInt(parameters, info, MAX_ATTEMPTS, CONFIG.getMaxAttempts());
     }
 
 

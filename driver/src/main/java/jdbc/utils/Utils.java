@@ -49,6 +49,10 @@ public class Utils {
         return getObject(map, name, defaultValue, Integer::parseInt);
     }
 
+    public static boolean getBoolean(Map<?, ?> map, String name, boolean defaultValue) {
+        return getObject(map, name, defaultValue, Boolean::parseBoolean);
+    }
+
     private static <T> T getObject(Map<?, ?> map, String name, T defaultValue, Function<String, T> valueGetter) {
         if (map != null) {
             Object option = map.get(name);

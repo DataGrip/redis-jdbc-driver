@@ -13,4 +13,8 @@ public class RedisDefaultConfig implements JedisClientConfig {
     public int getMaxAttempts() {
         return JedisCluster.DEFAULT_MAX_ATTEMPTS;
     }
+
+    public boolean isVerifyServerCertificate() {
+        return true;
+    }
 }
