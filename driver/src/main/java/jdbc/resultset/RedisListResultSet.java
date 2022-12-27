@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-import static jdbc.Utils.getColumnTitle;
 import static jdbc.resultset.RedisResultSetMetaData.createColumn;
+import static jdbc.utils.Utils.getColumnTitle;
 
 public class RedisListResultSet extends RedisResultSetBase<SimpleType<?>, List<Object>, Object> {
 

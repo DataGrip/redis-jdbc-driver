@@ -1,6 +1,6 @@
 package jdbc.client.structures.query;
 
-import jdbc.Utils;
+import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;

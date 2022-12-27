@@ -12,7 +12,7 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
 
-import static jdbc.Utils.parseSqlDbIndex;
+import static jdbc.utils.Utils.parseSqlDbIndex;
 
 public abstract class RedisClientBase implements RedisClient {
 
