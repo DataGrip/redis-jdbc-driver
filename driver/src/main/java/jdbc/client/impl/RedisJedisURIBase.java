@@ -1,6 +1,6 @@
 package jdbc.client.impl;
 
-import jdbc.Utils;
+import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisClientConfig;
 
@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static jdbc.Utils.parseDbIndex;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
+import static jdbc.utils.Utils.parseDbIndex;
 
 public abstract class RedisJedisURIBase implements JedisClientConfig {
 

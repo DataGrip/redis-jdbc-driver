@@ -4,7 +4,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jdbc.Utils.toLowerCase;
+import static jdbc.utils.Utils.toLowerCase;
 
 public class RedisColumnTypeHelper {
     

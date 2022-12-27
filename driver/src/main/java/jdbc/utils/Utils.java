@@ -1,4 +1,4 @@
-package jdbc;
+package jdbc.utils;
 
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +15,11 @@ import java.util.function.Predicate;
 public class Utils {
 
     private Utils() {
+    }
+
+
+    public static boolean isNullOrEmpty(@Nullable String value) {
+        return value == null || value.isEmpty();
     }
 
 

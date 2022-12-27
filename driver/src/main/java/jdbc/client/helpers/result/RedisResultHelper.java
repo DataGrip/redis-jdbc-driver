@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static jdbc.Utils.length;
-import static jdbc.Utils.param;
 import static jdbc.client.helpers.result.parser.ResultParserFactory.*;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrap;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrapList;
 import static jdbc.client.structures.query.CompositeCommand.create;
+import static jdbc.utils.Utils.length;
+import static jdbc.utils.Utils.param;
 
 public class RedisResultHelper {
 

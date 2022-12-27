@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static jdbc.Utils.*;
+import static jdbc.utils.Utils.*;
 
 public class QueryParser {
 
