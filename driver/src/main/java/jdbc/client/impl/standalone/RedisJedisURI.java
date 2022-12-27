@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class RedisJedisURI extends RedisJedisURIBase {
@@ -24,7 +25,7 @@ public class RedisJedisURI extends RedisJedisURIBase {
     // host and port
     private HostAndPort hostAndPort;
 
-    public RedisJedisURI(String url, Properties info) {
+    public RedisJedisURI(String url, Properties info) throws SQLException {
         super(url, info);
     }
 

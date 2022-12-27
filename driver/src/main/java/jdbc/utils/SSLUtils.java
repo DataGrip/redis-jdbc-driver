@@ -39,7 +39,7 @@ public class SSLUtils {
         }
       }
       catch (UnrecoverableKeyException uke) {
-        throw new SSLParamsException("Could not recover keys from client keystore.  Check password?", uke);
+        throw new SSLParamsException("Could not recover keys from client keystore. Check password?", uke);
       }
       catch (NoSuchAlgorithmException nsae) {
         throw new SSLParamsException("Unsupported keystore algorithm [" + nsae.getMessage() + "]", nsae);
@@ -72,7 +72,6 @@ public class SSLUtils {
       SSLContext sslContext = SSLContext.getInstance("TLS");
       sslContext.init(kms, new TrustManager[]{new MyTrustEverybodyManager()}, null);
       return sslContext;
-
     }
     catch (NoSuchAlgorithmException nsae) {
       throw new SSLParamsException("TLS is not a valid SSL protocol.", nsae);
@@ -83,6 +82,7 @@ public class SSLUtils {
   }
 
   private static class MyTrustEverybodyManager implements X509TrustManager {
+
     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
     }
 
