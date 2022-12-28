@@ -8,8 +8,7 @@ import redis.clients.jedis.HostAndPort;
 import java.sql.SQLException;
 import java.util.Comparator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class RedisURITest {
 
@@ -80,6 +79,13 @@ public class RedisURITest {
         RedisJedisURI uri = new RedisJedisURI("jdbc:redis://user:password@server:6380?connectionTimeout=1000&socketTimeout=3000", null);
         assertEquals(1000, uri.getConnectionTimeoutMillis());
         assertEquals(3000, uri.getSocketTimeoutMillis());
+    }
+
+    @Test
+    public void testSSLParams() throws SQLException {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://?ssl=true&verifyServerCertificate=false", null);
+        assertTrue(uri.isSsl());
+        assertNotNull(uri.getSslSocketFactory());
     }
 
     @Test
