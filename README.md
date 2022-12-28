@@ -42,7 +42,6 @@ try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost
   // Execute a query
   try (Statement statement = connection.createStatement()) {
     try (ResultSet resultSet = statement.executeQuery("SET key value")) {
-
       // Process the result set
       while (resultSet.next()) {
         String result = resultSet.getString("value");
@@ -72,15 +71,31 @@ jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>][?<property1>=<
 
 ### Properties
 
-| Property              | Type    | Default | Description                         |
-| --------------------- | ------- | ------- | ----------------------------------- |
-| user                  | String  | null    |                                     |
-| password              | String  | null    |                                     |
-| database              | Integer | 0       |                                     |
-| connectionTimeout     | Integer | 2000    | Connection timeout in milliseconds. |
-| socketTimeout         | Integer | 2000    | Socket timeout in milliseconds.     |
-| blockingSocketTimeout | Integer | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
-| clientName            | String  | null    |                                     |
+| Property                | Type    | Default | Description                         |
+| ----------------------- | ------- | ------- | ----------------------------------- |
+| user                    | String  | null    |                                     |
+| password                | String  | null    |                                     |
+| database                | Integer | 0       |                                     |
+| connectionTimeout       | Integer | 2000    | Connection timeout in milliseconds. |
+| socketTimeout           | Integer | 2000    | Socket timeout in milliseconds.     |
+| blockingSocketTimeout   | Integer | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
+| clientName              | String  | null    |                                     |
+| ssl                     | Boolean | false   | Enable SSL.                         |
+| verifyServerCertificate | Boolean | true    | Configure a connection that uses SSL but does not verify the identity of the server. |
+
+### SSL
+Set property `ssl=true`.
+
+Pass arguments for your keystore and trust store: 
+```
+-Djavax.net.ssl.trustStore=/path/to/client.truststore
+-Djavax.net.ssl.trustStorePassword=password123
+# If you're using client authentication:
+-Djavax.net.ssl.keyStore=/path/to/client.keystore
+-Djavax.net.ssl.keyStorePassword=password123
+```
+
+To disable server certificate verification set property `verifyServerCertificate=false`.
 
 ## Commands Execution
 
