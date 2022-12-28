@@ -25,6 +25,17 @@ public class RedisURITest {
     }
 
     @Test
+    public void testURIEmpty() throws SQLException {
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://", null);
+        HostAndPort hostAndPort = uri.getHostAndPort();
+        assertEquals("127.0.0.1", hostAndPort.getHost());
+        assertEquals(6379, hostAndPort.getPort());
+        assertNull(uri.getUser());
+        assertNull(uri.getPassword());
+        assertEquals(0, uri.getDatabase());
+    }
+
+    @Test
     public void testURIEmptyUser() throws SQLException {
         RedisJedisURI uri = new RedisJedisURI("jdbc:redis://password@server:6380/7", null);
         assertNull(uri.getUser());
@@ -63,7 +74,6 @@ public class RedisURITest {
         assertEquals(1000, uri.getConnectionTimeoutMillis());
         assertEquals(3000, uri.getSocketTimeoutMillis());
     }
-
 
     @Test
     public void testURIParamsAfterHostAndPort() throws SQLException {
