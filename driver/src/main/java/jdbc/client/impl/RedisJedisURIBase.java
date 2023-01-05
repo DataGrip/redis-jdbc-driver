@@ -7,6 +7,8 @@ import redis.clients.jedis.JedisClientConfig;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.KeyStore;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import java.util.Properties;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
 import static jdbc.utils.SSLUtils.getTrustEverybodySSLContext;
+import static jdbc.utils.Utils.isNullOrEmpty;
 import static jdbc.utils.Utils.parseDbIndex;
 
 public abstract class RedisJedisURIBase implements JedisClientConfig {
@@ -156,6 +159,14 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
                 String keyStoreType = System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
                 String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword", "");
                 String keyStoreUrl = System.getProperty("javax.net.ssl.keyStore", "");
+                // check keyStoreUrl
+                if (!isNullOrEmpty(keyStoreUrl)) {
+                    try {
+                        new URL(keyStoreUrl);
+                    } catch (MalformedURLException e) {
+                        keyStoreUrl = "file:" + keyStoreUrl;
+                    }
+                }
                 SSLContext context = getTrustEverybodySSLContext(keyStoreUrl, keyStoreType, keyStorePassword);
                 sslSocketFactory = context.getSocketFactory();
             }
