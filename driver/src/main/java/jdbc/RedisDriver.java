@@ -42,7 +42,7 @@ public class RedisDriver implements Driver {
 
     @Override
     public int getMinorVersion() {
-        return 3;
+        return 4;
     }
 
     @Override
