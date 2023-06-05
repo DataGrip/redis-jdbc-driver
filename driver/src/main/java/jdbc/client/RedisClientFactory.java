@@ -1,5 +1,6 @@
 package jdbc.client;
 
+import jdbc.client.impl.cluster.RedisJedisClusterClient;
 import jdbc.client.impl.cluster.RedisJedisClusterURI;
 import jdbc.client.impl.standalone.RedisJedisClient;
 import jdbc.client.impl.standalone.RedisJedisURI;
@@ -18,9 +19,7 @@ public class RedisClientFactory {
 
     public static RedisClient create(String url, Properties info) throws SQLException {
         if (RedisJedisURI.acceptsURL(url)) return new RedisJedisClient(new RedisJedisURI(url, info));
-        // TODO: support Redis Cluster
-        // if (RedisJedisClusterURI.acceptsURL(url)) return new RedisJedisClusterClient(new RedisJedisClusterURI(url, info));
-        if (RedisJedisClusterURI.acceptsURL(url)) throw  new SQLException("Redis Cluster is not supported.");
+        if (RedisJedisClusterURI.acceptsURL(url)) return new RedisJedisClusterClient(new RedisJedisClusterURI(url, info));
         return null;
     }
 }
