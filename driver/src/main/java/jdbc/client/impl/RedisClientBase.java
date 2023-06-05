@@ -8,6 +8,7 @@ import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import jdbc.client.structures.result.RedisResult;
 import org.jetbrains.annotations.NotNull;
+import redis.clients.jedis.ConnectionPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
@@ -59,4 +60,12 @@ public abstract class RedisClientBase implements RedisClient {
     }
 
     protected abstract void doClose();
+
+
+    protected static class SingleConnectionPoolConfig extends ConnectionPoolConfig {
+        public SingleConnectionPoolConfig() {
+            super();
+            setMaxTotal(1);
+        }
+    }
 }

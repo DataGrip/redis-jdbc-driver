@@ -3,7 +3,6 @@ package jdbc.client.impl.cluster;
 import jdbc.client.impl.RedisClientBase;
 import jdbc.client.structures.query.RedisBlockingQuery;
 import jdbc.client.structures.query.RedisQuery;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -17,7 +16,7 @@ public class RedisJedisClusterClient extends RedisClientBase {
 
     public RedisJedisClusterClient(@NotNull RedisJedisClusterURI uri) throws SQLException {
         try {
-            jedisCluster = new JedisCluster(uri.getNodes(), uri, uri.getMaxAttempts(), new GenericObjectPoolConfig<>());
+            jedisCluster = new JedisCluster(uri.getNodes(), uri, uri.getMaxAttempts(), new SingleConnectionPoolConfig());
         } catch (JedisException e) {
             throw new SQLException(e);
         }
