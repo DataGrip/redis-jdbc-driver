@@ -17,6 +17,7 @@ public class RedisDriverPropertyInfoHelper {
     public static final String MAX_ATTEMPTS = "maxAttempts";
     public static final String SSL = "ssl";
     public static final String VERIFY_SERVER_CERTIFICATE = "verifyServerCertificate";
+    public static final String HOST_AND_PORT_MAPPING = "hostAndPortMapping";
 
     private static final String[] booleanChoices = new String[]{Boolean.TRUE.toString(), Boolean.FALSE.toString()};
 
@@ -37,6 +38,7 @@ public class RedisDriverPropertyInfoHelper {
         addPropInfo(propInfos, SSL, String.valueOf(CONFIG.isSsl()), "Enable SSL.", booleanChoices);
         addPropInfo(propInfos, VERIFY_SERVER_CERTIFICATE, String.valueOf(CONFIG.isVerifyServerCertificate()),
                 "Configure a connection that uses SSL but does not verify the identity of the server.", booleanChoices);
+        addPropInfo(propInfos, HOST_AND_PORT_MAPPING, null, "Host and port mapping.");
         return propInfos.toArray(new DriverPropertyInfo[0]);
     }
 

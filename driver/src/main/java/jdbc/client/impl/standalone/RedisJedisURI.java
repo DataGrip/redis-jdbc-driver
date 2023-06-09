@@ -25,6 +25,7 @@ public class RedisJedisURI extends RedisJedisURIBase {
     // host and port
     private HostAndPort hostAndPort;
 
+
     public RedisJedisURI(String url, Properties info) throws SQLException {
         super(url, info);
     }

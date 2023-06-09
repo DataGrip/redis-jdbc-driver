@@ -35,6 +35,7 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
     // common parameters
     private int maxAttempts;
 
+
     public RedisJedisClusterURI(String url, Properties info) throws SQLException {
         super(url, info);
     }
@@ -64,6 +65,7 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
 
         this.nodes = nodes;
     }
+
 
     @Override
     protected void setCommonParameters(@NotNull Map<String, String> parameters, @Nullable Properties info) {

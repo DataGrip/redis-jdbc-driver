@@ -3,7 +3,10 @@ package jdbc.client.impl;
 import jdbc.utils.SSLUtils.SSLParamsException;
 import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.HostAndPortMapper;
 import redis.clients.jedis.JedisClientConfig;
+import redis.clients.jedis.Protocol;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -18,8 +21,7 @@ import java.util.Properties;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
 import static jdbc.utils.SSLUtils.getTrustEverybodySSLContext;
-import static jdbc.utils.Utils.isNullOrEmpty;
-import static jdbc.utils.Utils.parseDbIndex;
+import static jdbc.utils.Utils.*;
 
 public abstract class RedisJedisURIBase implements JedisClientConfig {
 
@@ -39,6 +41,10 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     // ssl parameters
     private boolean ssl;
     private SSLSocketFactory sslSocketFactory;
+
+    // host and port mapper
+    private HostAndPortMapper hostAndPortMapper;
+
 
     protected RedisJedisURIBase(String url, Properties info) throws SQLException {
         String uri = extractURI(url);
@@ -84,6 +90,8 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
             parametersBlock = uri;
         }
         setParameters(parametersBlock, info);
+
+        setHostAndPortMapping(info);
     }
 
 
@@ -117,7 +125,9 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         this.password = Utils.getString(info, PASSWORD, password);
     }
 
+
     protected abstract void setHostAndPort(@NotNull String hostAndPortBlock);
+
 
     private void setDatabase(@NotNull String databaseBlock, Properties info) {
         int database = CONFIG.getDatabase();
@@ -128,6 +138,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
 
         this.database = Utils.getInt(info, DATABASE, database);
     }
+
 
     private void setParameters(@NotNull String parametersBlock, Properties info) throws SQLException {
         Map<String, String> parameters = new HashMap<>();
@@ -189,6 +200,21 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     }
 
 
+    private void setHostAndPortMapping(Properties info) {
+        Map<HostAndPort, HostAndPort> mapping = getMap(info, HOST_AND_PORT_MAPPING, this::parseHostAndPort, this::parseHostAndPort);
+        this.hostAndPortMapper = mapping == null ? null : new ClientHostAndPortMapper(mapping);
+    }
+
+    // TODO (cluster): improvements + tests
+    @NotNull
+    private HostAndPort parseHostAndPort(@NotNull String hostAndPortStr) {
+        HostAndPort hostAndPort = HostAndPort.from(hostAndPortStr);
+        if ("localhost".equalsIgnoreCase(hostAndPort.getHost()))
+            return new HostAndPort(Protocol.DEFAULT_HOST, hostAndPort.getPort());
+        return hostAndPort;
+    }
+
+
     @Override
     public String getUser() {
         return user;
@@ -232,6 +258,25 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     @Override
     public SSLSocketFactory getSslSocketFactory() {
         return sslSocketFactory;
+    }
+
+    @Override
+    public HostAndPortMapper getHostAndPortMapper() {
+        return hostAndPortMapper;
+    }
+
+
+    protected static class ClientHostAndPortMapper implements HostAndPortMapper {
+        private final Map<HostAndPort, HostAndPort> mapping;
+
+        public ClientHostAndPortMapper(@NotNull Map<HostAndPort, HostAndPort> mapping) {
+            this.mapping = mapping;
+        }
+
+        @Override
+        public HostAndPort getHostAndPort(HostAndPort hap) {
+            return hap == null ? null : mapping.getOrDefault(hap, hap);
+        }
     }
 }
 

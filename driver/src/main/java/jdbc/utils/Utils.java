@@ -7,6 +7,7 @@ import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Keyword;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,10 +54,38 @@ public class Utils {
         return getObject(map, name, defaultValue, Boolean::parseBoolean);
     }
 
-    private static <T> T getObject(Map<?, ?> map, String name, T defaultValue, Function<String, T> valueGetter) {
+    public static <K, V> Map<K, V> getMap(Map<?, ?> map, String name,
+                                          @NotNull Function<String, K> keyParser,
+                                          @NotNull Function<String, V> valueParser) {
+        return getObject(map, name, null, o -> parseMap(keyParser, valueParser, o));
+    }
+
+    @NotNull
+    private static <K, V> Map<K, V> parseMap(@NotNull Function<String, K> keyParser,
+                                             @NotNull Function<String, V> valueParser,
+                                             @NotNull String map) {
+        Map<K, V> result = new HashMap<>();
+        String content = map.trim();
+        if (!content.startsWith("{") || !content.endsWith("}"))
+            throw new IllegalArgumentException(String.format("Incorrect map: %s", map));
+        String body = content.substring(1, content.length() - 1);
+        String[] elements = body.split(",");
+        for (String element : elements) {
+            element = element.trim();
+            String[] keyValue = element.split("=");
+            if (keyValue.length != 2)
+                throw new IllegalArgumentException(String.format("Incorrect map: %s", map));
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+            result.put(keyParser.apply(key), valueParser.apply(value));
+        }
+        return result;
+    }
+
+    private static <T> T getObject(Map<?, ?> map, String name, T defaultValue, Function<String, T> valueParser) {
         if (map != null) {
             Object option = map.get(name);
-            if (option != null) return valueGetter.apply(option.toString());
+            if (option != null) return valueParser.apply(option.toString());
         }
         return defaultValue;
     }
