@@ -33,8 +33,7 @@ public class RedisDriverPropertyInfoHelper {
         addPropInfo(propInfos, SOCKET_TIMEOUT, String.valueOf(CONFIG.getSocketTimeoutMillis()), "Socket timeout in milliseconds.");
         addPropInfo(propInfos, BLOCKING_SOCKET_TIMEOUT, String.valueOf(CONFIG.getBlockingSocketTimeoutMillis()), "Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever.");
         addPropInfo(propInfos, CLIENT_NAME, CONFIG.getClientName(), "Client name.");
-        // TODO: support Redis Cluster
-        // addPropInfo(propInfos, MAX_ATTEMPTS, String.valueOf(CONFIG.getMaxAttempts()), "Maximum number of attempts (cluster only).");
+        addPropInfo(propInfos, MAX_ATTEMPTS, String.valueOf(CONFIG.getMaxAttempts()), "Maximum number of attempts (cluster only).");
         addPropInfo(propInfos, SSL, String.valueOf(CONFIG.isSsl()), "Enable SSL.", booleanChoices);
         addPropInfo(propInfos, VERIFY_SERVER_CERTIFICATE, String.valueOf(CONFIG.isVerifyServerCertificate()),
                 "Configure a connection that uses SSL but does not verify the identity of the server.", booleanChoices);
