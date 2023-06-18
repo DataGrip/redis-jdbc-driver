@@ -1,10 +1,10 @@
 package jdbc.client.impl.standalone;
 
 import jdbc.client.impl.RedisClientBase;
-import jdbc.client.structures.query.RedisBlockingQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
@@ -24,12 +24,9 @@ public class RedisJedisClient extends RedisClientBase {
 
     @Override
     protected synchronized Object execute(@NotNull RedisQuery query) {
-        return jedis.sendCommand(query.getCommand(), query.getParams());
-    }
-
-    @Override
-    protected synchronized Object execute(@NotNull RedisBlockingQuery query) {
-        return jedis.sendBlockingCommand(query.getCommand(), query.getParams());
+        Command command = query.getCommand();
+        String[] params = query.getParams();
+        return query.isBlocking() ? jedis.sendBlockingCommand(command, params) : jedis.sendCommand(command, params);
     }
 
     @Override

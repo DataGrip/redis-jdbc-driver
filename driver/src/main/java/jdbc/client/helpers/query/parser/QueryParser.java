@@ -1,7 +1,10 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.helpers.query.parser.lexer.Lexer;
-import jdbc.client.structures.query.*;
+import jdbc.client.structures.query.ColumnHint;
+import jdbc.client.structures.query.CompositeCommand;
+import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.ClusterKeyword;
@@ -108,10 +111,7 @@ public class QueryParser {
         if (command == Command.SELECT && params.length == 1) {
             return new RedisSetDatabaseQuery(compositeCommand, parseSqlDbIndex(getFirst(params)), columnHint);
         }
-        if (BLOCKING_COMMANDS.contains(command)) {
-            return new RedisBlockingQuery(compositeCommand, params, columnHint);
-        }
-        return new RedisQuery(compositeCommand, params, columnHint, forcedSlot);
+        return new RedisQuery(compositeCommand, params, columnHint, forcedSlot, BLOCKING_COMMANDS.contains(command));
     }
 
 

@@ -15,17 +15,22 @@ public class RedisQuery {
     private final CompositeCommand compositeCommand;
     private final String[] params;
     private Set<String> paramsSet;
+
     private final ColumnHint columnHint;
+
     private final Integer forcedSlot;
+    private final boolean isBlocking;
 
     public RedisQuery(@NotNull CompositeCommand compositeCommand,
                       @NotNull String[] params,
                       @Nullable ColumnHint columnHint,
-                      @Nullable Integer forcedSlot) {
+                      @Nullable Integer forcedSlot,
+                      boolean isBlocking) {
         this.compositeCommand = compositeCommand;
         this.params = params;
         this.columnHint = columnHint;
         this.forcedSlot = forcedSlot;
+        this.isBlocking = isBlocking;
     }
 
     @NotNull
@@ -51,6 +56,10 @@ public class RedisQuery {
     @Nullable
     public Integer getForcedSlot() {
         return forcedSlot;
+    }
+
+    public boolean isBlocking() {
+        return isBlocking;
     }
 
     public boolean containsParam(@NotNull Keyword paramKeyword) {
