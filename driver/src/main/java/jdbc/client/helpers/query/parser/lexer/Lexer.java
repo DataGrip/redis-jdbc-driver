@@ -95,6 +95,7 @@ public class Lexer {
     }
 
 
+    @NotNull
     public static List<List<String>> tokenize(@NotNull String sql) throws SQLException {
         List<List<String>> tokens = new ArrayList<>();
         for (String line : sql.split(LINE_SEPARATOR)) {

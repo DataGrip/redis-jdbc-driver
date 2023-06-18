@@ -16,13 +16,16 @@ public class RedisQuery {
     private final String[] params;
     private Set<String> paramsSet;
     private final ColumnHint columnHint;
+    private final Integer forcedSlot;
 
     public RedisQuery(@NotNull CompositeCommand compositeCommand,
                       @NotNull String[] params,
-                      @Nullable ColumnHint columnHint) {
+                      @Nullable ColumnHint columnHint,
+                      @Nullable Integer forcedSlot) {
         this.compositeCommand = compositeCommand;
         this.params = params;
         this.columnHint = columnHint;
+        this.forcedSlot = forcedSlot;
     }
 
     @NotNull
@@ -40,8 +43,14 @@ public class RedisQuery {
         return params;
     }
 
+    @Nullable
     public ColumnHint getColumnHint() {
         return columnHint;
+    }
+
+    @Nullable
+    public Integer getForcedSlot() {
+        return forcedSlot;
     }
 
     public boolean containsParam(@NotNull Keyword paramKeyword) {

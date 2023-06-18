@@ -11,6 +11,7 @@ import redis.clients.jedis.args.Rawable;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static jdbc.utils.Utils.*;
@@ -70,8 +71,10 @@ public class QueryParser {
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
         ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
+        SlotHintLine slotHintLine = rawQuery.slotHintLine;
+        Integer forcedSlot = slotHintLine == null ? null : slotHintLine.slot;
 
-        return createQuery(compositeCommand, commandLine.params, columnHint);
+        return createQuery(compositeCommand, commandLine.params, columnHint, forcedSlot);
     }
 
     private static @NotNull Command parseCommand(@NotNull String commandStr) throws SQLException {
@@ -99,7 +102,8 @@ public class QueryParser {
 
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @NotNull String[] params,
-                                                   @Nullable ColumnHint columnHint) throws SQLException {
+                                                   @Nullable ColumnHint columnHint,
+                                                   @Nullable Integer forcedSlot) throws SQLException {
         Command command = compositeCommand.getCommand();
         if (command == Command.SELECT && params.length == 1) {
             return new RedisSetDatabaseQuery(compositeCommand, parseSqlDbIndex(getFirst(params)), columnHint);
@@ -107,7 +111,7 @@ public class QueryParser {
         if (BLOCKING_COMMANDS.contains(command)) {
             return new RedisBlockingQuery(compositeCommand, params, columnHint);
         }
-        return new RedisQuery(compositeCommand, params, columnHint);
+        return new RedisQuery(compositeCommand, params, columnHint, forcedSlot);
     }
 
 
@@ -121,34 +125,49 @@ public class QueryParser {
         if (commandLines.size() > 1) throw new SQLException("Query can contain only one command.");
         CommandLine commandLine = commandLines.get(0);
 
-        List<ColumnHintLine> columnHintLines = lines.stream()
-                .map(l -> l instanceof ColumnHintLine? (ColumnHintLine) l : null).filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        if (columnHintLines.size() > 1) throw new SQLException("Query can contain only one comment with column hint.");
-        ColumnHintLine columnHintLine = columnHintLines.isEmpty() ? null : columnHintLines.get(0);
+        ColumnHintLine columnHintLine =
+                getHintLine(lines, l -> l instanceof ColumnHintLine ? (ColumnHintLine) l : null, "column");
+        SlotHintLine slotHintLine =
+                getHintLine(lines, l -> l instanceof SlotHintLine ? (SlotHintLine) l : null, "slot");
 
-        return new RawQuery(commandLine, columnHintLine);
+        return new RawQuery(commandLine, columnHintLine, slotHintLine);
     }
 
     private static @Nullable Line createLine(@NotNull List<String> lineTokens) {
+        if (SlotHintLine.accepts(lineTokens)) return new SlotHintLine(lineTokens);
         if (ColumnHintLine.accepts(lineTokens)) return new ColumnHintLine(lineTokens);
         if (CommentLine.accepts(lineTokens)) return new CommentLine(lineTokens);
         if (CommandLine.accepts(lineTokens)) return new CommandLine(lineTokens);
         return null;
     }
 
+    private static <T extends HintLine> @Nullable T getHintLine(@NotNull List<Line> lines,
+                                                                @NotNull Function<Line, T> lineMapper,
+                                                                @NotNull String hintType) throws SQLException {
+        List<T> hintLines = lines.stream().map(lineMapper).filter(Objects::nonNull).collect(Collectors.toList());
+        if (hintLines.size() > 1)
+            throw new SQLException(String.format("Query can contain only one comment with %s hint.", hintType));
+        return hintLines.isEmpty() ? null : hintLines.get(0);
+    }
+
 
     private static class RawQuery {
         public final CommandLine commandLine;
         public final ColumnHintLine columnHintLine;
+        public final SlotHintLine slotHintLine;
 
-        RawQuery(@NotNull CommandLine commandLine, @Nullable ColumnHintLine columnHintLine) {
+        RawQuery(@NotNull CommandLine commandLine,
+                 @Nullable ColumnHintLine columnHintLine,
+                 @Nullable SlotHintLine slotHintLine) {
             this.commandLine = commandLine;
             this.columnHintLine = columnHintLine;
+            this.slotHintLine = slotHintLine;
         }
     }
 
     private interface Line {}
+
+    private interface HintLine extends Line {}
 
     private static class CommandLine implements Line {
         public final String command;
@@ -177,11 +196,11 @@ public class QueryParser {
         }
     }
 
-    private static class ColumnHintLine extends CommentLine {
-        private static final String COLUMN_NAME_SEPARATOR_TOKEN = ":";
+    private static class ColumnHintLine extends CommentLine implements HintLine {
+        private static final String SEPARATOR_TOKEN = ":";
 
-        public final String name;
-        public final String[] values;
+        public final @NotNull String name;
+        public final @NotNull String[] values;
 
         ColumnHintLine(@NotNull List<String> tokens) {
             super(tokens);
@@ -191,7 +210,34 @@ public class QueryParser {
         }
 
         public static boolean accepts(@NotNull List<String> tokens) {
-            return CommentLine.accepts(tokens) && tokens.size() >= 3 && COLUMN_NAME_SEPARATOR_TOKEN.equals(tokens.get(2));
+            return CommentLine.accepts(tokens)
+                    && tokens.size() >= 3
+                    && SEPARATOR_TOKEN.equals(tokens.get(2));
+        }
+    }
+
+    private static class SlotHintLine extends CommentLine implements HintLine {
+        private static final String SLOT_TOKEN = "slot";
+        private static final String SEPARATOR_TOKEN = "=";
+
+        public final @Nullable Integer slot;
+
+        SlotHintLine(@NotNull List<String> tokens) {
+            super(tokens);
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect slot hint tokens: %s.", tokens));
+            Integer slot = null;
+            try {
+                slot = Integer.parseInt(tokens.get(3));
+            } catch (NumberFormatException | NullPointerException ignored) {
+            }
+            this.slot = slot;
+        }
+
+        public static boolean accepts(@NotNull List<String> tokens) {
+            return CommentLine.accepts(tokens)
+                    && tokens.size() == 4
+                    && SLOT_TOKEN.equalsIgnoreCase(tokens.get(1))
+                    && SEPARATOR_TOKEN.equals(tokens.get(2));
         }
     }
 }
