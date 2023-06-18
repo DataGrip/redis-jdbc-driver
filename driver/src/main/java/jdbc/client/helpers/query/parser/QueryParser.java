@@ -4,8 +4,10 @@ import jdbc.client.helpers.query.parser.lexer.Lexer;
 import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.Protocol.ClusterKeyword;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.args.Rawable;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -25,6 +27,9 @@ public class QueryParser {
     private static final Map<String, Keyword> KEYWORDS =
             Arrays.stream(Keyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
 
+    private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS =
+            Arrays.stream(ClusterKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
+
     private static final Set<Command> BLOCKING_COMMANDS = Set.of(
             Command.BLMOVE, Command.BLMPOP, Command.BLPOP, Command.BRPOP,
             Command.BRPOPLPUSH, Command.BZMPOP, Command.BZPOPMAX, Command.BZPOPMIN
@@ -38,11 +43,18 @@ public class QueryParser {
     );
 
     private static @Nullable Command getCommand(@NotNull String command) {
-        return COMMANDS.get(toUpperCase(command));
+        return COMMANDS.get(getName(command));
     }
 
-    private static @Nullable Keyword getKeyword(@NotNull String keyword) {
-        return KEYWORDS.get(toUpperCase(keyword));
+    // TODO (cluster): check mode
+    @SuppressWarnings("RedundantIfStatement")
+    private static @Nullable Rawable getKeyword(@NotNull String keyword) {
+        String name = getName(keyword);
+        Keyword knownKeyword = KEYWORDS.get(name);
+        if (knownKeyword != null) return knownKeyword;
+        ClusterKeyword clusterKeyword = CLUSTER_KEYWORDS.get(name);
+        if (clusterKeyword != null) return clusterKeyword;
+        return null;
     }
 
 
@@ -53,7 +65,7 @@ public class QueryParser {
 
         CommandLine commandLine = rawQuery.commandLine;
         Command command = parseCommand(commandLine.command);
-        Keyword commandKeyword = parseCommandKeyword(command, commandLine.params);
+        Rawable commandKeyword = parseCommandKeyword(command, commandLine.params);
         CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
@@ -69,13 +81,13 @@ public class QueryParser {
         return command;
     }
 
-    private static @Nullable Keyword parseCommandKeyword(@NotNull Command command,
+    private static @Nullable Rawable parseCommandKeyword(@NotNull Command command,
                                                          @NotNull String[] params) throws SQLException {
         if (!COMMANDS_WITH_KEYWORDS.contains(command)) return null;
         String commandKeywordStr = getFirst(params);
         if (commandKeywordStr == null)
             throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-        Keyword commandKeyword = getKeyword(commandKeywordStr);
+        Rawable commandKeyword = getKeyword(commandKeywordStr);
         if (commandKeyword == null)
             throw new SQLException(String.format(
                     "Query contains an unknown keyword for the command %s: %s.",

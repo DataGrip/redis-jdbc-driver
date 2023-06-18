@@ -1,10 +1,13 @@
 package jdbc.utils;
 
 import jdbc.client.structures.query.RedisQuery;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.args.Rawable;
+import redis.clients.jedis.util.SafeEncoder;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -122,5 +125,18 @@ public class Utils {
         String lowerName = toLowerCase(command.name());
         if (lowerName.equals("zscore") || lowerName.equals("zmscore")) return "score"; // for consistency with ObjectType<Tuple>
         return lowerName;
+    }
+
+
+    @Contract("null -> null; !null -> !null")
+    public static @Nullable String getName(@Nullable Rawable rawable) {
+        if (rawable == null) return null;
+        byte[] raw = rawable.getRaw();
+        String text = raw == null ? "" : SafeEncoder.encode(raw);
+        return getName(text);
+    }
+
+    public static @NotNull String getName(@NotNull String text) {
+        return toUpperCase(text);
     }
 }

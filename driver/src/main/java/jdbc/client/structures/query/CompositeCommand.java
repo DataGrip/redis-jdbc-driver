@@ -1,20 +1,21 @@
 package jdbc.client.structures.query;
 
+import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
-import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.args.Rawable;
 
 import java.util.Objects;
 
 public class CompositeCommand {
 
     private final Command command;
-    private final Keyword keyword;
+    private final String keyword;
 
-    public CompositeCommand(@NotNull Command command, @Nullable Keyword keyword) {
+    public CompositeCommand(@NotNull Command command, @Nullable Rawable keyword) {
         this.command = command;
-        this.keyword = keyword;
+        this.keyword = Utils.getName(keyword);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class CompositeCommand {
     }
 
 
-    public static CompositeCommand create(@NotNull Command command, @Nullable Keyword keyword) {
+    public static CompositeCommand create(@NotNull Command command, @Nullable Rawable keyword) {
         return new CompositeCommand(command, keyword);
     }
 
