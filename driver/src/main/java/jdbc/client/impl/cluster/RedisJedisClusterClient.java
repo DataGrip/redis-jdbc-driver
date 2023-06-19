@@ -1,14 +1,16 @@
 package jdbc.client.impl.cluster;
 
 import jdbc.client.impl.RedisClientBase;
+import jdbc.client.impl.standalone.RedisJedisClient;
+import jdbc.client.structures.query.NodeHint;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.Protocol;
+import redis.clients.jedis.*;
 import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class RedisJedisClusterClient extends RedisClientBase {
 
@@ -23,7 +25,26 @@ public class RedisJedisClusterClient extends RedisClientBase {
     }
 
     @Override
-    protected synchronized Object execute(@NotNull RedisQuery query) {
+    public Object execute(@NotNull RedisQuery query) throws SQLException {
+        NodeHint nodeHint = query.getNodeHint();
+        if (nodeHint != null) return execute(nodeHint.getHostAndPort(), query);
+        return super.execute(query);
+    }
+
+    private synchronized Object execute(@NotNull HostAndPort nodeHostAndPort,
+                                        @NotNull RedisQuery query) throws SQLException {
+        Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
+        String nodeKey = JedisClusterInfoCache.getNodeKey(nodeHostAndPort);
+        ConnectionPool nodePool = nodes.get(nodeKey);
+        Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
+        if (nodeConnection == null)
+            throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
+        RedisJedisClient nodeClient = new RedisJedisClient(nodeConnection);
+        return nodeClient.execute(query);
+    }
+
+    @Override
+    public synchronized Object executeImpl(@NotNull RedisQuery query) {
         Protocol.Command command = query.getCommand();
         String[] params = query.getParams();
         return query.isBlocking()

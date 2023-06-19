@@ -20,16 +20,21 @@ public abstract class RedisClientBase implements RedisClient {
     public final RedisResult execute(String sql) throws SQLException {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
-            Object data = query instanceof RedisSetDatabaseQuery ? execute((RedisSetDatabaseQuery)query) : execute(query);
+            Object data = execute(query);
             return RedisResultHelper.parseResult(query, data);
         } catch (JedisException e) {
             throw new SQLException(e);
         }
     }
 
-    protected abstract Object execute(@NotNull RedisQuery query);
+    public Object execute(@NotNull RedisQuery query) throws SQLException {
+       if (query instanceof RedisSetDatabaseQuery) return executeImpl((RedisSetDatabaseQuery)query);
+       return executeImpl(query);
+    }
 
-    private Object execute(@NotNull RedisSetDatabaseQuery query) {
+    protected abstract Object executeImpl(@NotNull RedisQuery query) throws SQLException;
+
+    private Object executeImpl(@NotNull RedisSetDatabaseQuery query) {
         return setDatabase(query.getDbIndex());
     }
 
