@@ -1,12 +1,10 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.helpers.query.parser.lexer.Lexer;
-import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.query.CompositeCommand;
-import jdbc.client.structures.query.RedisQuery;
-import jdbc.client.structures.query.RedisSetDatabaseQuery;
+import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol.ClusterKeyword;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
@@ -73,11 +71,13 @@ public class QueryParser {
         CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
-        ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
-        SlotHintLine slotHintLine = rawQuery.slotHintLine;
-        Integer forcedSlot = slotHintLine == null ? null : slotHintLine.slot;
+        ColumnHint columnHint =
+                columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
+        NodeHintLine nodeHintLine = rawQuery.nodeHintLine;
+        NodeHint nodeHint =
+                nodeHintLine == null || nodeHintLine.hostAndPort == null ? null : new NodeHint(nodeHintLine.hostAndPort);
 
-        return createQuery(compositeCommand, commandLine.params, columnHint, forcedSlot);
+        return createQuery(compositeCommand, commandLine.params, columnHint, nodeHint);
     }
 
     private static @NotNull Command parseCommand(@NotNull String commandStr) throws SQLException {
@@ -106,12 +106,12 @@ public class QueryParser {
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
-                                                   @Nullable Integer forcedSlot) throws SQLException {
+                                                   @Nullable NodeHint nodeHint) throws SQLException {
         Command command = compositeCommand.getCommand();
         if (command == Command.SELECT && params.length == 1) {
             return new RedisSetDatabaseQuery(compositeCommand, parseSqlDbIndex(getFirst(params)), columnHint);
         }
-        return new RedisQuery(compositeCommand, params, columnHint, forcedSlot, BLOCKING_COMMANDS.contains(command));
+        return new RedisQuery(compositeCommand, params, columnHint, nodeHint, BLOCKING_COMMANDS.contains(command));
     }
 
 
@@ -127,14 +127,14 @@ public class QueryParser {
 
         ColumnHintLine columnHintLine =
                 getHintLine(lines, l -> l instanceof ColumnHintLine ? (ColumnHintLine) l : null, "column");
-        SlotHintLine slotHintLine =
-                getHintLine(lines, l -> l instanceof SlotHintLine ? (SlotHintLine) l : null, "slot");
+        NodeHintLine nodeHintLine =
+                getHintLine(lines, l -> l instanceof NodeHintLine ? (NodeHintLine) l : null, "node");
 
-        return new RawQuery(commandLine, columnHintLine, slotHintLine);
+        return new RawQuery(commandLine, columnHintLine, nodeHintLine);
     }
 
     private static @Nullable Line createLine(@NotNull List<String> lineTokens) {
-        if (SlotHintLine.accepts(lineTokens)) return new SlotHintLine(lineTokens);
+        if (NodeHintLine.accepts(lineTokens)) return new NodeHintLine(lineTokens);
         if (ColumnHintLine.accepts(lineTokens)) return new ColumnHintLine(lineTokens);
         if (CommentLine.accepts(lineTokens)) return new CommentLine(lineTokens);
         if (CommandLine.accepts(lineTokens)) return new CommandLine(lineTokens);
@@ -154,14 +154,14 @@ public class QueryParser {
     private static class RawQuery {
         public final CommandLine commandLine;
         public final ColumnHintLine columnHintLine;
-        public final SlotHintLine slotHintLine;
+        public final NodeHintLine nodeHintLine;
 
         RawQuery(@NotNull CommandLine commandLine,
                  @Nullable ColumnHintLine columnHintLine,
-                 @Nullable SlotHintLine slotHintLine) {
+                 @Nullable QueryParser.NodeHintLine nodeHintLine) {
             this.commandLine = commandLine;
             this.columnHintLine = columnHintLine;
-            this.slotHintLine = slotHintLine;
+            this.nodeHintLine = nodeHintLine;
         }
     }
 
@@ -216,27 +216,28 @@ public class QueryParser {
         }
     }
 
-    private static class SlotHintLine extends CommentLine implements HintLine {
-        private static final String SLOT_TOKEN = "slot";
+    private static class NodeHintLine extends CommentLine implements HintLine {
+        private static final String NODE_TOKEN = "node";
         private static final String SEPARATOR_TOKEN = "=";
 
-        public final @Nullable Integer slot;
+        public final @Nullable HostAndPort hostAndPort;
 
-        SlotHintLine(@NotNull List<String> tokens) {
+        NodeHintLine(@NotNull List<String> tokens) {
             super(tokens);
-            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect slot hint tokens: %s.", tokens));
-            Integer slot = null;
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect node hint tokens: %s.", tokens));
+            HostAndPort hostAndPort = null;
             try {
-                slot = Integer.parseInt(tokens.get(3));
-            } catch (NumberFormatException | NullPointerException ignored) {
+                // TODO (cluster): improve parsing (URL too)
+                hostAndPort = HostAndPort.from(tokens.get(3));
+            } catch (Exception ignored) {
             }
-            this.slot = slot;
+            this.hostAndPort = hostAndPort;
         }
 
         public static boolean accepts(@NotNull List<String> tokens) {
             return CommentLine.accepts(tokens)
                     && tokens.size() == 4
-                    && SLOT_TOKEN.equalsIgnoreCase(tokens.get(1))
+                    && NODE_TOKEN.equalsIgnoreCase(tokens.get(1))
                     && SEPARATOR_TOKEN.equals(tokens.get(2));
         }
     }
