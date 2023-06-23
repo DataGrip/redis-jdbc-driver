@@ -10,11 +10,13 @@ import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RedisJedisClusterClient extends RedisClientBase {
 
     private final JedisCluster jedisCluster;
+    private final Map<String, RedisJedisClient> jedisClusterNodes = new HashMap<>();
 
     public RedisJedisClusterClient(@NotNull RedisJedisClusterURI uri) throws SQLException {
         try {
@@ -33,14 +35,18 @@ public class RedisJedisClusterClient extends RedisClientBase {
 
     private synchronized Object execute(@NotNull HostAndPort nodeHostAndPort,
                                         @NotNull RedisQuery query) throws SQLException {
-        Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
         String nodeKey = JedisClusterInfoCache.getNodeKey(nodeHostAndPort);
-        ConnectionPool nodePool = nodes.get(nodeKey);
-        Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
-        if (nodeConnection == null)
-            throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
-        RedisJedisClient nodeClient = new RedisJedisClient(nodeConnection);
-        return nodeClient.execute(query);
+        RedisJedisClient jedisNode = jedisClusterNodes.get(nodeKey);
+        if (jedisNode == null) {
+            Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
+            ConnectionPool nodePool = nodes.get(nodeKey);
+            Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
+            if (nodeConnection == null)
+                throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
+            jedisNode = new RedisJedisClient(nodeConnection);
+            jedisClusterNodes.put(nodeKey, jedisNode);
+        }
+        return jedisNode.execute(query);
     }
 
     @Override
