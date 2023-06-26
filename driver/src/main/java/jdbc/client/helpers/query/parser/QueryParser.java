@@ -103,14 +103,31 @@ public class QueryParser {
         return commandKeyword;
     }
 
+    // TODO (cluster): refactor
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
         Command command = compositeCommand.getCommand();
+        boolean isBlocking = BLOCKING_COMMANDS.contains(command);
+
+        // set databases query
         if (command == Command.SELECT && params.length == 1) {
-            return new RedisSetDatabaseQuery(compositeCommand, parseSqlDbIndex(getFirst(params)), columnHint);
+            int dbIndex = parseSqlDbIndex(getFirst(params));
+            return new RedisSetDatabaseQuery(compositeCommand, dbIndex, columnHint);
         }
+
+        // keys pattern queries
+        if (command == Command.KEYS) {
+            String pattern = getFirst(params);
+            return new RedisKeysPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+        }
+        if (command == Command.SCAN) {
+            Integer matchIndex = getIndex(params, p -> Keyword.MATCH.name().equalsIgnoreCase(p));
+            String pattern = matchIndex == null || matchIndex == params.length - 1 ? null : params[matchIndex + 1];
+            return new RedisKeysPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+        }
+
         return new RedisQuery(compositeCommand, params, columnHint, nodeHint, BLOCKING_COMMANDS.contains(command));
     }
 

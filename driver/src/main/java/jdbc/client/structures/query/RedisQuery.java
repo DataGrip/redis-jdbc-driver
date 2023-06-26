@@ -62,6 +62,11 @@ public class RedisQuery {
         return isBlocking;
     }
 
+    @Nullable
+    public String getSampleKey() {
+        return null;
+    }
+
     public boolean containsParam(@NotNull Keyword paramKeyword) {
         if (paramsSet == null) {
             paramsSet = Arrays.stream(params).map(Utils::toUpperCase).collect(Collectors.toSet());

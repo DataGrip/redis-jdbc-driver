@@ -31,6 +31,7 @@ public class RedisJedisClient extends RedisClientBase {
         }
     }
 
+
     @Override
     protected synchronized Object executeImpl(@NotNull RedisQuery query) {
         Command command = query.getCommand();
@@ -39,6 +40,7 @@ public class RedisJedisClient extends RedisClientBase {
                 ? jedis.sendBlockingCommand(command, params)
                 : jedis.sendCommand(command, params);
     }
+
 
     @Override
     protected synchronized String setDatabase(int index) {
@@ -50,9 +52,9 @@ public class RedisJedisClient extends RedisClientBase {
         return Integer.toString(jedis.getDB());
     }
 
+
     @Override
     protected synchronized void doClose() {
         jedis.close();
     }
-
 }

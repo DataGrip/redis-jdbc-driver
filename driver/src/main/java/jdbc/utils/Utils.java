@@ -44,6 +44,13 @@ public class Utils {
         return elements.length > 0 ? elements[elements.length - 1] : null;
     }
 
+    public static @Nullable Integer getIndex(@NotNull String[] elements, @NotNull Predicate<String> predicate) {
+        for (int i = 0; i < elements.length; ++i) {
+            if (predicate.test(elements[i])) return i;
+        }
+        return null;
+    }
+
 
     public static String getString(Map<?, ?> map, String name, String defaultValue) {
         return getObject(map, name, defaultValue, Object::toString);

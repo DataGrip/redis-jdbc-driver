@@ -35,6 +35,10 @@ public class CompositeCommand {
         return command;
     }
 
+    @Override
+    public String toString() {
+        return keyword == null ? command.name() : String.format("%s %s", command.name(), keyword);
+    }
 
     public static CompositeCommand create(@NotNull Command command, @Nullable Rawable keyword) {
         return new CompositeCommand(command, keyword);

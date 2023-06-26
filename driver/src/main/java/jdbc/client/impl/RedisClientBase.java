@@ -3,6 +3,7 @@ package jdbc.client.impl;
 import jdbc.client.RedisClient;
 import jdbc.client.helpers.query.RedisQueryHelper;
 import jdbc.client.helpers.result.RedisResultHelper;
+import jdbc.client.structures.query.RedisKeysPatternQuery;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import jdbc.client.structures.result.RedisResult;
@@ -28,15 +29,22 @@ public abstract class RedisClientBase implements RedisClient {
     }
 
     public Object execute(@NotNull RedisQuery query) throws SQLException {
-       if (query instanceof RedisSetDatabaseQuery) return executeImpl((RedisSetDatabaseQuery)query);
+       if (query instanceof RedisSetDatabaseQuery) return executeImpl((RedisSetDatabaseQuery) query);
+       if (query instanceof RedisKeysPatternQuery) return executeImpl((RedisKeysPatternQuery) query);
        return executeImpl(query);
     }
 
-    protected abstract Object executeImpl(@NotNull RedisQuery query) throws SQLException;
 
     private Object executeImpl(@NotNull RedisSetDatabaseQuery query) {
         return setDatabase(query.getDbIndex());
     }
+
+    protected Object executeImpl(@NotNull RedisKeysPatternQuery query) throws SQLException {
+        return executeImpl((RedisQuery) query);
+    }
+
+    protected abstract Object executeImpl(@NotNull RedisQuery query) throws SQLException;
+
 
     @Override
     public final void setDatabase(String db) throws SQLException {
@@ -48,6 +56,7 @@ public abstract class RedisClientBase implements RedisClient {
     }
 
     protected abstract String setDatabase(int index);
+
 
     @Override
     public final void close() throws SQLException {
