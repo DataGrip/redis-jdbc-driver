@@ -267,10 +267,12 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         @Override
         public HostAndPort getHostAndPort(HostAndPort hap) throws JedisConnectionException {
             if (hap == null) return null;
-            HostAndPort mappedHsp = mapping.get(hap);
-            if (mappedHsp == null)
+            HostAndPort mappedHap = mapping.get(hap);
+            if (mappedHap == null) {
+                if (mapping.containsValue(hap)) return hap;
                 throw new JedisConnectionException(String.format("Port forwarding is not specified for %s", hap));
-            return mappedHsp;
+            }
+            return mappedHap;
         }
     }
 }

@@ -109,12 +109,18 @@ public class Utils {
 
     public static @NotNull HostAndPort parseHostAndPort(@NotNull String hostAndPortStr) {
         HostAndPort hostAndPort = HostAndPort.from(hostAndPortStr);
-        String adjustedHost = hostAndPort.getHost().trim();
-        if ("localhost".equalsIgnoreCase(adjustedHost)) {
-            adjustedHost = Protocol.DEFAULT_HOST;
-        }
-        if (adjustedHost.equals(hostAndPort.getHost())) return hostAndPort;
+        String host = hostAndPort.getHost();
+        String adjustedHost = adjustHost(host);
+        if (adjustedHost.equals(host)) return hostAndPort;
         return new HostAndPort(adjustedHost, hostAndPort.getPort());
+    }
+
+    public static @NotNull String adjustHost(@NotNull String host) {
+        String adjustedHost = host.trim();
+        if ("localhost".equalsIgnoreCase(adjustedHost)) {
+            return Protocol.DEFAULT_HOST;
+        }
+        return adjustedHost;
     }
 
 

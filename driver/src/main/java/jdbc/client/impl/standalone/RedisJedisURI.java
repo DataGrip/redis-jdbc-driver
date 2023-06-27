@@ -8,6 +8,8 @@ import redis.clients.jedis.Protocol;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import static jdbc.utils.Utils.adjustHost;
+
 public class RedisJedisURI extends RedisJedisURIBase {
 
     private static final String PREFIX = "jdbc:redis://";
@@ -46,7 +48,7 @@ public class RedisJedisURI extends RedisJedisURIBase {
             }
         }
 
-        this.hostAndPort = new HostAndPort(host, port);
+        this.hostAndPort = new HostAndPort(adjustHost(host), port);
     }
 
 

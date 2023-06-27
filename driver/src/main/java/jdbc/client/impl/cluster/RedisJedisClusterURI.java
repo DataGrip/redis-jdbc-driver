@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.MAX_ATTEMPTS;
+import static jdbc.utils.Utils.adjustHost;
 
 public class RedisJedisClusterURI extends RedisJedisURIBase {
 
@@ -60,7 +61,7 @@ public class RedisJedisClusterURI extends RedisJedisURIBase {
                 }
             }
 
-            nodes.add(new HostAndPort(host, port));
+            nodes.add(new HostAndPort(adjustHost(host), port));
         }
 
         this.nodes = nodes;
