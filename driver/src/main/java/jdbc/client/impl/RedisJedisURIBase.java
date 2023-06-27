@@ -7,6 +7,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.HostAndPortMapper;
 import redis.clients.jedis.JedisClientConfig;
 import redis.clients.jedis.Protocol;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -274,8 +275,12 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         }
 
         @Override
-        public HostAndPort getHostAndPort(HostAndPort hap) {
-            return hap == null ? null : mapping.getOrDefault(hap, hap);
+        public HostAndPort getHostAndPort(HostAndPort hap) throws JedisConnectionException {
+            if (hap == null) return null;
+            HostAndPort mappedHsp = mapping.get(hap);
+            if (mappedHsp == null)
+                throw new JedisConnectionException(String.format("Port forwarding is not specified for %s", hap));
+            return mappedHsp;
         }
     }
 }
