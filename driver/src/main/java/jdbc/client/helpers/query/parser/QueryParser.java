@@ -244,8 +244,7 @@ public class QueryParser {
             if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect node hint tokens: %s.", tokens));
             HostAndPort hostAndPort = null;
             try {
-                // TODO (cluster): improve parsing (URL too)
-                hostAndPort = HostAndPort.from(tokens.get(3));
+                hostAndPort = parseHostAndPort(tokens.get(3));
             } catch (Exception ignored) {
             }
             this.hostAndPort = hostAndPort;

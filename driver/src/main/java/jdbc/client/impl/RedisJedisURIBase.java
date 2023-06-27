@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.HostAndPortMapper;
 import redis.clients.jedis.JedisClientConfig;
-import redis.clients.jedis.Protocol;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import javax.net.ssl.SSLContext;
@@ -202,17 +201,8 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
 
 
     private void setHostAndPortMapping(Properties info) {
-        Map<HostAndPort, HostAndPort> mapping = getMap(info, HOST_AND_PORT_MAPPING, this::parseHostAndPort, this::parseHostAndPort);
+        Map<HostAndPort, HostAndPort> mapping = getMap(info, HOST_AND_PORT_MAPPING, Utils::parseHostAndPort, Utils::parseHostAndPort);
         this.hostAndPortMapper = mapping == null ? null : new CompleteHostAndPortMapper(mapping);
-    }
-
-    // TODO (cluster): improvements + tests
-    @NotNull
-    private HostAndPort parseHostAndPort(@NotNull String hostAndPortStr) {
-        HostAndPort hostAndPort = HostAndPort.from(hostAndPortStr);
-        if ("localhost".equalsIgnoreCase(hostAndPort.getHost()))
-            return new HostAndPort(Protocol.DEFAULT_HOST, hostAndPort.getPort());
-        return hostAndPort;
     }
 
 

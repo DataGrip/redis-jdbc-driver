@@ -4,6 +4,7 @@ import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
@@ -103,6 +104,17 @@ public class Utils {
             if (option != null) return valueParser.apply(option.toString());
         }
         return defaultValue;
+    }
+
+
+    public static @NotNull HostAndPort parseHostAndPort(@NotNull String hostAndPortStr) {
+        HostAndPort hostAndPort = HostAndPort.from(hostAndPortStr);
+        String adjustedHost = hostAndPort.getHost().trim();
+        if ("localhost".equalsIgnoreCase(adjustedHost)) {
+            adjustedHost = Protocol.DEFAULT_HOST;
+        }
+        if (adjustedHost.equals(hostAndPort.getHost())) return hostAndPort;
+        return new HostAndPort(adjustedHost, hostAndPort.getPort());
     }
 
 
