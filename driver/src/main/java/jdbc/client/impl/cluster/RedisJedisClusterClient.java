@@ -30,7 +30,7 @@ public class RedisJedisClusterClient extends RedisClientBase {
         try {
             jedisCluster = new JedisCluster(uri.getNodes(), uri, uri.getMaxAttempts(), new SingleConnectionPoolConfig());
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 

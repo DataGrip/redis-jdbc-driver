@@ -24,7 +24,7 @@ public abstract class RedisClientBase implements RedisClient {
             Object data = execute(query);
             return RedisResultHelper.parseResult(query, data);
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 
@@ -51,7 +51,7 @@ public abstract class RedisClientBase implements RedisClient {
         try {
             setDatabase(parseSqlDbIndex(db));
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 
@@ -63,11 +63,22 @@ public abstract class RedisClientBase implements RedisClient {
         try {
             doClose();
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 
     protected abstract void doClose();
+
+
+    protected static SQLException sqlWrap(@NotNull JedisException e) {
+        if (e.getCause() == null) {
+            Throwable[] suppressed = e.getSuppressed();
+            if (suppressed != null && suppressed.length == 1) {
+                return new SQLException(e.getMessage(), suppressed[0]);
+            }
+        }
+        return new SQLException(e);
+    }
 
 
     protected static class SingleConnectionPoolConfig extends ConnectionPoolConfig {

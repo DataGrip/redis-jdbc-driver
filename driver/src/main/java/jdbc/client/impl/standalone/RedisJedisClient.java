@@ -20,7 +20,7 @@ public class RedisJedisClient extends RedisClientBase {
             jedis = new Jedis(uri.getHostAndPort(), uri);
             jedis.connect();
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 
@@ -28,7 +28,7 @@ public class RedisJedisClient extends RedisClientBase {
         try {
             jedis = new Jedis(connection);
         } catch (JedisException e) {
-            throw new SQLException(e);
+            throw sqlWrap(e);
         }
     }
 
