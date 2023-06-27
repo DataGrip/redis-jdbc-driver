@@ -17,7 +17,12 @@ public class RedisDriverPropertyInfoHelper {
     public static final String MAX_ATTEMPTS = "maxAttempts";
     public static final String SSL = "ssl";
     public static final String VERIFY_SERVER_CERTIFICATE = "verifyServerCertificate";
+
     public static final String HOST_AND_PORT_MAPPING = "hostAndPortMapping";
+    public static final String HOST_AND_PORT_MAPPING_DEFAULT = null;
+
+    public static final String VERIFY_CONNECTION_MODE = "verifyConnectionMode";
+    public static final boolean VERIFY_CONNECTION_MODE_DEFAULT = true;
 
     private static final String[] booleanChoices = new String[]{Boolean.TRUE.toString(), Boolean.FALSE.toString()};
 
@@ -38,7 +43,9 @@ public class RedisDriverPropertyInfoHelper {
         addPropInfo(propInfos, SSL, String.valueOf(CONFIG.isSsl()), "Enable SSL.", booleanChoices);
         addPropInfo(propInfos, VERIFY_SERVER_CERTIFICATE, String.valueOf(CONFIG.isVerifyServerCertificate()),
                 "Configure a connection that uses SSL but does not verify the identity of the server.", booleanChoices);
-        addPropInfo(propInfos, HOST_AND_PORT_MAPPING, null, "Host and port mapping.");
+        addPropInfo(propInfos, HOST_AND_PORT_MAPPING, HOST_AND_PORT_MAPPING_DEFAULT, "Host and port mapping.");
+        addPropInfo(propInfos, VERIFY_CONNECTION_MODE, String.valueOf(VERIFY_CONNECTION_MODE_DEFAULT),
+                "Verify that mode specified for a connection in the URL scheme matches the server mode.", booleanChoices);
         return propInfos.toArray(new DriverPropertyInfo[0]);
     }
 

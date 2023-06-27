@@ -1,5 +1,6 @@
 package jdbc.client.impl.standalone;
 
+import jdbc.client.RedisMode;
 import jdbc.client.impl.RedisClientBase;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
@@ -56,5 +57,12 @@ public class RedisJedisClient extends RedisClientBase {
     @Override
     protected synchronized void doClose() {
         jedis.close();
+    }
+
+
+
+    @Override
+    public @NotNull RedisMode getMode() {
+        return RedisMode.STANDALONE;
     }
 }

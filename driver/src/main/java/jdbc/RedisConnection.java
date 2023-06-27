@@ -1,6 +1,8 @@
 package jdbc;
 
 import jdbc.client.RedisClient;
+import jdbc.client.RedisMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.Map;
@@ -18,6 +20,24 @@ public class RedisConnection implements Connection {
     public RedisConnection(RedisDriver driver, RedisClient client) {
         this.driver = driver;
         this.client = client;
+    }
+
+    private static final String UNKNOWN_SERVER_MODE_MESSAGE = "Unable to get the server mode" +
+            " using the \"INFO server\" command to check if the connection mode matches the server mode.";
+
+    public void checkConnectionMode() throws SQLException {
+        RedisMode serverMode;
+        try {
+            serverMode = getMetaData().getDatabaseProductMode();
+        } catch (SQLException e) {
+            throw new SQLException(UNKNOWN_SERVER_MODE_MESSAGE, e);
+        }
+        if (serverMode == null)
+            throw new SQLException(UNKNOWN_SERVER_MODE_MESSAGE);
+        RedisMode clientMode = client.getMode();
+        if (clientMode != serverMode)
+            throw new SQLException(String.format("The connection mode \"%s\" does not match the server mode \"%s\".",
+                    clientMode.name(), serverMode.name()));
     }
 
     private void checkClosed() throws SQLException {
@@ -85,7 +105,7 @@ public class RedisConnection implements Connection {
     }
 
     @Override
-    public DatabaseMetaData getMetaData() throws SQLException {
+    public @NotNull RedisDatabaseMetaData getMetaData() throws SQLException {
         checkClosed();
         return new RedisDatabaseMetaData(this, driver);
     }

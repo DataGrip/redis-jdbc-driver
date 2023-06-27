@@ -1,5 +1,6 @@
 package jdbc.client.impl.cluster;
 
+import jdbc.client.RedisMode;
 import jdbc.client.impl.RedisClientBase;
 import jdbc.client.impl.standalone.RedisJedisClient;
 import jdbc.client.structures.query.NodeHint;
@@ -18,10 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class RedisJedisClusterClient extends RedisClientBase {
-
-    private static final String UNSUPPORTED_COMMAND_MESSAGE = "Cluster mode does not support %s command";
-    private static final String UNSUPPORTED_KEYS_PATTERN_COMMAND_MESSAGE = "Cluster mode only supports %s command"
-            + " with pattern containing hash-tag ( curly-brackets enclosed string )";
 
     private static final Set<Command> UNSUPPORTED_COMMANDS = Set.of(Command.DBSIZE, Command.WAIT);
 
@@ -71,7 +68,8 @@ public class RedisJedisClusterClient extends RedisClientBase {
     private static void checkSupportInClusterMode(@NotNull RedisKeysPatternQuery query) throws SQLException {
         String keysPattern = query.getKeysPattern();
         if (keysPattern == null || !JedisClusterHashTag.isClusterCompliantMatchPattern(keysPattern))
-            throw new SQLException(String.format(UNSUPPORTED_KEYS_PATTERN_COMMAND_MESSAGE, query.getCommand()));
+            throw new SQLException(String.format("Cluster mode only supports %s command"
+                    + " with pattern containing hash-tag ( curly-brackets enclosed string )", query.getCommand()));
     }
 
 
@@ -95,7 +93,7 @@ public class RedisJedisClusterClient extends RedisClientBase {
     private static void checkSupportInClusterMode(@NotNull RedisQuery query) throws SQLException {
         Command command = query.getCommand();
         if (UNSUPPORTED_COMMANDS.contains(command))
-            throw new SQLException(String.format(UNSUPPORTED_COMMAND_MESSAGE, command));
+            throw new SQLException(String.format("Cluster mode does not support %s command", command));
     }
 
 
@@ -115,5 +113,11 @@ public class RedisJedisClusterClient extends RedisClientBase {
     @Override
     public synchronized void doClose() {
         jedisCluster.close();
+    }
+
+
+    @Override
+    public @NotNull RedisMode getMode() {
+        return RedisMode.CLUSTER;
     }
 }

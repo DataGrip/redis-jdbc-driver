@@ -1,8 +1,15 @@
 package jdbc;
 
+import jdbc.client.RedisMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.sql.*;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static jdbc.utils.Utils.toCapitalized;
 
 public class RedisDatabaseMetaData implements DatabaseMetaData {
 
@@ -61,15 +68,28 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
 
     @Override
     public String getDatabaseProductName() throws SQLException {
-        return "Redis";
+        RedisMode mode = getDatabaseProductMode();
+        return mode != null ? String.format("Redis %s", toCapitalized(mode.name())) : "Redis";
+    }
+
+    @Nullable
+    public RedisMode getDatabaseProductMode() throws SQLException {
+        String modeName = getDatabaseProductInfo("redis_mode:(.+)");
+        if (modeName == null) return null;
+        return Arrays.stream(RedisMode.values())
+                .filter(v -> modeName.equalsIgnoreCase(v.name())).findFirst().orElse(null);
     }
 
     @Override
     public String getDatabaseProductVersion() throws SQLException {
+        return getDatabaseProductInfo("redis_version:(.+)");
+    }
+
+    private String getDatabaseProductInfo(@NotNull String fieldPattern) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("INFO server");
         String serverInfo = result.next() ? result.getString(1) : null;
-        Matcher matcher = serverInfo != null ? Pattern.compile("redis_version:(.+)").matcher(serverInfo) : null;
+        Matcher matcher = serverInfo != null ? Pattern.compile(fieldPattern).matcher(serverInfo) : null;
         return matcher != null && matcher.find() ? matcher.group(1) : null;
     }
 

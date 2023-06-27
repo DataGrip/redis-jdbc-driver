@@ -3,10 +3,15 @@ package jdbc;
 import jdbc.client.RedisClient;
 import jdbc.client.RedisClientFactory;
 import jdbc.properties.RedisDriverPropertyInfoHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import static jdbc.properties.RedisDriverPropertyInfoHelper.VERIFY_CONNECTION_MODE;
+import static jdbc.properties.RedisDriverPropertyInfoHelper.VERIFY_CONNECTION_MODE_DEFAULT;
+import static jdbc.utils.Utils.getBoolean;
 
 public class RedisDriver implements Driver {
 
@@ -22,7 +27,19 @@ public class RedisDriver implements Driver {
     public Connection connect(String url, Properties info) throws SQLException {
         RedisClient client = RedisClientFactory.create(url, info);
         if (client == null) return null;
-        return new RedisConnection(this, client);
+        RedisConnection connection = new RedisConnection(this, client);
+        try {
+            checkConnectionModeIfNeeded(info, connection);
+        } catch (SQLException e) {
+            connection.close();
+            throw e;
+        }
+        return connection;
+    }
+
+    private static void checkConnectionModeIfNeeded(Properties info, @NotNull RedisConnection connection) throws SQLException {
+        if (!getBoolean(info, VERIFY_CONNECTION_MODE, VERIFY_CONNECTION_MODE_DEFAULT)) return;
+        connection.checkConnectionMode();
     }
 
     @Override

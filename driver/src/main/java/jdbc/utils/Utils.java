@@ -35,6 +35,10 @@ public class Utils {
         return value.toUpperCase(Locale.ENGLISH);
     }
 
+    public static @NotNull String toCapitalized(@NotNull String value) {
+        return value.isEmpty() ? value : toUpperCase(value.substring(0, 1)) + toLowerCase(value.substring(1));
+    }
+
 
     public static @Nullable String getFirst(@NotNull String[] elements) {
         return elements.length > 0 ? elements[0] : null;
