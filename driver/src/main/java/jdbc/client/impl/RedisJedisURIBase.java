@@ -44,7 +44,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     private SSLSocketFactory sslSocketFactory;
 
     // host and port mapper
-    private HostAndPortMapper hostAndPortMapper;
+    private CompleteHostAndPortMapper hostAndPortMapper;
 
 
     protected RedisJedisURIBase(String url, Properties info) throws SQLException {
@@ -203,7 +203,7 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
 
     private void setHostAndPortMapping(Properties info) {
         Map<HostAndPort, HostAndPort> mapping = getMap(info, HOST_AND_PORT_MAPPING, this::parseHostAndPort, this::parseHostAndPort);
-        this.hostAndPortMapper = mapping == null ? null : new ClientHostAndPortMapper(mapping);
+        this.hostAndPortMapper = mapping == null ? null : new CompleteHostAndPortMapper(mapping);
     }
 
     // TODO (cluster): improvements + tests
@@ -262,15 +262,15 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
     }
 
     @Override
-    public HostAndPortMapper getHostAndPortMapper() {
+    public CompleteHostAndPortMapper getHostAndPortMapper() {
         return hostAndPortMapper;
     }
 
 
-    protected static class ClientHostAndPortMapper implements HostAndPortMapper {
+    public static class CompleteHostAndPortMapper implements HostAndPortMapper {
         private final Map<HostAndPort, HostAndPort> mapping;
 
-        public ClientHostAndPortMapper(@NotNull Map<HostAndPort, HostAndPort> mapping) {
+        public CompleteHostAndPortMapper(@NotNull Map<HostAndPort, HostAndPort> mapping) {
             this.mapping = mapping;
         }
 

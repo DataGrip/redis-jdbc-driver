@@ -2,13 +2,16 @@ package jdbc.client.impl.cluster;
 
 import jdbc.client.RedisMode;
 import jdbc.client.impl.RedisClientBase;
+import jdbc.client.impl.RedisJedisURIBase.CompleteHostAndPortMapper;
 import jdbc.client.impl.standalone.RedisJedisClient;
 import jdbc.client.structures.query.NodeHint;
 import jdbc.client.structures.query.RedisKeysPatternQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.*;
 import redis.clients.jedis.Protocol.Command;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.JedisClusterHashTag;
@@ -29,8 +32,19 @@ public class RedisJedisClusterClient extends RedisClientBase {
     public RedisJedisClusterClient(@NotNull RedisJedisClusterURI uri) throws SQLException {
         try {
             jedisCluster = new JedisCluster(uri.getNodes(), uri, uri.getMaxAttempts(), new SingleConnectionPoolConfig());
+            checkClusterNodes(jedisCluster, uri.getHostAndPortMapper());
         } catch (JedisException e) {
             throw sqlWrap(e);
+        }
+    }
+
+    private static void checkClusterNodes(@NotNull JedisCluster cluster,
+                                          @Nullable CompleteHostAndPortMapper hostAndPortMapper) throws JedisConnectionException {
+        if (hostAndPortMapper == null) return;
+        Iterable<String> nodeKeys = cluster.getClusterNodes().keySet();
+        for (String nodeKey : nodeKeys) {
+            HostAndPort nodeHostAndPort = HostAndPort.from(nodeKey);
+            hostAndPortMapper.getHostAndPort(nodeHostAndPort);
         }
     }
 
