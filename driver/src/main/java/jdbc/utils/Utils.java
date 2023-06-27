@@ -82,7 +82,8 @@ public class Utils {
         String content = map.trim();
         if (!content.startsWith("{") || !content.endsWith("}"))
             throw new IllegalArgumentException(String.format("Incorrect map: %s", map));
-        String body = content.substring(1, content.length() - 1);
+        String body = content.substring(1, content.length() - 1).trim();
+        if (body.isEmpty()) return result;
         String[] elements = body.split(",");
         for (String element : elements) {
             element = element.trim();
