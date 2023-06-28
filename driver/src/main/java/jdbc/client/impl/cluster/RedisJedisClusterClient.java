@@ -17,7 +17,6 @@ import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.JedisClusterHashTag;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +26,6 @@ public class RedisJedisClusterClient extends RedisClientBase {
 
 
     private final JedisCluster jedisCluster;
-    private final Map<String, RedisJedisClient> jedisClusterNodes = new HashMap<>();
 
     public RedisJedisClusterClient(@NotNull RedisJedisClusterURI uri) throws SQLException {
         try {
@@ -58,18 +56,20 @@ public class RedisJedisClusterClient extends RedisClientBase {
 
     private synchronized Object execute(@NotNull HostAndPort nodeHostAndPort,
                                         @NotNull RedisQuery query) throws SQLException {
-        String nodeKey = JedisClusterInfoCache.getNodeKey(nodeHostAndPort);
-        RedisJedisClient jedisNode = jedisClusterNodes.get(nodeKey);
-        if (jedisNode == null) {
-            Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
-            ConnectionPool nodePool = nodes.get(nodeKey);
-            Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
-            if (nodeConnection == null)
-                throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
-            jedisNode = new RedisJedisClient(nodeConnection);
-            jedisClusterNodes.put(nodeKey, jedisNode);
+        Connection nodeConnection = getNodeConnection(nodeHostAndPort);
+        try (RedisJedisClient nodeClient = new RedisJedisClient(nodeConnection)) {
+            return nodeClient.execute(query);
         }
-        return jedisNode.execute(query);
+    }
+
+    private synchronized @NotNull Connection getNodeConnection(@NotNull HostAndPort nodeHostAndPort) throws SQLException {
+        String nodeKey = JedisClusterInfoCache.getNodeKey(nodeHostAndPort);
+        Map<String, ConnectionPool> nodes = jedisCluster.getClusterNodes();
+        ConnectionPool nodePool = nodes.get(nodeKey);
+        Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
+        if (nodeConnection == null)
+            throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
+        return nodeConnection;
     }
 
 
