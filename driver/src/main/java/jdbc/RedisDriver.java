@@ -39,7 +39,7 @@ public class RedisDriver implements Driver {
 
     private static void checkConnectionModeIfNeeded(Properties info, @NotNull RedisConnection connection) throws SQLException {
         if (!getBoolean(info, VERIFY_CONNECTION_MODE, VERIFY_CONNECTION_MODE_DEFAULT)) return;
-        connection.checkConnectionMode();
+        connection.checkMode();
     }
 
     @Override

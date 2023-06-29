@@ -68,7 +68,7 @@ public class RedisJedisClusterClient extends RedisClientBase {
         ConnectionPool nodePool = nodes.get(nodeKey);
         Connection nodeConnection = nodePool != null ? nodePool.getResource() : null;
         if (nodeConnection == null)
-            throw new SQLException(String.format("Cluster node not found: %s", nodeHostAndPort));
+            throw new SQLException(String.format("Cluster node not found: %s.", nodeHostAndPort));
         return nodeConnection;
     }
 
@@ -82,8 +82,8 @@ public class RedisJedisClusterClient extends RedisClientBase {
     private static void checkSupportInClusterMode(@NotNull RedisKeyPatternQuery query) throws SQLException {
         String keyPattern = query.getKeyPattern();
         if (keyPattern == null || !JedisClusterHashTag.isClusterCompliantMatchPattern(keyPattern))
-            throw new SQLException(String.format("Cluster mode only supports %s command"
-                    + " with pattern containing hash-tag ( curly-brackets enclosed string )", query.getCommand()));
+            throw new SQLException(String.format("Cluster mode only supports the %s command"
+                    + " with a pattern containing a hash-tag (curly-brackets enclosed string).", query.getCommand()));
     }
 
 
@@ -107,15 +107,14 @@ public class RedisJedisClusterClient extends RedisClientBase {
     private static void checkSupportInClusterMode(@NotNull RedisQuery query) throws SQLException {
         Command command = query.getCommand();
         if (UNSUPPORTED_COMMANDS.contains(command))
-            throw new SQLException(String.format("Cluster mode does not support %s command", command));
+            throw new SQLException(String.format("Cluster mode does not support the %s command.", command));
     }
 
 
     @Override
     protected String setDatabase(int index) {
         if (index == 0) return "OK";
-        // TODO (cluster): unify
-        throw new JedisDataException("ERR SELECT is not allowed in cluster mode");
+        throw new JedisDataException("ERR DB index is out of range");
     }
 
     @Override

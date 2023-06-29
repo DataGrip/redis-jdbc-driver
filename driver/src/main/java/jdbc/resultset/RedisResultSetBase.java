@@ -306,7 +306,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
     public int findColumn(String columnLabel) throws SQLException {
         checkClosed();
         int col = getMetaData().findColumn(columnLabel);
-        if (col == -1) throw new SQLException("No such column " + columnLabel);
+        if (col == -1) throw new SQLException(String.format("No such column %s.", columnLabel));
         return col;
     }
 

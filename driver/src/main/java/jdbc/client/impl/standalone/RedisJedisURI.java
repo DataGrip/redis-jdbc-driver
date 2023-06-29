@@ -12,7 +12,7 @@ import static jdbc.utils.Utils.adjustHost;
 
 public class RedisJedisURI extends RedisJedisURIBase {
 
-    private static final String PREFIX = "jdbc:redis://";
+    public static final String PREFIX = "jdbc:redis://";
 
     public static boolean acceptsURL(String url) {
         return url != null && url.startsWith(PREFIX);

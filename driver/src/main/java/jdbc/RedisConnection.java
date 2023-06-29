@@ -1,6 +1,7 @@
 package jdbc;
 
 import jdbc.client.RedisClient;
+import jdbc.client.RedisClientFactory;
 import jdbc.client.RedisMode;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,8 @@ import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+
+import static jdbc.utils.Utils.toLowerCase;
 
 public class RedisConnection implements Connection {
 
@@ -25,7 +28,7 @@ public class RedisConnection implements Connection {
     private static final String UNKNOWN_SERVER_MODE_MESSAGE = "Unable to get the server mode" +
             " using the \"INFO server\" command to check if the connection mode matches the server mode.";
 
-    public void checkConnectionMode() throws SQLException {
+    public void checkMode() throws SQLException {
         RedisMode serverMode;
         try {
             serverMode = getMetaData().getDatabaseProductMode();
@@ -35,9 +38,12 @@ public class RedisConnection implements Connection {
         if (serverMode == null)
             throw new SQLException(UNKNOWN_SERVER_MODE_MESSAGE);
         RedisMode clientMode = client.getMode();
-        if (clientMode != serverMode)
-            throw new SQLException(String.format("The connection mode \"%s\" does not match the server mode \"%s\".",
-                    clientMode.name(), serverMode.name()));
+        if (clientMode != serverMode) {
+            String serverURLPrefix = RedisClientFactory.getURLPrefix(serverMode);
+            String urlFix = serverURLPrefix != null ? String.format("\nPlease change the URL prefix to \"%s\".", serverURLPrefix) : null;
+            throw new SQLException(String.format("The connection mode \"%s\" does not match the server mode \"%s\".%s",
+                    toLowerCase(clientMode.name()), toLowerCase(serverMode.name()), urlFix));
+        }
     }
 
     private void checkClosed() throws SQLException {

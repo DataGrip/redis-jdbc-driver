@@ -32,7 +32,7 @@ public class ArrayImpl implements Array {
 
     @Override
     public Object[] getArray() throws SQLException {
-        if (array == null) throw new SQLException("Array was freed");
+        if (array == null) throw new SQLException("Array was freed.");
         return array;
     }
 

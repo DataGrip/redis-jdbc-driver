@@ -18,7 +18,7 @@ import static jdbc.utils.Utils.adjustHost;
 
 public class RedisJedisClusterURI extends RedisJedisURIBase {
 
-    private static final String PREFIX = "jdbc:redis:cluster://";
+    public static final String PREFIX = "jdbc:redis:cluster://";
 
     public static boolean acceptsURL(String url) {
         return url != null && url.startsWith(PREFIX);

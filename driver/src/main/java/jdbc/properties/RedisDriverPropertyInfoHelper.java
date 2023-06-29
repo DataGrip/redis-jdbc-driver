@@ -45,7 +45,7 @@ public class RedisDriverPropertyInfoHelper {
                 "Configure a connection that uses SSL but does not verify the identity of the server.", booleanChoices);
         addPropInfo(propInfos, HOST_AND_PORT_MAPPING, HOST_AND_PORT_MAPPING_DEFAULT, "Host and port mapping.");
         addPropInfo(propInfos, VERIFY_CONNECTION_MODE, String.valueOf(VERIFY_CONNECTION_MODE_DEFAULT),
-                "Verify that mode specified for a connection in the URL scheme matches the server mode.", booleanChoices);
+                "Verify that the mode specified for a connection in the URL prefix matches the server mode (standalone, cluster, sentinel).", booleanChoices);
         return propInfos.toArray(new DriverPropertyInfo[0]);
     }
 
