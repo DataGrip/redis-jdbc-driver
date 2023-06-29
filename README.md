@@ -1,12 +1,13 @@
 # Redis JDBC Driver
 
 [![Apache licensed](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg)](./LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/datagrip/redis-jdbc-driver?label=latest)](https://github.com/DataGrip/redis-jdbc-driver/releases/tag/v1.3)
+[![Latest Release](https://img.shields.io/github/v/release/datagrip/redis-jdbc-driver?label=latest)](https://github.com/DataGrip/redis-jdbc-driver/releases/tag/v1.4)
 [![CI](https://github.com/datagrip/redis-jdbc-driver/workflows/CI/badge.svg?branch=main)](https://github.com/datagrip/redis-jdbc-driver/actions?query=workflow%3ACI+branch%3Amain)
 
 Type 4 JDBC driver based on [Jedis](https://github.com/redis/jedis) that allows Java programs to connect to a Redis database.
 
 This driver is embedded into [DataGrip](https://www.jetbrains.com/datagrip/).
+
 
 ## Get The Driver
 
@@ -25,6 +26,7 @@ gradlew.bat jar
 ```
 
 You will find driver jar in ```build/libs```
+
 
 ## Get Started
 
@@ -52,12 +54,13 @@ try (Connection connection = DriverManager.getConnection("jdbc:redis://localhost
 }
 ```
 
+
 ## Connectivity
 
 | Server              | Status              |
 | ------------------- | ------------------- |
 | Redis Standalone    | ***Supported***     |
-| Redis Cluster       | *Not supported yet* |
+| Redis Cluster       | ***Supported***     |
 | Redis Sentinel      | *Not supported yet* |
 
 Default host and port: ```127.0.0.1:6379```
@@ -69,21 +72,29 @@ Default host and port: ```127.0.0.1:6379```
 jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>][?<property1>=<value>&<property2>=<value>&...]
 ```
 
+#### Redis Cluster
+```
+jdbc:redis:cluster://[[<user>:]<password>@][<host1>[:<port1>],<host2>[:<port2>],...][/<database>][?<property1>=<value>&<property2>=<value>&...]
+```
+
 ### Properties
 
-| Property                | Type    | Default | Description                         |
-| ----------------------- | ------- | ------- | ----------------------------------- |
-| user                    | String  | null    |                                     |
-| password                | String  | null    |                                     |
-| database                | Integer | 0       |                                     |
-| connectionTimeout       | Integer | 2000    | Connection timeout in milliseconds. |
-| socketTimeout           | Integer | 2000    | Socket timeout in milliseconds.     |
-| blockingSocketTimeout   | Integer | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
-| clientName              | String  | null    |                                     |
-| ssl                     | Boolean | false   | Enable SSL.                         |
-| verifyServerCertificate | Boolean | true    | Configure a connection that uses SSL but does not verify the identity of the server. |
+| Property                | Type                | Default | Description                         |
+| ----------------------- | ------------------- | ------- | ----------------------------------- |
+| user                    | String              | null    |                                     |
+| password                | String              | null    |                                     |
+| database                | Integer             | 0       |                                     |
+| connectionTimeout       | Integer             | 2000    | Connection timeout in milliseconds. |
+| socketTimeout           | Integer             | 2000    | Socket timeout in milliseconds.     |
+| blockingSocketTimeout   | Integer             | 0       | Socket timeout (in milliseconds) to use during blocking operation. Default is '0', which means to block forever. |
+| clientName              | String              | null    |                                     |
+| ssl                     | Boolean             | false   | Enable SSL.                         |
+| verifyServerCertificate | Boolean             | true    | Configure a connection that uses SSL but does not verify the identity of the server. |
+| hostAndPortMapping      | Map<String, String> | null    | Host and port mapping.              |
+| verifyConnectionMode    | Boolean             | true    | Verify that the mode specified for a connection in the URL prefix matches the server mode (standalone, cluster, sentinel). |
 
 ### SSL
+
 Set property `ssl=true`.
 
 Pass arguments for your keystore and trust store: 
@@ -97,8 +108,8 @@ Pass arguments for your keystore and trust store:
 
 To disable server certificate verification set property `verifyServerCertificate=false`.
 
-## Commands Execution
 
+## Commands Execution
 
 | Commands        | Status              |
 | --------------- | ------------------- |
@@ -108,6 +119,7 @@ To disable server certificate verification set property `verifyServerCertificate
 | RedisGraph      | *Not supported yet* |
 | RedisJSON       | *Not supported yet* |
 | RedisTimeSeries | *Not supported yet* |
+
 
 ## Classes
 
@@ -120,6 +132,7 @@ To disable server certificate verification set property `verifyServerCertificate
 |```java.sql.DatabaseMetaData```  |```jdbc.RedisDatabaseMetaData``` | **Minimal implementation**: it does not contain information about database objects. |
 |```java.sql.ResultSet```         |```jdbc.resultset.RedisResultSetBase```|                                                                               |
 |```java.sql.ResultSetMetaData``` |```jdbc.resultset.RedisResultSetMetaData```| **Partial implementation**: it contains only information about columns.   |
+
 
 ## References
 
