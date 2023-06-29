@@ -5,7 +5,7 @@ import jdbc.client.impl.RedisClientBase;
 import jdbc.client.impl.RedisJedisURIBase.CompleteHostAndPortMapper;
 import jdbc.client.impl.standalone.RedisJedisClient;
 import jdbc.client.structures.query.NodeHint;
-import jdbc.client.structures.query.RedisKeysPatternQuery;
+import jdbc.client.structures.query.RedisKeyPatternQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,14 +74,14 @@ public class RedisJedisClusterClient extends RedisClientBase {
 
 
     @Override
-    protected Object executeImpl(@NotNull RedisKeysPatternQuery query) throws SQLException {
+    protected Object executeImpl(@NotNull RedisKeyPatternQuery query) throws SQLException {
         checkSupportInClusterMode(query);
         return super.executeImpl(query);
     }
 
-    private static void checkSupportInClusterMode(@NotNull RedisKeysPatternQuery query) throws SQLException {
-        String keysPattern = query.getKeysPattern();
-        if (keysPattern == null || !JedisClusterHashTag.isClusterCompliantMatchPattern(keysPattern))
+    private static void checkSupportInClusterMode(@NotNull RedisKeyPatternQuery query) throws SQLException {
+        String keyPattern = query.getKeyPattern();
+        if (keyPattern == null || !JedisClusterHashTag.isClusterCompliantMatchPattern(keyPattern))
             throw new SQLException(String.format("Cluster mode only supports %s command"
                     + " with pattern containing hash-tag ( curly-brackets enclosed string )", query.getCommand()));
     }

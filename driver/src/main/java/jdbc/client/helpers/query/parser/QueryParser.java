@@ -120,12 +120,12 @@ public class QueryParser {
         // keys pattern queries
         if (command == Command.KEYS) {
             String pattern = getFirst(params);
-            return new RedisKeysPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+            return new RedisKeyPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
         }
         if (command == Command.SCAN) {
             Integer matchIndex = getIndex(params, p -> Keyword.MATCH.name().equalsIgnoreCase(p));
             String pattern = matchIndex == null || matchIndex == params.length - 1 ? null : params[matchIndex + 1];
-            return new RedisKeysPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+            return new RedisKeyPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
         }
 
         return new RedisQuery(compositeCommand, params, columnHint, nodeHint, BLOCKING_COMMANDS.contains(command));

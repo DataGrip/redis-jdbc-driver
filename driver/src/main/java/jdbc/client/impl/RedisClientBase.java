@@ -3,7 +3,7 @@ package jdbc.client.impl;
 import jdbc.client.RedisClient;
 import jdbc.client.helpers.query.RedisQueryHelper;
 import jdbc.client.helpers.result.RedisResultHelper;
-import jdbc.client.structures.query.RedisKeysPatternQuery;
+import jdbc.client.structures.query.RedisKeyPatternQuery;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.query.RedisSetDatabaseQuery;
 import jdbc.client.structures.result.RedisResult;
@@ -30,7 +30,7 @@ public abstract class RedisClientBase implements RedisClient {
 
     public Object execute(@NotNull RedisQuery query) throws SQLException {
        if (query instanceof RedisSetDatabaseQuery) return executeImpl((RedisSetDatabaseQuery) query);
-       if (query instanceof RedisKeysPatternQuery) return executeImpl((RedisKeysPatternQuery) query);
+       if (query instanceof RedisKeyPatternQuery) return executeImpl((RedisKeyPatternQuery) query);
        return executeImpl(query);
     }
 
@@ -39,7 +39,7 @@ public abstract class RedisClientBase implements RedisClient {
         return setDatabase(query.getDbIndex());
     }
 
-    protected Object executeImpl(@NotNull RedisKeysPatternQuery query) throws SQLException {
+    protected Object executeImpl(@NotNull RedisKeyPatternQuery query) throws SQLException {
         return executeImpl((RedisQuery) query);
     }
 
