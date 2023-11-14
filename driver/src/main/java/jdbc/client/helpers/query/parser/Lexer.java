@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lexer {
+class Lexer {
 
     private static final String LINE_SEPARATOR = "\r|\n|\r\n";
 

@@ -4,14 +4,15 @@ import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Protocol.ClusterKeyword;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -23,41 +24,17 @@ public class QueryParser {
     }
 
 
-    private static final Map<String, Command> COMMANDS =
-            Arrays.stream(Command.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Map<String, Keyword> KEYWORDS =
-            Arrays.stream(Keyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS =
-            Arrays.stream(ClusterKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Set<Command> BLOCKING_COMMANDS = Set.of(
+    private static final Set<ProtocolCommand> BLOCKING_COMMANDS = Set.of(
             Command.BLMOVE, Command.BLMPOP, Command.BLPOP, Command.BRPOP,
             Command.BRPOPLPUSH, Command.BZMPOP, Command.BZPOPMAX, Command.BZPOPMIN
     );
 
-    private static final Set<Command> COMMANDS_WITH_KEYWORDS = Set.of(
+    private static final Set<ProtocolCommand> COMMANDS_WITH_KEYWORDS = Set.of(
             Command.ACL, Command.CLIENT, Command.CLUSTER, Command.COMMAND,
             Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE,
             Command.OBJECT, Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG,
             Command.XGROUP, Command.XINFO
     );
-
-    private static @Nullable Command getCommand(@NotNull String command) {
-        return COMMANDS.get(getName(command));
-    }
-
-    // TODO (cluster): check mode
-    @SuppressWarnings("RedundantIfStatement")
-    private static @Nullable Rawable getKeyword(@NotNull String keyword) {
-        String name = getName(keyword);
-        Keyword knownKeyword = KEYWORDS.get(name);
-        if (knownKeyword != null) return knownKeyword;
-        ClusterKeyword clusterKeyword = CLUSTER_KEYWORDS.get(name);
-        if (clusterKeyword != null) return clusterKeyword;
-        return null;
-    }
 
 
     public static @NotNull RedisQuery parse(@Nullable String sql) throws SQLException {
@@ -66,44 +43,43 @@ public class QueryParser {
         RawQuery rawQuery = createRawQuery(tokens);
 
         CommandLine commandLine = rawQuery.commandLine;
-        Command command = parseCommand(commandLine.command);
-        Rawable commandKeyword = parseCommandKeyword(command, commandLine.params);
-        CompositeCommand compositeCommand = new CompositeCommand(command, commandKeyword);
+        ProtocolCommand command = parseCommand(commandLine.command);
+        Rawable keyword = parseKeyword(command, commandLine.params);
+        CompositeCommand compositeCommand = new CompositeCommand(command, keyword);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
-        ColumnHint columnHint =
-                columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
+        ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
         NodeHintLine nodeHintLine = rawQuery.nodeHintLine;
-        NodeHint nodeHint =
-                nodeHintLine == null || nodeHintLine.hostAndPort == null ? null : new NodeHint(nodeHintLine.hostAndPort);
+        NodeHint nodeHint = nodeHintLine == null || nodeHintLine.hostAndPort == null ? null : new NodeHint(nodeHintLine.hostAndPort);
 
         return createQuery(compositeCommand, commandLine.params, columnHint, nodeHint);
     }
 
-    private static @NotNull Command parseCommand(@NotNull String commandStr) throws SQLException {
-        Command command = getCommand(commandStr);
+    private static @NotNull ProtocolCommand parseCommand(@NotNull String commandStr) throws SQLException {
+        ProtocolCommand command = CommandParser.parseCommand(commandStr);
         if (command == null)
             throw new SQLException(String.format("Query contains an unknown command: %s.", commandStr));
         return command;
     }
 
-    private static @Nullable Rawable parseCommandKeyword(@NotNull Command command,
-                                                         @NotNull String[] params) throws SQLException {
+    private static @Nullable Rawable parseKeyword(@NotNull ProtocolCommand command,
+                                                  @NotNull String[] params) throws SQLException {
         if (!COMMANDS_WITH_KEYWORDS.contains(command)) return null;
-        String commandKeywordStr = getFirst(params);
-        if (commandKeywordStr == null)
+        String keywordStr = getFirst(params);
+        if (keywordStr == null)
             throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-        Rawable commandKeyword = getKeyword(commandKeywordStr);
-        if (commandKeyword == null)
+        Rawable keyword = KeywordParser.parseKeyword(command, keywordStr);
+        if (keyword == null)
             throw new SQLException(String.format(
                     "Query contains an unknown keyword for the command %s: %s.",
                     command,
-                    commandKeywordStr
+                    keywordStr
             ));
-        return commandKeyword;
+        return keyword;
     }
 
-    // TODO (cluster): refactor
+
+    // TODO (stack): refactor
     private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
@@ -128,7 +104,7 @@ public class QueryParser {
             return new RedisKeyPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
         }
 
-        return new RedisQuery(compositeCommand, params, columnHint, nodeHint, BLOCKING_COMMANDS.contains(command));
+        return new RedisQuery(compositeCommand, params, columnHint, nodeHint, isBlocking);
     }
 
 
