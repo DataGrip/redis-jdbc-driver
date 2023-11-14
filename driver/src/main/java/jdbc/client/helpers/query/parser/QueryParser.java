@@ -1,6 +1,5 @@
 package jdbc.client.helpers.query.parser;
 
-import jdbc.client.helpers.query.parser.lexer.Lexer;
 import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
