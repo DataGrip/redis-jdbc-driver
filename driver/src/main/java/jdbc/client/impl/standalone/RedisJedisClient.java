@@ -6,7 +6,7 @@ import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Connection;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Protocol.Command;
+import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.exceptions.JedisException;
 
 import java.sql.SQLException;
@@ -35,7 +35,7 @@ public class RedisJedisClient extends RedisClientBase {
 
     @Override
     protected synchronized Object executeImpl(@NotNull RedisQuery query) {
-        Command command = query.getCommand();
+        ProtocolCommand command = query.getCommand();
         String[] params = query.getParams();
         return query.isBlocking()
                 ? jedis.sendBlockingCommand(command, params)

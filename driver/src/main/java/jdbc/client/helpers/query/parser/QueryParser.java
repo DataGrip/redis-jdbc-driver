@@ -8,6 +8,7 @@ import redis.clients.jedis.Protocol.ClusterKeyword;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
+import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -107,7 +108,7 @@ public class QueryParser {
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
-        Command command = compositeCommand.getCommand();
+        ProtocolCommand command = compositeCommand.getCommand();
         boolean isBlocking = BLOCKING_COMMANDS.contains(command);
 
         // set databases query

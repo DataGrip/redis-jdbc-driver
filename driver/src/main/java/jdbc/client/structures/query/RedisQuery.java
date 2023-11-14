@@ -3,8 +3,8 @@ package jdbc.client.structures.query;
 import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class RedisQuery {
     }
 
     @NotNull
-    public Command getCommand() {
+    public ProtocolCommand getCommand() {
         return compositeCommand.getCommand();
     }
 
