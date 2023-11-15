@@ -31,8 +31,7 @@ class KeywordParser {
             Arrays.stream(SentinelKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
 
 
-    // TODO (stack): think about nullable
-    public static @Nullable Rawable parseKeyword(@NotNull ProtocolCommand command, @NotNull String keyword) {
+    public static @NotNull Rawable parseKeyword(@NotNull ProtocolCommand command, @NotNull String keyword) {
         String keywordName = Utils.getName(keyword);
         Rawable knownKeyword = parseKnownKeyword(command, keywordName);
         return knownKeyword != null ? knownKeyword : new UnknownKeyword(keywordName);

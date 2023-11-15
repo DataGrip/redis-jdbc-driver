@@ -21,8 +21,8 @@ class CommandParser {
             Arrays.stream(Command.values()).collect(Collectors.toMap(Enum::name, v -> v));
 
 
-    // TODO (stack): think about nullable
-    public static @Nullable ProtocolCommand parseCommand(@NotNull String command) {
+
+    public static @NotNull ProtocolCommand parseCommand(@NotNull String command) {
         String commandName = Utils.getName(command);
         ProtocolCommand knownCommand = parseKnownCommand(commandName);
         if (knownCommand != null) return knownCommand;

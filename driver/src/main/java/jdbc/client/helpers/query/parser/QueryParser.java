@@ -56,10 +56,7 @@ public class QueryParser {
     }
 
     private static @NotNull ProtocolCommand parseCommand(@NotNull String commandStr) throws SQLException {
-        ProtocolCommand command = CommandParser.parseCommand(commandStr);
-        if (command == null)
-            throw new SQLException(String.format("Query contains an unknown command: %s.", commandStr));
-        return command;
+        return CommandParser.parseCommand(commandStr);
     }
 
     private static @Nullable Rawable parseKeyword(@NotNull ProtocolCommand command,
@@ -68,14 +65,7 @@ public class QueryParser {
         String keywordStr = getFirst(params);
         if (keywordStr == null)
             throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-        Rawable keyword = KeywordParser.parseKeyword(command, keywordStr);
-        if (keyword == null)
-            throw new SQLException(String.format(
-                    "Query contains an unknown keyword for the command %s: %s.",
-                    command,
-                    keywordStr
-            ));
-        return keyword;
+        return KeywordParser.parseKeyword(command, keywordStr);
     }
 
 
