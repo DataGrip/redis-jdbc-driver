@@ -1,40 +1,44 @@
 package jdbc.client.helpers.query.parser;
 
-import jdbc.utils.Utils;
+import jdbc.client.structures.query.CompositeCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Protocol.Command;
+import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
-import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
-import java.util.Map;
+import java.sql.SQLException;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.getFirst;
+import static jdbc.utils.Utils.getName;
 
-class CommandParser {
+abstract class CommandParser<T extends ProtocolCommand> {
 
-    private CommandParser() {
-    }
-
-
-    private static final Map<String, Command> COMMANDS = toMap(Command.values());
-    private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
-
-
-    public static @NotNull ProtocolCommand parseCommand(@NotNull String command) {
-        String commandName = Utils.getName(command);
-        ProtocolCommand knownCommand = parseKnownCommand(commandName);
-        if (knownCommand != null) return knownCommand;
-        return new UnknownCommand(commandName);
-    }
-
-    private static @Nullable ProtocolCommand parseKnownCommand(@NotNull String commandName) {
-        if (commandName.contains(".")) {
-            if (commandName.startsWith("JSON.")) return JSON_COMMANDS.get(commandName);
+    public @NotNull CompositeCommand parseCompositeCommand(@NotNull String commandName,
+                                                           @NotNull String[] params) throws SQLException {
+        T command = parseCommand(commandName);
+        if (command != null && hasKeyword(command)) {
+            if (!hasKeyword(command)) return CompositeCommand.create(command);
+            String keywordName = getKeywordName(params);
+            if (keywordName == null)
+                throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
+            Rawable keyword = parseKeyword(command, keywordName);
+            return CompositeCommand.create(command, keyword != null ? keyword : new UnknownKeyword(keywordName));
         }
-        return COMMANDS.get(commandName);
+        return CompositeCommand.create(command != null ? command : new UnknownCommand(commandName));
     }
+
+    protected abstract @Nullable T parseCommand(@NotNull String commandName);
+
+    protected abstract boolean hasKeyword(@NotNull T command);
+
+    @Nullable
+    private static String getKeywordName(@NotNull String[] params) {
+        String firstParam = getFirst(params);
+        return firstParam != null ? getName(firstParam) : null;
+    }
+
+    protected abstract @Nullable Rawable parseKeyword(@NotNull T command, @NotNull String keywordName);
 
 
     private static class UnknownCommand implements ProtocolCommand {
@@ -42,6 +46,19 @@ class CommandParser {
 
         UnknownCommand(@NotNull String commandName) {
             raw = SafeEncoder.encode(commandName);
+        }
+
+        @Override
+        public byte[] getRaw() {
+            return raw;
+        }
+    }
+
+    private static class UnknownKeyword implements Rawable {
+        private final byte[] raw;
+
+        UnknownKeyword(@NotNull String keywordName) {
+            raw = SafeEncoder.encode(keywordName);
         }
 
         @Override

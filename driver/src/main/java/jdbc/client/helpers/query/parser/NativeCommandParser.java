@@ -1,6 +1,5 @@
 package jdbc.client.helpers.query.parser;
 
-import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.ClusterKeyword;
@@ -9,46 +8,41 @@ import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.Protocol.SentinelKeyword;
 import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
-import redis.clients.jedis.util.SafeEncoder;
 
 import java.util.Map;
+import java.util.Set;
 
 import static jdbc.utils.Utils.toMap;
 
-class KeywordParser {
+public class NativeCommandParser extends CommandParser<Command> {
 
-    private KeywordParser() {
-    }
+    private static final Map<String, Command> COMMANDS = toMap(Command.values());
 
+    private static final Set<ProtocolCommand> COMMANDS_WITH_KEYWORDS = Set.of(
+            Command.ACL, Command.CLIENT, Command.CLUSTER, Command.SENTINEL, Command.COMMAND,
+            Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE, Command.OBJECT,
+            Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
+    );
 
     private static final Map<String, Keyword> KEYWORDS = toMap(Keyword.values());
     private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS = toMap(ClusterKeyword.values());
     private static final Map<String, SentinelKeyword> SENTINEL_KEYWORDS = toMap(SentinelKeyword.values());
 
 
-    public static @NotNull Rawable parseKeyword(@NotNull ProtocolCommand command, @NotNull String keyword) {
-        String keywordName = Utils.getName(keyword);
-        Rawable knownKeyword = parseKnownKeyword(command, keywordName);
-        return knownKeyword != null ? knownKeyword : new UnknownKeyword(keywordName);
+    @Override
+    protected @Nullable Command parseCommand(@NotNull String commandName) {
+        return COMMANDS.get(commandName);
     }
 
-    private static @Nullable Rawable parseKnownKeyword(@NotNull ProtocolCommand command, @NotNull String keywordName) {
+    @Override
+    protected boolean hasKeyword(@NotNull Command command) {
+        return COMMANDS_WITH_KEYWORDS.contains(command);
+    }
+
+    @Override
+    protected @Nullable Rawable parseKeyword(@NotNull Command command, @NotNull String keywordName) {
         if (command == Command.CLUSTER) return CLUSTER_KEYWORDS.get(keywordName);
         if (command == Command.SENTINEL) return SENTINEL_KEYWORDS.get(keywordName);
         return KEYWORDS.get(keywordName);
-    }
-
-
-    private static class UnknownKeyword implements ProtocolCommand {
-        private final byte[] raw;
-
-        UnknownKeyword(@NotNull String keywordName) {
-            raw = SafeEncoder.encode(keywordName);
-        }
-
-        @Override
-        public byte[] getRaw() {
-            return raw;
-        }
     }
 }

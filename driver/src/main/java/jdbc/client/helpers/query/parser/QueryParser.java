@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
-import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.sql.SQLException;
@@ -29,13 +28,6 @@ public class QueryParser {
             Command.BRPOPLPUSH, Command.BZMPOP, Command.BZPOPMAX, Command.BZPOPMIN
     );
 
-    private static final Set<ProtocolCommand> COMMANDS_WITH_KEYWORDS = Set.of(
-            Command.ACL, Command.CLIENT, Command.CLUSTER, Command.COMMAND,
-            Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE,
-            Command.OBJECT, Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG,
-            Command.XGROUP, Command.XINFO
-    );
-
 
     public static @NotNull RedisQuery parse(@Nullable String sql) throws SQLException {
         if (sql == null) throw new SQLException("Empty query.");
@@ -43,9 +35,7 @@ public class QueryParser {
         RawQuery rawQuery = createRawQuery(tokens);
 
         CommandLine commandLine = rawQuery.commandLine;
-        ProtocolCommand command = parseCommand(commandLine.command);
-        Rawable keyword = parseKeyword(command, commandLine.params);
-        CompositeCommand compositeCommand = new CompositeCommand(command, keyword);
+        CompositeCommand compositeCommand = parseCompositeCommand(commandLine.command, commandLine.params);
 
         ColumnHintLine columnHintLine = rawQuery.columnHintLine;
         ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
@@ -55,17 +45,14 @@ public class QueryParser {
         return createQuery(compositeCommand, commandLine.params, columnHint, nodeHint);
     }
 
-    private static @NotNull ProtocolCommand parseCommand(@NotNull String commandStr) throws SQLException {
-        return CommandParser.parseCommand(commandStr);
-    }
-
-    private static @Nullable Rawable parseKeyword(@NotNull ProtocolCommand command,
-                                                  @NotNull String[] params) throws SQLException {
-        if (!COMMANDS_WITH_KEYWORDS.contains(command)) return null;
-        String keywordStr = getFirst(params);
-        if (keywordStr == null)
-            throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-        return KeywordParser.parseKeyword(command, keywordStr);
+    private static @NotNull CompositeCommand parseCompositeCommand(@NotNull String commandStr,
+                                                                   @NotNull String[] params) throws SQLException {
+        String commandName = getName(commandStr);
+        if (commandName.contains(".")) {
+            if (JsonCommandParser.accepts(commandName))
+                return new JsonCommandParser().parseCompositeCommand(commandName, params);
+        }
+        return new NativeCommandParser().parseCompositeCommand(commandName, params);
     }
 
 
