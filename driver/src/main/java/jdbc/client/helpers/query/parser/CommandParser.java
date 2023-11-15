@@ -8,9 +8,9 @@ import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static jdbc.utils.Utils.toMap;
 
 class CommandParser {
 
@@ -18,11 +18,8 @@ class CommandParser {
     }
 
 
-    private static final Map<String, Command> COMMANDS =
-            Arrays.stream(Command.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Map<String, JsonCommand> JSON_COMMANDS =
-            Arrays.stream(JsonCommand.values()).collect(Collectors.toMap(Enum::name, v -> v));
+    private static final Map<String, Command> COMMANDS = toMap(Command.values());
+    private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
 
 
     public static @NotNull ProtocolCommand parseCommand(@NotNull String command) {

@@ -12,11 +12,13 @@ import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -170,5 +172,10 @@ public class Utils {
 
     public static @NotNull String getName(@NotNull String text) {
         return toUpperCase(text);
+    }
+
+
+    public static <T extends Enum<?>> @NotNull Map<String, T> toMap(T @NotNull [] values) {
+        return Arrays.stream(values).collect(Collectors.toMap(Enum::name, v -> v));
     }
 }

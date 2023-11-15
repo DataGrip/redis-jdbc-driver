@@ -11,9 +11,9 @@ import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static jdbc.utils.Utils.toMap;
 
 class KeywordParser {
 
@@ -21,14 +21,9 @@ class KeywordParser {
     }
 
 
-    private static final Map<String, Keyword> KEYWORDS =
-            Arrays.stream(Keyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS =
-            Arrays.stream(ClusterKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Map<String, SentinelKeyword> SENTINEL_KEYWORDS =
-            Arrays.stream(SentinelKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
+    private static final Map<String, Keyword> KEYWORDS = toMap(Keyword.values());
+    private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS = toMap(ClusterKeyword.values());
+    private static final Map<String, SentinelKeyword> SENTINEL_KEYWORDS = toMap(SentinelKeyword.values());
 
 
     public static @NotNull Rawable parseKeyword(@NotNull ProtocolCommand command, @NotNull String keyword) {
