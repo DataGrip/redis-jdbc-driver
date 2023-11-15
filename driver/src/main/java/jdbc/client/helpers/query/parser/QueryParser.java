@@ -34,23 +34,36 @@ public class QueryParser {
         List<List<String>> tokens = Lexer.tokenize(sql);
         RawQuery rawQuery = createRawQuery(tokens);
 
-        CommandLine commandLine = rawQuery.commandLine;
-        CompositeCommand compositeCommand = parseCompositeCommand(commandLine.command, commandLine.params);
+        CompositeCommand compositeCommand = parseCompositeCommand(rawQuery.commandLine);
+        String[] params = rawQuery.commandLine.params;
+        ColumnHint columnHint = parseColumnHint(rawQuery.columnHintLine);
+        NodeHint nodeHint = parseNodeHint(rawQuery.nodeHintLine);
 
-        ColumnHintLine columnHintLine = rawQuery.columnHintLine;
-        ColumnHint columnHint = columnHintLine == null ? null : new ColumnHint(columnHintLine.name, columnHintLine.values);
-        NodeHintLine nodeHintLine = rawQuery.nodeHintLine;
-        NodeHint nodeHint = nodeHintLine == null || nodeHintLine.hostAndPort == null ? null : new NodeHint(nodeHintLine.hostAndPort);
-
-        return createQuery(compositeCommand, commandLine.params, columnHint, nodeHint);
+        return createQuery(compositeCommand, params, columnHint, nodeHint);
     }
 
-    private static @NotNull CompositeCommand parseCompositeCommand(@NotNull String commandStr,
-                                                                   @NotNull String[] params) throws SQLException {
-        String commandName = getName(commandStr);
+    private static @NotNull CompositeCommand parseCompositeCommand(@NotNull CommandLine commandLine) throws SQLException {
+        String commandName = getName(commandLine.command);
+        String[] params = commandLine.params;
         if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser().parseCompositeCommand(commandName, params);
         if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser().parseCompositeCommand(commandName, params);
         return new CompositeCommand(null, commandName, null);
+    }
+
+    private static @Nullable ColumnHint parseColumnHint(@Nullable ColumnHintLine columnHintLine) {
+        return columnHintLine != null ? new ColumnHint(columnHintLine.name, columnHintLine.values) : null;
+    }
+
+    private static @Nullable NodeHint parseNodeHint(@Nullable NodeHintLine nodeHintLine) {
+        if (nodeHintLine != null && nodeHintLine.hostAndPort != null) {
+            try {
+                HostAndPort hostAndPort = parseHostAndPort(nodeHintLine.hostAndPort);
+                return new NodeHint(hostAndPort);
+            }
+            catch (Exception ignored) {
+            }
+        }
+        return null;
     }
 
 
@@ -188,17 +201,11 @@ public class QueryParser {
         private static final String NODE_TOKEN = "node";
         private static final String SEPARATOR_TOKEN = "=";
 
-        public final @Nullable HostAndPort hostAndPort;
+        public final @Nullable String hostAndPort;
 
         NodeHintLine(@NotNull List<String> tokens) {
             super(tokens);
-            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect node hint tokens: %s.", tokens));
-            HostAndPort hostAndPort = null;
-            try {
-                hostAndPort = parseHostAndPort(tokens.get(3));
-            } catch (Exception ignored) {
-            }
-            this.hostAndPort = hostAndPort;
+            hostAndPort = tokens.get(3);
         }
 
         public static boolean accepts(@NotNull List<String> tokens) {
