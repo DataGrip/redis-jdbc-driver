@@ -45,8 +45,8 @@ public class QueryParser {
     private static @NotNull CompositeCommand parseCompositeCommand(@NotNull CommandLine commandLine) throws SQLException {
         String commandName = getName(commandLine.command);
         String[] params = commandLine.params;
-        if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser().parseCompositeCommand(commandName, params);
-        if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser().parseCompositeCommand(commandName, params);
+        if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser(commandName, params).parse();
+        if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser(commandName, params).parse();
         return new CompositeCommand(null, commandName, null);
     }
 

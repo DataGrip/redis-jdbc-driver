@@ -19,6 +19,9 @@ public class NativeCommandParser extends CommandParser<Command> {
             Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
     );
 
+    NativeCommandParser(@NotNull String commandName, @NotNull String[] params) {
+        super(commandName, params);
+    }
 
     @Override
     protected @Nullable Command parseCommand(@NotNull String commandName) {

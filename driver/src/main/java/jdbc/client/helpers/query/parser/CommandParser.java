@@ -12,8 +12,15 @@ import static jdbc.utils.Utils.getName;
 
 abstract class CommandParser<T extends ProtocolCommand> {
 
-    public @NotNull CompositeCommand parseCompositeCommand(@NotNull String commandName,
-                                                           @NotNull String[] params) throws SQLException {
+    private final String commandName;
+    private final String[] params;
+
+    CommandParser(@NotNull String commandName, @NotNull String[] params) {
+        this.commandName = commandName;
+        this.params = params;
+    }
+
+    public @NotNull CompositeCommand parse() throws SQLException {
         T command = parseCommand(commandName);
         if (command != null && hasKeyword(command)) {
             if (!hasKeyword(command)) return CompositeCommand.create(command);

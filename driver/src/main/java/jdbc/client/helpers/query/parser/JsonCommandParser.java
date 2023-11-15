@@ -13,6 +13,9 @@ public class JsonCommandParser extends CommandParser<JsonCommand> {
     private static final String JSON_COMMAND_PREFIX = "JSON.";
     private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
 
+    JsonCommandParser(@NotNull String commandName, @NotNull String[] params) {
+        super(commandName, params);
+    }
 
     @Override
     protected @Nullable JsonCommand parseCommand(@NotNull String commandName) {
