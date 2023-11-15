@@ -29,6 +29,7 @@ public class RedisResultHelper {
     }
 
     private static final Map<CompositeCommand, List<ResultParserWrapper>> RESULT_PARSERS = new HashMap<>() {{
+        /* --------------------------------------------- Native --------------------------------------------- */
         put(create(Command.ACL, Keyword.CAT), wrapList(STRING));
         put(create(Command.ACL, Keyword.DELUSER), wrapList(LONG));
         put(create(Command.ACL, Keyword.DRYRUN), wrapList(STRING));
@@ -314,6 +315,8 @@ public class RedisResultHelper {
         put(create(Command.ZREVRANK), wrapList(LONG));
         put(create(Command.ZSCAN), wrapList(TUPLE_SCAN_RESULT));
         put(create(Command.ZSCORE), wrapList(DOUBLE));
+        /* --------------------------------------------- RedisJSON --------------------------------------------- */
+        // TODO (stack): RedisJSON
     }};
 
     private static @NotNull ResultParser getResultParser(@NotNull RedisQuery query) {

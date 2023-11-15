@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.commands.ProtocolCommand;
+import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
 import java.util.Arrays;
@@ -20,6 +21,8 @@ class CommandParser {
     private static final Map<String, Command> COMMANDS =
             Arrays.stream(Command.values()).collect(Collectors.toMap(Enum::name, v -> v));
 
+    private static final Map<String, JsonCommand> JSON_COMMANDS =
+            Arrays.stream(JsonCommand.values()).collect(Collectors.toMap(Enum::name, v -> v));
 
 
     public static @NotNull ProtocolCommand parseCommand(@NotNull String command) {
@@ -30,6 +33,9 @@ class CommandParser {
     }
 
     private static @Nullable ProtocolCommand parseKnownCommand(@NotNull String commandName) {
+        if (commandName.contains(".")) {
+            if (commandName.startsWith("JSON.")) return JSON_COMMANDS.get(commandName);
+        }
         return COMMANDS.get(commandName);
     }
 
