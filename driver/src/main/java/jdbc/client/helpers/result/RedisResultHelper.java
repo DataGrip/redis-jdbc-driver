@@ -333,8 +333,8 @@ public class RedisResultHelper {
         // TODO (unknown): put(create(JsonCommand.MSET), wrapList(STRING));
         // TODO (parser): put(create(JsonCommand.NUMINCRBY), wrapList());
         // TODO (unknown): put(create(JsonCommand.NUMMULTBY), wrapList());
-        // TODO (parser): put(create(JsonCommand.OBJKEYS), wrapList());
-        // TODO (parser): put(create(JsonCommand.RESP), wrapList());
+        put(create(JsonCommand.OBJKEYS), wrapList(STRING_LIST));
+        put(create(JsonCommand.RESP), wrapList(OBJECT_LIST));
         put(create(JsonCommand.SET), wrapList(STRING));
         put(create(JsonCommand.STRAPPEND), wrapList(LONG));
         put(create(JsonCommand.STRLEN), wrapList(LONG));
