@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static jdbc.client.helpers.result.parser.converter.type.TypeFactory.STRING;
+import static jdbc.client.helpers.result.parser.converter.TypeFactory.STRING;
 
 public class ObjectType<T> extends ArrayList<ObjectTypeField<T>> {
 

@@ -1,6 +1,7 @@
 package jdbc.client.helpers.result.parser;
 
 import jdbc.client.helpers.result.parser.converter.ConverterFactory;
+import jdbc.client.helpers.result.parser.converter.IdentityConverter;
 import jdbc.client.helpers.result.parser.converter.ObjectConverter;
 import jdbc.client.helpers.result.parser.converter.SimpleConverter;
 import jdbc.client.helpers.result.parser.encoder.EncoderFactory;
@@ -31,7 +32,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Object, Object> getConverter() {
+        protected @NotNull IdentityConverter<Object> getConverter() {
             return ConverterFactory.OBJECT;
         }
     };
@@ -43,7 +44,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<String, String> getConverter() {
+        protected @NotNull IdentityConverter<String> getConverter() {
             return ConverterFactory.STRING;
         }
     };
@@ -55,7 +56,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Long, Long> getConverter() {
+        protected @NotNull IdentityConverter<Long> getConverter() {
             return ConverterFactory.LONG;
         }
     };
@@ -67,7 +68,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Double, Double> getConverter() {
+        protected @NotNull IdentityConverter<Double> getConverter() {
             return ConverterFactory.DOUBLE;
         }
     };
@@ -79,7 +80,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Boolean, Boolean> getConverter() {
+        protected @NotNull IdentityConverter<Boolean> getConverter() {
             return ConverterFactory.BOOLEAN;
         }
     };
@@ -91,7 +92,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<byte[], byte[]> getConverter() {
+        protected @NotNull IdentityConverter<byte[]> getConverter() {
             return ConverterFactory.BYTE_ARRAY;
         }
     };
@@ -104,7 +105,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<List<Object>, List<Object>> getConverter() {
+        protected @NotNull IdentityConverter<List<Object>> getConverter() {
             return ConverterFactory.OBJECT_LIST;
         }
     };
@@ -116,7 +117,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<List<String>, List<String>> getConverter() {
+        protected @NotNull IdentityConverter<List<String>> getConverter() {
             return ConverterFactory.STRING_LIST;
         }
     };
@@ -129,7 +130,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Object, Object> getConverter() {
+        protected @NotNull IdentityConverter<Object> getConverter() {
             return ConverterFactory.OBJECT;
         }
     };
@@ -141,7 +142,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<String, String> getConverter() {
+        protected @NotNull IdentityConverter<String> getConverter() {
             return ConverterFactory.STRING;
         }
     };

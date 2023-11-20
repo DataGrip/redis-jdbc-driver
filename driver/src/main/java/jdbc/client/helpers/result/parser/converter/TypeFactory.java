@@ -1,6 +1,5 @@
-package jdbc.client.helpers.result.parser.converter.type;
+package jdbc.client.helpers.result.parser.converter;
 
-import jdbc.client.helpers.result.parser.converter.ConverterFactory;
 import jdbc.client.structures.result.ObjectType;
 import jdbc.client.structures.result.SimpleType;
 import jdbc.types.RedisColumnTypeHelper;
