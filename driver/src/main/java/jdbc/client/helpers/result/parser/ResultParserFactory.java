@@ -21,6 +21,9 @@ import java.util.Map;
 
 public class ResultParserFactory {
 
+
+    /* --------------------------------------------- Common --------------------------------------------- */
+
     public static final ResultParser OBJECT = new ListResultParser<>() {
         @Override
         protected @NotNull ListEncoder<Object> getBuilder() {
@@ -445,6 +448,23 @@ public class ResultParserFactory {
         }
     };
 
+
+    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+
+    public static final ResultParser JSON_OBJECT = new ListResultParser<>() {
+        @Override
+        protected @NotNull ListEncoder<Object> getBuilder() {
+            return EncoderFactory.JSON_OBJECT;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<Object, Object> getConverter() {
+            return ConverterFactory.OBJECT;
+        }
+    };
+
+
+    /* ------------------------------------------------------------------------------------------ */
 
     private static abstract class ListResultParser<T, S> implements ResultParser {
         protected abstract @NotNull ListEncoder<T> getBuilder();

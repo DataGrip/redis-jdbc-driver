@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.*;
+import redis.clients.jedis.json.DefaultGsonObjectMapper;
+import redis.clients.jedis.json.JsonObjectMapper;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.util.KeyValue;
 
@@ -11,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static redis.clients.jedis.BuilderFactory.RAW_OBJECT_LIST;
 
@@ -19,6 +22,8 @@ public class EncoderFactory {
     private EncoderFactory() {
     }
 
+
+    /* --------------------------------------------- Common --------------------------------------------- */
 
     public static final ListEncoder<Object> OBJECT = new ElementListEncoder<>() {
         @Override
@@ -193,6 +198,7 @@ public class EncoderFactory {
     };
 
     public static final ListEncoder<Slowlog> SLOW_LOG = new SimpleListEncoder<>() {
+
         private final Builder<List<Slowlog>> SLOW_LOG_LIST = new Builder<>() {
             @Override
             public List<Slowlog> build(Object data) {
@@ -343,6 +349,41 @@ public class EncoderFactory {
         }
     };
 
+
+    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+
+    public static final ListEncoder<Object> JSON_OBJECT = new ElementListEncoder<>() {
+
+        private final Builder<Object> JSON_OBJECT = new Builder<>() {
+            private final JsonObjectMapper JSON_OBJECT_MAPPER = new DefaultGsonObjectMapper();
+
+            @Override
+            public Object build(Object data) {
+                return JSON_OBJECT_MAPPER.fromJson(BuilderFactory.STRING.build(data), Object.class);
+            }
+        };
+
+        private final Builder<List<Object>> JSON_OBJECT_LIST = new Builder<>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public List<Object> build(Object data) {
+                return ((List<Object>) data).stream().map(JSON_OBJECT::build).collect(Collectors.toList());
+            }
+        };
+
+        @Override
+        protected @NotNull Builder<Object> getBuilder() {
+            return JSON_OBJECT;
+        }
+
+        @Override
+        protected @NotNull Builder<List<Object>> getListBuilder() {
+            return JSON_OBJECT_LIST;
+        }
+    };
+
+
+    /* ------------------------------------------------------------------------------------------ */
 
     private static abstract class ElementListEncoder<T> extends ListEncoder<T> {
 
