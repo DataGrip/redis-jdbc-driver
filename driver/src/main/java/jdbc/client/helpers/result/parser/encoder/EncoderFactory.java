@@ -98,6 +98,31 @@ public class EncoderFactory {
     };
 
 
+    public static final ListEncoder<List<Object>> OBJECT_LIST = new ListElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<List<Object>> getBuilder() {
+            return BuilderFactory.ENCODED_OBJECT_LIST;
+        }
+
+        @Override
+        protected @NotNull Builder<List<List<Object>>> getListBuilder() {
+            return BuilderFactory.ENCODED_OBJECT_LIST_LIST;
+        }
+    };
+
+    public static final ListEncoder<List<String>> STRING_LIST = new ListElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<List<String>> getBuilder() {
+            return BuilderFactory.STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull Builder<List<List<String>>> getListBuilder() {
+            return BuilderFactory.STRING_LIST_LIST;
+        }
+    };
+
+
     public static final MapEncoder<Object> OBJECT_MAP = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, Object>> getMapBuilder() {
@@ -286,7 +311,7 @@ public class EncoderFactory {
     };
 
 
-    public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ElementListEncoder<>() {
+    public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ListElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder() {
             return BuilderFactory.KEYED_STRING_LIST;
@@ -296,16 +321,9 @@ public class EncoderFactory {
         protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder() {
             return BuilderFactory.KEYED_STRING_LIST_LIST;
         }
-
-        @Override
-        protected boolean isElementList(@NotNull Object data) {
-            if (!super.isElementList(data)) return false;
-            List<?> dataList = (List<?>) data;
-            return dataList.isEmpty() || dataList.get(0) instanceof List;
-        }
     };
 
-    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ElementListEncoder<>() {
+    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ListElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder() {
             return BuilderFactory.KEYED_TUPLE_LIST;
@@ -385,31 +403,6 @@ public class EncoderFactory {
 
     /* ------------------------------------------------------------------------------------------ */
 
-    private static abstract class ElementListEncoder<T> extends ListEncoder<T> {
-
-        protected abstract @NotNull Builder<T> getBuilder();
-        
-        protected @Nullable Builder<List<T>> getListBuilder() {
-            return null;
-        }
-
-        protected boolean isElementList(@NotNull Object data) {
-            return getListBuilder() != null && data instanceof List;
-        }
-
-        @Override
-        public @NotNull List<T> encode(@Nullable Object data) {
-            if (data == null) return Collections.singletonList(null);
-            if (isElementList(data)) return Objects.requireNonNull(getListBuilder()).build(data);
-            return Collections.singletonList(getBuilder().build(data));
-        }
-
-        @Override
-        public String toString() {
-            return String.format("List<%s>", getBuilder());
-        }
-    }
-
     private abstract static class SimpleListEncoder<T> extends ListEncoder<T> {
 
         protected abstract @NotNull Builder<List<T>> getListBuilder();
@@ -439,6 +432,40 @@ public class EncoderFactory {
         @Override
         public String toString() {
             return getMapBuilder().toString();
+        }
+    }
+
+    private static abstract class ElementListEncoder<T> extends ListEncoder<T> {
+
+        protected abstract @NotNull Builder<T> getBuilder();
+
+        protected @Nullable Builder<List<T>> getListBuilder() {
+            return null;
+        }
+
+        protected boolean isElementList(@NotNull Object data) {
+            return getListBuilder() != null && data instanceof List;
+        }
+
+        @Override
+        public @NotNull List<T> encode(@Nullable Object data) {
+            if (data == null) return Collections.singletonList(null);
+            if (isElementList(data)) return Objects.requireNonNull(getListBuilder()).build(data);
+            return Collections.singletonList(getBuilder().build(data));
+        }
+
+        @Override
+        public String toString() {
+            return String.format("List<%s>", getBuilder());
+        }
+    }
+
+    private static abstract class ListElementListEncoder<T> extends ElementListEncoder<T> {
+        @Override
+        protected boolean isElementList(@NotNull Object data) {
+            if (!super.isElementList(data)) return false;
+            List<?> dataList = (List<?>) data;
+            return dataList.isEmpty() || dataList.get(0) instanceof List;
         }
     }
 }

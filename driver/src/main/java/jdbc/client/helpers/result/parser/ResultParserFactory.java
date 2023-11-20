@@ -97,6 +97,31 @@ public class ResultParserFactory {
     };
 
 
+    public static final ResultParser OBJECT_LIST = new ListResultParser<List<Object>, List<Object>>() {
+        @Override
+        protected @NotNull ListEncoder<List<Object>> getBuilder() {
+            return EncoderFactory.OBJECT_LIST;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<List<Object>, List<Object>> getConverter() {
+            return ConverterFactory.OBJECT_LIST;
+        }
+    };
+
+    public static final ResultParser STRING_LIST = new ListResultParser<List<String>, List<String>>() {
+        @Override
+        protected @NotNull ListEncoder<List<String>> getBuilder() {
+            return EncoderFactory.STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<List<String>, List<String>> getConverter() {
+            return ConverterFactory.STRING_LIST;
+        }
+    };
+
+
     public static final ResultParser OBJECT_MAP = new MapResultParser<>() {
         @Override
         protected @NotNull MapEncoder<Object> getBuilder() {

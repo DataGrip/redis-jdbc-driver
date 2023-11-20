@@ -37,9 +37,22 @@ public class TypeFactory {
 
     public static final SimpleType<byte[]> BYTE_ARRAY = new SimpleType<>(RedisColumnTypeHelper.BINARY);
 
-    public static final SimpleType<List<?>> LIST = new SimpleType<>(RedisColumnTypeHelper.ARRAY);
+    public static final SimpleType<List<?>> LIST = new ListSimpleType<>();
 
-    public static final SimpleType<Map<String, ?>> MAP = new SimpleType<>(RedisColumnTypeHelper.MAP);
+    public static class ListSimpleType<T extends List<?>> extends SimpleType<T> {
+        public ListSimpleType() {
+            super(RedisColumnTypeHelper.ARRAY);
+        }
+    }
+
+    public static final SimpleType<Map<String, ?>> MAP = new MapSimpleType<>();
+
+    public static class MapSimpleType<T extends Map<String, ?>> extends SimpleType<T> {
+        public MapSimpleType() {
+            super(RedisColumnTypeHelper.MAP);
+        }
+    }
+
 
 
     public static final ObjectType<KeyedListElement> KEYED_STRING = new ObjectType<>() {{

@@ -61,6 +61,24 @@ public class ConverterFactory {
         }
     };
 
+    public static final IdentityConverter<List<Object>> OBJECT_LIST = new IdentityConverter<>() {
+        private final SimpleType<List<Object>> OBJECT_LIST = new TypeFactory.ListSimpleType<>();
+
+        @Override
+        public SimpleType<List<Object>> getSimpleType() {
+            return OBJECT_LIST;
+        }
+    };
+
+    public static final IdentityConverter<List<String>> STRING_LIST = new IdentityConverter<>() {
+        private final SimpleType<List<String>> STRING_LIST = new TypeFactory.ListSimpleType<>();
+
+        @Override
+        public SimpleType<List<String>> getSimpleType() {
+            return STRING_LIST;
+        }
+    };
+
     public abstract static class IdentityConverter<T> extends SimpleConverter<T, T> {
         @Override
         protected @NotNull T convertImpl(@NotNull T encoded) {
