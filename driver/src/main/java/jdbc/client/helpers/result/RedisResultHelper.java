@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 
 import java.util.HashMap;
 import java.util.List;
@@ -316,7 +317,29 @@ public class RedisResultHelper {
         put(create(Command.ZSCAN), wrapList(TUPLE_SCAN_RESULT));
         put(create(Command.ZSCORE), wrapList(DOUBLE));
         /* --------------------------------------------- RedisJSON --------------------------------------------- */
-        // TODO (stack): RedisJSON
+        put(create(JsonCommand.ARRAPPEND), wrapList(LONG));
+        put(create(JsonCommand.ARRINDEX), wrapList(LONG));
+        put(create(JsonCommand.ARRINSERT), wrapList(LONG));
+        put(create(JsonCommand.ARRLEN), wrapList(LONG));
+        put(create(JsonCommand.ARRPOP), wrapList(JSON_OBJECT));
+        put(create(JsonCommand.ARRTRIM), wrapList(LONG));
+        put(create(JsonCommand.CLEAR), wrapList(LONG));
+        // TODO (unknown keyword): put(create(JsonCommand.DEBUG /*, MEMORY */), wrapList(LONG));
+        put(create(JsonCommand.DEL), wrapList(LONG));
+        // TODO (unknown): put(create(JsonCommand.FORGET), wrapList(LONG));
+        put(create(JsonCommand.GET), wrapList(JSON_OBJECT));
+        // TODO (unknown): put(create(JsonCommand.MERGE), wrapList(STRING));
+        put(create(JsonCommand.MGET), wrapList(JSON_OBJECT));
+        // TODO (unknown): put(create(JsonCommand.MSET), wrapList(STRING));
+        // TODO (parser): put(create(JsonCommand.NUMINCRBY), wrapList());
+        // TODO (unknown): put(create(JsonCommand.NUMMULTBY), wrapList());
+        // TODO (parser): put(create(JsonCommand.OBJKEYS), wrapList());
+        // TODO (parser): put(create(JsonCommand.RESP), wrapList());
+        put(create(JsonCommand.SET), wrapList(STRING));
+        put(create(JsonCommand.STRAPPEND), wrapList(LONG));
+        put(create(JsonCommand.STRLEN), wrapList(LONG));
+        put(create(JsonCommand.TOGGLE), wrapList(BOOLEAN));
+        put(create(JsonCommand.TYPE), wrapList(STRING));
     }};
 
     private static @NotNull ResultParser getResultParser(@NotNull RedisQuery query) {
