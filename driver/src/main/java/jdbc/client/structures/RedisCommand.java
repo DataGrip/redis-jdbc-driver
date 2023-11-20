@@ -45,11 +45,11 @@ public class RedisCommand {
     }
 
 
-    public static RedisCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
+    static RedisCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
         return new RedisCommand(command, Utils.getName(command), Utils.getName(keyword));
     }
 
-    public static RedisCommand create(@NotNull ProtocolCommand command) {
+    static RedisCommand create(@NotNull ProtocolCommand command) {
         return create(command, null);
     }
 
