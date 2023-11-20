@@ -92,23 +92,23 @@ public class RedisJedisClusterClient extends RedisClientBase {
     protected synchronized Object executeImpl(@NotNull RedisQuery query) throws SQLException {
         checkSupportInClusterMode(query);
         String sampleKey = query.getSampleKey();
-        ProtocolCommand command = query.getCommand();
-        String[] params = query.getParams();
+        ProtocolCommand cmd = query.getRawCommand();
+        String[] args = query.getParams();
         if (query.isBlocking()) {
             return sampleKey != null
-                    ? jedisCluster.sendBlockingCommand(sampleKey, command, params)
-                    : jedisCluster.sendBlockingCommand(command, params);
+                    ? jedisCluster.sendBlockingCommand(sampleKey, cmd, args)
+                    : jedisCluster.sendBlockingCommand(cmd, args);
         } else {
             return sampleKey != null
-                    ? jedisCluster.sendCommand(sampleKey, command, params)
-                    : jedisCluster.sendCommand(command, params);
+                    ? jedisCluster.sendCommand(sampleKey, cmd, args)
+                    : jedisCluster.sendCommand(cmd, args);
         }
     }
 
     private static void checkSupportInClusterMode(@NotNull RedisQuery query) throws SQLException {
-        ProtocolCommand command = query.getCommand();
-        if (UNSUPPORTED_COMMANDS.contains(command))
-            throw new SQLException(String.format("Cluster mode does not support the %s command.", command));
+        ProtocolCommand rawCommand = query.getRawCommand();
+        if (UNSUPPORTED_COMMANDS.contains(rawCommand))
+            throw new SQLException(String.format("Cluster mode does not support the %s command.", rawCommand));
     }
 
 

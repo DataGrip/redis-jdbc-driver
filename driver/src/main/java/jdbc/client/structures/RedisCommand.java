@@ -1,4 +1,4 @@
-package jdbc.client.structures.query;
+package jdbc.client.structures;
 
 import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -9,14 +9,14 @@ import redis.clients.jedis.util.SafeEncoder;
 
 import java.util.Objects;
 
-public class CompositeCommand {
+public class RedisCommand {
 
     private final ProtocolCommand command;
 
     private final String commandName;
     private final String keywordName;
 
-    public CompositeCommand(@Nullable ProtocolCommand command, @NotNull String commandName, @Nullable String keywordName) {
+    public RedisCommand(@Nullable ProtocolCommand command, @NotNull String commandName, @Nullable String keywordName) {
         this.command = command != null ? command : new UnknownCommand(commandName);
         this.commandName = commandName;
         this.keywordName = keywordName;
@@ -24,8 +24,8 @@ public class CompositeCommand {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof CompositeCommand)) return false;
-        CompositeCommand c = (CompositeCommand) o;
+        if (!(o instanceof RedisCommand)) return false;
+        RedisCommand c = (RedisCommand) o;
         return Objects.equals(c.command, command) && Objects.equals(c.keywordName, keywordName);
     }
 
@@ -35,7 +35,7 @@ public class CompositeCommand {
     }
 
     @NotNull
-    public ProtocolCommand getCommand() {
+    public ProtocolCommand getRawCommand() {
         return command;
     }
 
@@ -45,11 +45,11 @@ public class CompositeCommand {
     }
 
 
-    public static CompositeCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
-        return new CompositeCommand(command, Utils.getName(command), Utils.getName(keyword));
+    public static RedisCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
+        return new RedisCommand(command, Utils.getName(command), Utils.getName(keyword));
     }
 
-    public static CompositeCommand create(@NotNull ProtocolCommand command) {
+    public static RedisCommand create(@NotNull ProtocolCommand command) {
         return create(command, null);
     }
 

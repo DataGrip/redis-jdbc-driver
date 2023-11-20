@@ -1,5 +1,6 @@
 package jdbc.utils;
 
+import jdbc.client.structures.RedisCommand;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,6 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
-import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
 import java.sql.SQLException;
@@ -154,9 +154,8 @@ public class Utils {
     }
 
 
-    public static @NotNull String getColumnTitle(@NotNull ProtocolCommand command) {
-        String name = Utils.getName(command);
-        String lowerName = toLowerCase(name);
+    public static @NotNull String getColumnTitle(@NotNull RedisCommand command) {
+        String lowerName = toLowerCase(command.toString());
         if (lowerName.equals("zscore") || lowerName.equals("zmscore")) return "score"; // for consistency with ObjectType<Tuple>
         return lowerName;
     }

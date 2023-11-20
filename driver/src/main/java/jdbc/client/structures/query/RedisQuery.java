@@ -1,5 +1,6 @@
 package jdbc.client.structures.query;
 
+import jdbc.client.structures.RedisCommand;
 import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class RedisQuery {
 
-    private final CompositeCommand compositeCommand;
+    private final RedisCommand command;
     private final String[] params;
     private Set<String> paramsSet;
 
@@ -21,12 +22,12 @@ public class RedisQuery {
 
     private final boolean isBlocking;
 
-    public RedisQuery(@NotNull CompositeCommand compositeCommand,
+    public RedisQuery(@NotNull RedisCommand command,
                       @NotNull String[] params,
                       @Nullable ColumnHint columnHint,
                       @Nullable NodeHint nodeHint,
                       boolean isBlocking) {
-        this.compositeCommand = compositeCommand;
+        this.command = command;
         this.params = params;
         this.columnHint = columnHint;
         this.nodeHint = nodeHint;
@@ -34,13 +35,13 @@ public class RedisQuery {
     }
 
     @NotNull
-    public CompositeCommand getCompositeCommand() {
-        return compositeCommand;
+    public RedisCommand getCommand() {
+        return command;
     }
 
     @NotNull
-    public ProtocolCommand getCommand() {
-        return compositeCommand.getCommand();
+    public ProtocolCommand getRawCommand() {
+        return command.getRawCommand();
     }
 
     @NotNull

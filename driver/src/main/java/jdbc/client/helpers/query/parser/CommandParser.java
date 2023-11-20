@@ -1,6 +1,6 @@
 package jdbc.client.helpers.query.parser;
 
-import jdbc.client.structures.query.CompositeCommand;
+import jdbc.client.structures.RedisCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.commands.ProtocolCommand;
@@ -20,16 +20,16 @@ abstract class CommandParser<T extends ProtocolCommand> {
         this.params = params;
     }
 
-    public @NotNull CompositeCommand parse() throws SQLException {
+    public @NotNull RedisCommand parse() throws SQLException {
         T command = parseCommand(commandName);
         if (command != null && hasKeyword(command)) {
-            if (!hasKeyword(command)) return CompositeCommand.create(command);
+            if (!hasKeyword(command)) return RedisCommand.create(command);
             String keywordName = getKeywordName(params);
             if (keywordName == null)
                 throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-            return new CompositeCommand(command, commandName, keywordName);
+            return new RedisCommand(command, commandName, keywordName);
         }
-        return new CompositeCommand(command, commandName, null);
+        return new RedisCommand(command, commandName, null);
     }
 
     protected abstract @Nullable T parseCommand(@NotNull String commandName);

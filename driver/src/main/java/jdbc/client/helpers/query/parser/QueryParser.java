@@ -1,5 +1,6 @@
 package jdbc.client.helpers.query.parser;
 
+import jdbc.client.structures.RedisCommand;
 import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,20 +35,20 @@ public class QueryParser {
         List<List<String>> tokens = Lexer.tokenize(sql);
         RawQuery rawQuery = createRawQuery(tokens);
 
-        CompositeCommand compositeCommand = parseCompositeCommand(rawQuery.commandLine);
+        RedisCommand command = parseCommand(rawQuery.commandLine);
         String[] params = rawQuery.commandLine.params;
         ColumnHint columnHint = parseColumnHint(rawQuery.columnHintLine);
         NodeHint nodeHint = parseNodeHint(rawQuery.nodeHintLine);
 
-        return createQuery(compositeCommand, params, columnHint, nodeHint);
+        return createQuery(command, params, columnHint, nodeHint);
     }
 
-    private static @NotNull CompositeCommand parseCompositeCommand(@NotNull CommandLine commandLine) throws SQLException {
+    private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine) throws SQLException {
         String commandName = getName(commandLine.command);
         String[] params = commandLine.params;
         if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser(commandName, params).parse();
         if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser(commandName, params).parse();
-        return new CompositeCommand(null, commandName, null);
+        return new RedisCommand(null, commandName, null);
     }
 
     private static @Nullable ColumnHint parseColumnHint(@Nullable ColumnHintLine columnHintLine) {
@@ -68,31 +69,31 @@ public class QueryParser {
 
 
     // TODO (stack): refactor
-    private static @NotNull RedisQuery createQuery(@NotNull CompositeCommand compositeCommand,
+    private static @NotNull RedisQuery createQuery(@NotNull RedisCommand command,
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
-        ProtocolCommand command = compositeCommand.getCommand();
-        boolean isBlocking = BLOCKING_COMMANDS.contains(command);
+        ProtocolCommand rawCommand = command.getRawCommand();
+        boolean isBlocking = BLOCKING_COMMANDS.contains(rawCommand);
 
         // set databases query
-        if (command == Command.SELECT && params.length == 1) {
+        if (rawCommand == Command.SELECT && params.length == 1) {
             int dbIndex = parseSqlDbIndex(getFirst(params));
-            return new RedisSetDatabaseQuery(compositeCommand, dbIndex, columnHint);
+            return new RedisSetDatabaseQuery(command, dbIndex, columnHint);
         }
 
         // keys pattern queries
-        if (command == Command.KEYS) {
+        if (rawCommand == Command.KEYS) {
             String pattern = getFirst(params);
-            return new RedisKeyPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+            return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
         }
-        if (command == Command.SCAN) {
+        if (rawCommand == Command.SCAN) {
             Integer matchIndex = getIndex(params, p -> Keyword.MATCH.name().equalsIgnoreCase(p));
             String pattern = matchIndex == null || matchIndex == params.length - 1 ? null : params[matchIndex + 1];
-            return new RedisKeyPatternQuery(compositeCommand, params, pattern, columnHint, nodeHint, isBlocking);
+            return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
         }
 
-        return new RedisQuery(compositeCommand, params, columnHint, nodeHint, isBlocking);
+        return new RedisQuery(command, params, columnHint, nodeHint, isBlocking);
     }
 
 

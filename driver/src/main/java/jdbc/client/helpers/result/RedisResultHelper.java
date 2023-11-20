@@ -2,7 +2,7 @@ package jdbc.client.helpers.result;
 
 import jdbc.client.helpers.result.parser.ResultParser;
 import jdbc.client.helpers.result.parser.ResultParserWrapper;
-import jdbc.client.structures.query.CompositeCommand;
+import jdbc.client.structures.RedisCommand;
 import jdbc.client.structures.query.RedisQuery;
 import jdbc.client.structures.result.RedisResult;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
 import static jdbc.client.helpers.result.parser.ResultParserFactory.*;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrap;
 import static jdbc.client.helpers.result.parser.ResultParserWrapper.wrapList;
-import static jdbc.client.structures.query.CompositeCommand.create;
+import static jdbc.client.structures.RedisCommand.create;
 import static jdbc.utils.Utils.length;
 import static jdbc.utils.Utils.param;
 
@@ -29,7 +29,7 @@ public class RedisResultHelper {
     private RedisResultHelper() {
     }
 
-    private static final Map<CompositeCommand, List<ResultParserWrapper>> RESULT_PARSERS = new HashMap<>() {{
+    private static final Map<RedisCommand, List<ResultParserWrapper>> RESULT_PARSERS = new HashMap<>() {{
         /* --------------------------------------------- Native --------------------------------------------- */
         put(create(Command.ACL, Keyword.CAT), wrapList(STRING));
         put(create(Command.ACL, Keyword.DELUSER), wrapList(LONG));
@@ -343,7 +343,7 @@ public class RedisResultHelper {
     }};
 
     private static @NotNull ResultParser getResultParser(@NotNull RedisQuery query) {
-        List<ResultParserWrapper> wrappers = RESULT_PARSERS.get(query.getCompositeCommand());
+        List<ResultParserWrapper> wrappers = RESULT_PARSERS.get(query.getCommand());
         if (wrappers != null) {
             Optional<ResultParserWrapper> wrapper = wrappers.stream().filter(p -> p.isApplicable(query)).findFirst();
             if (wrapper.isPresent()) return wrapper.get().getResultParser();
