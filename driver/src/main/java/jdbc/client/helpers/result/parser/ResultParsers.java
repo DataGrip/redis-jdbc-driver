@@ -68,7 +68,7 @@ public class ResultParsers {
         // CRP_MAP.put(RedisCommands.CLIENT_GETREDIR,         LONG);
         CRP_MAP.put(RedisCommands.CLIENT_ID,               LONG);
         CRP_MAP.put(RedisCommands.CLIENT_INFO,             STRING);
-        CRP_MAP.put(RedisCommands.CLIENT_KILL,             LONG, wrap(STRING, length(3)));
+        CRP_MAP.put(RedisCommands.CLIENT_KILL,             LONG, wrap(STRING, length(2)));
         CRP_MAP.put(RedisCommands.CLIENT_LIST,             STRING);
         // CRP_MAP.put(RedisCommands.CLIENT_NO-EVICT,         ???);
         CRP_MAP.put(RedisCommands.CLIENT_PAUSE,            STRING);
@@ -284,7 +284,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.XINFO_GROUPS,            STREAM_GROUP_INFO);
         CRP_MAP.put(RedisCommands.XINFO_STREAM,            STREAM_INFO, wrap(STREAM_INFO_FULL, contains(Keyword.FULL)));
         CRP_MAP.put(RedisCommands.XLEN,                    LONG);
-        CRP_MAP.put(RedisCommands.XPENDING,                STREAM_PENDING_ENTRY, wrap(STREAM_PENDING_SUMMARY, length(3)));
+        CRP_MAP.put(RedisCommands.XPENDING,                STREAM_PENDING_ENTRY, wrap(STREAM_PENDING_SUMMARY, length(2)));
         CRP_MAP.put(RedisCommands.XRANGE,                  STREAM_ENTRY);
         CRP_MAP.put(RedisCommands.XREAD,                   STREAM_READ);
         CRP_MAP.put(RedisCommands.XREADGROUP,              STREAM_READ);

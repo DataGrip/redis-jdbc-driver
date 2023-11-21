@@ -44,19 +44,6 @@ public class Utils {
     }
 
 
-    public static @Nullable String getFirst(@NotNull String[] elements) {
-        return elements.length > 0 ? elements[0] : null;
-    }
-
-
-    public static @Nullable Integer getIndex(@NotNull String[] elements, @NotNull Predicate<String> predicate) {
-        for (int i = 0; i < elements.length; ++i) {
-            if (predicate.test(elements[i])) return i;
-        }
-        return null;
-    }
-
-
     public static String getString(Map<?, ?> map, String name, String defaultValue) {
         return getObject(map, name, defaultValue, Object::toString);
     }
@@ -147,7 +134,7 @@ public class Utils {
     }
 
     public static @NotNull Predicate<Params> length(int length) {
-        return params -> 1 /* command */ + params.getLength() == length;
+        return params -> params.getLength() == length;
     }
 
 
