@@ -16,53 +16,46 @@ public class RedisQuery {
     private final boolean isBlocking;
 
     public RedisQuery(@NotNull RedisCommand command,
-                      @NotNull String[] params,
+                      @NotNull Params params,
                       @Nullable ColumnHint columnHint,
                       @Nullable NodeHint nodeHint,
                       boolean isBlocking) {
         this.command = command;
-        this.params = new Params(params);
+        this.params = params;
         this.columnHint = columnHint;
         this.nodeHint = nodeHint;
         this.isBlocking = isBlocking;
     }
 
-    @NotNull
-    public RedisCommand getCommand() {
+    public @Nullable String getSampleKey() {
+        return null;
+    }
+
+    public @NotNull RedisCommand getCommand() {
         return command;
     }
 
-    @NotNull
-    public ProtocolCommand getRawCommand() {
+    public @NotNull ProtocolCommand getRawCommand() {
         return command.getRawCommand();
     }
 
-    @NotNull
-    public Params getParams() {
+    public @NotNull Params getParams() {
         return params;
     }
 
-    @NotNull
-    public String[] getRawParams() {
+    public @NotNull String[] getRawParams() {
         return params.getRawParams();
     }
 
-    @Nullable
-    public ColumnHint getColumnHint() {
+    public @Nullable ColumnHint getColumnHint() {
         return columnHint;
     }
 
-    @Nullable
-    public NodeHint getNodeHint() {
+    public @Nullable NodeHint getNodeHint() {
         return nodeHint;
     }
 
     public boolean isBlocking() {
         return isBlocking;
-    }
-
-    @Nullable
-    public String getSampleKey() {
-        return null;
     }
 }

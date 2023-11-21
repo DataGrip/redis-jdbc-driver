@@ -1,21 +1,21 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.structures.RedisCommand;
+import jdbc.client.structures.query.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.sql.SQLException;
 
-import static jdbc.utils.Utils.getFirst;
 import static jdbc.utils.Utils.getName;
 
 abstract class CommandParser<T extends ProtocolCommand> {
 
     private final String commandName;
-    private final String[] params;
+    private final Params params;
 
-    CommandParser(@NotNull String commandName, @NotNull String[] params) {
+    CommandParser(@NotNull String commandName, @NotNull Params params) {
         this.commandName = commandName;
         this.params = params;
     }
@@ -36,8 +36,8 @@ abstract class CommandParser<T extends ProtocolCommand> {
     protected abstract boolean hasKeyword(@NotNull T command);
 
     @Nullable
-    private static String getKeywordName(@NotNull String[] params) {
-        String firstParam = getFirst(params);
+    private static String getKeywordName(@NotNull Params params) {
+        String firstParam = params.getFirst();
         return firstParam != null ? getName(firstParam) : null;
     }
 }

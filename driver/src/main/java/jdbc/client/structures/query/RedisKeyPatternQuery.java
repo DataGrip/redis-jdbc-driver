@@ -9,7 +9,7 @@ public class RedisKeyPatternQuery extends RedisQuery {
     private final String keyPattern;
 
     public RedisKeyPatternQuery(@NotNull RedisCommand command,
-                                @NotNull String[] params,
+                                @NotNull Params params,
                                 @Nullable String keyPattern,
                                 @Nullable ColumnHint columnHint,
                                 @Nullable NodeHint nodeHint,
@@ -18,14 +18,12 @@ public class RedisKeyPatternQuery extends RedisQuery {
         this.keyPattern = keyPattern;
     }
 
-    @Nullable
-    public String getKeyPattern() {
+    public @Nullable String getKeyPattern() {
         return keyPattern;
     }
 
-    @Nullable
     @Override
-    public String getSampleKey() {
+    public @Nullable String getSampleKey() {
         return keyPattern;
     }
 }

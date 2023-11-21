@@ -9,9 +9,12 @@ public class RedisSetDatabaseQuery extends RedisQuery {
     private final int dbIndex;
 
     public RedisSetDatabaseQuery(@NotNull RedisCommand command,
+                                 @NotNull Params params,
                                  int dbIndex,
-                                 @Nullable ColumnHint columnHint) {
-        super(command, new String[]{Integer.toString(dbIndex)}, columnHint, null, false);
+                                 @Nullable ColumnHint columnHint,
+                                 @Nullable NodeHint nodeHint,
+                                 boolean isBlocking) {
+        super(command, params, columnHint, nodeHint, isBlocking);
         this.dbIndex = dbIndex;
     }
 

@@ -48,9 +48,6 @@ public class Utils {
         return elements.length > 0 ? elements[0] : null;
     }
 
-    public static @Nullable String getLast(@NotNull String[] elements) {
-        return elements.length > 0 ? elements[elements.length - 1] : null;
-    }
 
     public static @Nullable Integer getIndex(@NotNull String[] elements, @NotNull Predicate<String> predicate) {
         for (int i = 0; i < elements.length; ++i) {

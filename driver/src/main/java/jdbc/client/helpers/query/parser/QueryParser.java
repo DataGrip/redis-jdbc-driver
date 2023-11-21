@@ -34,17 +34,20 @@ public class QueryParser {
         List<List<String>> tokens = Lexer.tokenize(sql);
         RawQuery rawQuery = createRawQuery(tokens);
 
-        RedisCommand command = parseCommand(rawQuery.commandLine);
-        String[] params = rawQuery.commandLine.params;
+        Params params = parseParams(rawQuery.commandLine);
+        RedisCommand command = parseCommand(rawQuery.commandLine, params);
         ColumnHint columnHint = parseColumnHint(rawQuery.columnHintLine);
         NodeHint nodeHint = parseNodeHint(rawQuery.nodeHintLine);
 
         return createQuery(command, params, columnHint, nodeHint);
     }
 
-    private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine) throws SQLException {
+    private static @NotNull Params parseParams(@NotNull CommandLine commandLine) {
+        return new Params(commandLine.params);
+    }
+
+    private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine, @NotNull Params params) throws SQLException {
         String commandName = getName(commandLine.command);
-        String[] params = commandLine.params;
         if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser(commandName, params).parse();
         if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser(commandName, params).parse();
         return new RedisCommand(null, commandName, null);
@@ -69,25 +72,24 @@ public class QueryParser {
 
     // TODO (stack): refactor
     private static @NotNull RedisQuery createQuery(@NotNull RedisCommand command,
-                                                   @NotNull String[] params,
+                                                   @NotNull Params params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
         boolean isBlocking = BLOCKING_COMMANDS.contains(command);
 
         // set databases query
-        if (RedisCommands.SELECT.equals(command) && params.length == 1) {
-            int dbIndex = parseSqlDbIndex(getFirst(params));
-            return new RedisSetDatabaseQuery(command, dbIndex, columnHint);
+        if (RedisCommands.SELECT.equals(command) && params.getLength() == 1) {
+            int dbIndex = parseSqlDbIndex(params.getFirst());
+            return new RedisSetDatabaseQuery(command, params, dbIndex, columnHint, nodeHint, isBlocking);
         }
 
         // keys pattern queries
         if (RedisCommands.KEYS.equals(command)) {
-            String pattern = getFirst(params);
+            String pattern = params.getFirst();
             return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
         }
         if (RedisCommands.SCAN.equals(command)) {
-            Integer matchIndex = getIndex(params, p -> Keyword.MATCH.name().equalsIgnoreCase(p));
-            String pattern = matchIndex == null || matchIndex == params.length - 1 ? null : params[matchIndex + 1];
+            String pattern = params.getNext(Keyword.MATCH);
             return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
         }
 

@@ -1,5 +1,6 @@
 package jdbc.client.helpers.query.parser;
 
+import jdbc.client.structures.query.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
@@ -19,7 +20,7 @@ public class NativeCommandParser extends CommandParser<Command> {
             Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
     );
 
-    NativeCommandParser(@NotNull String commandName, @NotNull String[] params) {
+    NativeCommandParser(@NotNull String commandName, @NotNull Params params) {
         super(commandName, params);
     }
 
