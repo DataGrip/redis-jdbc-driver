@@ -4,13 +4,14 @@ import jdbc.client.RedisMode;
 import jdbc.client.impl.RedisClientBase;
 import jdbc.client.impl.RedisJedisURIBase.CompleteHostAndPortMapper;
 import jdbc.client.impl.standalone.RedisJedisClient;
+import jdbc.client.structures.RedisCommand;
+import jdbc.client.structures.RedisCommands;
 import jdbc.client.structures.query.NodeHint;
 import jdbc.client.structures.query.RedisKeyPatternQuery;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.*;
-import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -23,7 +24,7 @@ import java.util.Set;
 
 public class RedisJedisClusterClient extends RedisClientBase {
 
-    private static final Set<ProtocolCommand> UNSUPPORTED_COMMANDS = Set.of(Command.DBSIZE, Command.WAIT);
+    private static final Set<RedisCommand> UNSUPPORTED_COMMANDS = Set.of(RedisCommands.DBSIZE, RedisCommands.WAIT);
 
 
     private final JedisCluster jedisCluster;
@@ -106,9 +107,9 @@ public class RedisJedisClusterClient extends RedisClientBase {
     }
 
     private static void checkSupportInClusterMode(@NotNull RedisQuery query) throws SQLException {
-        ProtocolCommand rawCommand = query.getRawCommand();
-        if (UNSUPPORTED_COMMANDS.contains(rawCommand))
-            throw new SQLException(String.format("Cluster mode does not support the %s command.", rawCommand));
+        RedisCommand command = query.getCommand();
+        if (UNSUPPORTED_COMMANDS.contains(command))
+            throw new SQLException(String.format("Cluster mode does not support the %s command.", command));
     }
 
 

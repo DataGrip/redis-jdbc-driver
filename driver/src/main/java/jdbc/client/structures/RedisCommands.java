@@ -214,6 +214,7 @@ public class RedisCommands {
     public static final RedisCommand SCRIPT_LOAD             = create(Command.SCRIPT, Keyword.LOAD);
     public static final RedisCommand SDIFF                   = create(Command.SDIFF);
     public static final RedisCommand SDIFFSTORE              = create(Command.SDIFFSTORE);
+    public static final RedisCommand SELECT                  = create(Command.SELECT); // TODO: result parser stub
     public static final RedisCommand SET                     = create(Command.SET);
     public static final RedisCommand SETBIT                  = create(Command.SETBIT);
     public static final RedisCommand SETEX                   = create(Command.SETEX);

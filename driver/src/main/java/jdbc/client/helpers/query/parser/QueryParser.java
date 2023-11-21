@@ -1,13 +1,12 @@
 package jdbc.client.helpers.query.parser;
 
 import jdbc.client.structures.RedisCommand;
+import jdbc.client.structures.RedisCommands;
 import jdbc.client.structures.query.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
-import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,9 +23,9 @@ public class QueryParser {
     }
 
 
-    private static final Set<ProtocolCommand> BLOCKING_COMMANDS = Set.of(
-            Command.BLMOVE, Command.BLMPOP, Command.BLPOP, Command.BRPOP,
-            Command.BRPOPLPUSH, Command.BZMPOP, Command.BZPOPMAX, Command.BZPOPMIN
+    private static final Set<RedisCommand> BLOCKING_COMMANDS = Set.of(
+            RedisCommands.BLMOVE, RedisCommands.BLMPOP, RedisCommands.BLPOP, RedisCommands.BRPOP,
+            RedisCommands.BRPOPLPUSH, RedisCommands.BZMPOP, RedisCommands.BZPOPMAX, RedisCommands.BZPOPMIN
     );
 
 
@@ -73,21 +72,20 @@ public class QueryParser {
                                                    @NotNull String[] params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
-        ProtocolCommand rawCommand = command.getRawCommand();
-        boolean isBlocking = BLOCKING_COMMANDS.contains(rawCommand);
+        boolean isBlocking = BLOCKING_COMMANDS.contains(command);
 
         // set databases query
-        if (rawCommand == Command.SELECT && params.length == 1) {
+        if (RedisCommands.SELECT.equals(command) && params.length == 1) {
             int dbIndex = parseSqlDbIndex(getFirst(params));
             return new RedisSetDatabaseQuery(command, dbIndex, columnHint);
         }
 
         // keys pattern queries
-        if (rawCommand == Command.KEYS) {
+        if (RedisCommands.KEYS.equals(command)) {
             String pattern = getFirst(params);
             return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
         }
-        if (rawCommand == Command.SCAN) {
+        if (RedisCommands.SCAN.equals(command)) {
             Integer matchIndex = getIndex(params, p -> Keyword.MATCH.name().equalsIgnoreCase(p));
             String pattern = matchIndex == null || matchIndex == params.length - 1 ? null : params[matchIndex + 1];
             return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
