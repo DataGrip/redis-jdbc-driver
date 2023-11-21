@@ -11,7 +11,6 @@ import static jdbc.utils.Utils.toMap;
 
 public class JsonCommandParser extends CommandParser<JsonCommand> {
 
-    private static final String JSON_COMMAND_PREFIX = "JSON.";
     private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
 
     JsonCommandParser(@NotNull String commandName, @NotNull Params params) {
@@ -28,8 +27,7 @@ public class JsonCommandParser extends CommandParser<JsonCommand> {
         return command == JsonCommand.DEBUG;
     }
 
-
     public static boolean accepts(@NotNull String commandName) {
-        return commandName.startsWith(JSON_COMMAND_PREFIX);
+        return commandName.startsWith("JSON.");
     }
 }
