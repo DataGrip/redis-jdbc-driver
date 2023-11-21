@@ -11,7 +11,6 @@ import redis.clients.jedis.Protocol.Keyword;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,12 +20,6 @@ public class QueryParser {
 
     private QueryParser() {
     }
-
-
-    private static final Set<RedisCommand> BLOCKING_COMMANDS = Set.of(
-            RedisCommands.BLMOVE, RedisCommands.BLMPOP, RedisCommands.BLPOP, RedisCommands.BRPOP,
-            RedisCommands.BRPOPLPUSH, RedisCommands.BZMPOP, RedisCommands.BZPOPMAX, RedisCommands.BZPOPMIN
-    );
 
 
     public static @NotNull RedisQuery parse(@Nullable String sql) throws SQLException {
@@ -70,12 +63,11 @@ public class QueryParser {
     }
 
 
-    // TODO (stack): refactor
     private static @NotNull RedisQuery createQuery(@NotNull RedisCommand command,
                                                    @NotNull Params params,
                                                    @Nullable ColumnHint columnHint,
                                                    @Nullable NodeHint nodeHint) throws SQLException {
-        boolean isBlocking = BLOCKING_COMMANDS.contains(command);
+        boolean isBlocking = QueryAnalyzer.isBlocking(command);
 
         // set databases query
         if (RedisCommands.SELECT.equals(command) && params.getLength() == 1) {
