@@ -1,6 +1,6 @@
 package jdbc.client.structures.result;
 
-import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.query.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,21 +26,21 @@ public class ObjectType<T> extends ArrayList<ObjectTypeField<T>> {
     public <S> void add(@NotNull String name,
                         @NotNull SimpleType<S> simpleType,
                         @NotNull Function<T, S> getter,
-                        @Nullable Predicate<RedisQuery> isPresent) {
+                        @Nullable Predicate<Params> isPresent) {
         add(new ObjectTypeField<>(name, simpleType, getter, isPresent));
     }
 
     public <S> void add(@NotNull String name,
                         @NotNull SimpleType<S> simpleType,
                         @NotNull Function<T, S> getter) {
-        add(name, simpleType, getter, (Predicate<RedisQuery>) null);
+        add(name, simpleType, getter, (Predicate<Params>) null);
     }
 
     public <S, R> void add(@NotNull String name,
                            @NotNull SimpleType<S> simpleType,
                            @NotNull Function<T, R> getter,
                            @NotNull Function<R, S> converter,
-                           @Nullable Predicate<RedisQuery> isPresent) {
+                           @Nullable Predicate<Params> isPresent) {
         add(name, simpleType, converter.compose(getter), isPresent);
     }
 

@@ -36,7 +36,7 @@ public class RedisJedisClient extends RedisClientBase {
     @Override
     protected synchronized Object executeImpl(@NotNull RedisQuery query) {
         ProtocolCommand cmd = query.getRawCommand();
-        String[] args = query.getParams();
+        String[] args = query.getRawParams();
         return query.isBlocking()
                 ? jedis.sendBlockingCommand(cmd, args)
                 : jedis.sendCommand(cmd, args);

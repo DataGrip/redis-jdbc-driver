@@ -1,7 +1,7 @@
 package jdbc.utils;
 
 import jdbc.client.structures.RedisCommand;
-import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.structures.query.Params;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,12 +145,12 @@ public class Utils {
     }
 
 
-    public static @NotNull Predicate<RedisQuery> param(@NotNull Keyword keyword) {
-        return q -> q.containsParam(keyword);
+    public static @NotNull Predicate<Params> contains(@NotNull Keyword keyword) {
+        return params -> params.contains(keyword);
     }
 
-    public static @NotNull Predicate<RedisQuery> length(int length) {
-        return q -> 1 /* command */ + q.getParams().length == length;
+    public static @NotNull Predicate<Params> length(int length) {
+        return params -> 1 /* command */ + params.getLength() == length;
     }
 
 

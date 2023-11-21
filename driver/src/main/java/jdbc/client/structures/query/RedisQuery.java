@@ -1,21 +1,14 @@
 package jdbc.client.structures.query;
 
 import jdbc.client.structures.RedisCommand;
-import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.commands.ProtocolCommand;
-
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RedisQuery {
 
     private final RedisCommand command;
-    private final String[] params;
-    private Set<String> paramsSet;
+    private final Params params;
 
     private final ColumnHint columnHint;
     private final NodeHint nodeHint;
@@ -28,7 +21,7 @@ public class RedisQuery {
                       @Nullable NodeHint nodeHint,
                       boolean isBlocking) {
         this.command = command;
-        this.params = params;
+        this.params = new Params(params);
         this.columnHint = columnHint;
         this.nodeHint = nodeHint;
         this.isBlocking = isBlocking;
@@ -45,8 +38,13 @@ public class RedisQuery {
     }
 
     @NotNull
-    public String[] getParams() {
+    public Params getParams() {
         return params;
+    }
+
+    @NotNull
+    public String[] getRawParams() {
+        return params.getRawParams();
     }
 
     @Nullable
@@ -66,12 +64,5 @@ public class RedisQuery {
     @Nullable
     public String getSampleKey() {
         return null;
-    }
-
-    public boolean containsParam(@NotNull Keyword paramKeyword) {
-        if (paramsSet == null) {
-            paramsSet = Arrays.stream(params).map(Utils::toUpperCase).collect(Collectors.toSet());
-        }
-        return paramsSet.contains(paramKeyword.name());
     }
 }

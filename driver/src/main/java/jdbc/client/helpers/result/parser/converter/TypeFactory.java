@@ -3,6 +3,7 @@ package jdbc.client.helpers.result.parser.converter;
 import jdbc.client.structures.result.ObjectType;
 import jdbc.client.structures.result.SimpleType;
 import jdbc.types.RedisColumnTypeHelper;
+import jdbc.utils.Utils;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.Protocol;
@@ -13,8 +14,6 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static jdbc.utils.Utils.param;
 
 public class TypeFactory {
 
@@ -77,9 +76,9 @@ public class TypeFactory {
 
     public static final ObjectType<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectType<>() {{
         add("member", STRING, GeoRadiusResponse::getMemberByString);
-        add("distance", DOUBLE, GeoRadiusResponse::getDistance, param(Protocol.Keyword.WITHDIST));
-        add("coordinate", MAP, GeoRadiusResponse::getCoordinate, ConverterFactory.GEO_COORDINATE::convert, param(Protocol.Keyword.WITHCOORD));
-        add("raw-score", LONG, GeoRadiusResponse::getRawScore, param(Protocol.Keyword.WITHHASH));
+        add("distance", DOUBLE, GeoRadiusResponse::getDistance, Utils.contains(Protocol.Keyword.WITHDIST));
+        add("coordinate", MAP, GeoRadiusResponse::getCoordinate, ConverterFactory.GEO_COORDINATE::convert, Utils.contains(Protocol.Keyword.WITHCOORD));
+        add("raw-score", LONG, GeoRadiusResponse::getRawScore, Utils.contains(Protocol.Keyword.WITHHASH));
     }};
 
     public static final ObjectType<Module> MODULE = new ObjectType<>() {{
@@ -133,7 +132,7 @@ public class TypeFactory {
         add("library-name", STRING, LibraryInfo::getLibraryName);
         add("engine", STRING, LibraryInfo::getEngine);
         add("functions", LIST, LibraryInfo::getFunctions);
-        add("library-code", STRING, LibraryInfo::getLibraryCode, param(Protocol.Keyword.WITHCODE));
+        add("library-code", STRING, LibraryInfo::getLibraryCode, Utils.contains(Protocol.Keyword.WITHCODE));
     }};
 
     public static final ObjectType<Slowlog> SLOW_LOG = new ObjectType<>() {{

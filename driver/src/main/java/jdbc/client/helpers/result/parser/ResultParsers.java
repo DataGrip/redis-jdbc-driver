@@ -2,6 +2,7 @@ package jdbc.client.helpers.result.parser;
 
 import jdbc.client.structures.RedisCommand;
 import jdbc.client.structures.RedisCommands;
+import jdbc.client.structures.query.Params;
 import jdbc.client.structures.query.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Protocol.Keyword;
@@ -11,8 +12,8 @@ import java.util.function.Predicate;
 
 import static jdbc.client.helpers.result.parser.ResultParserFactory.*;
 import static jdbc.client.helpers.result.parser.ResultParsers.ResultParserWrapper.wrap;
+import static jdbc.utils.Utils.contains;
 import static jdbc.utils.Utils.length;
-import static jdbc.utils.Utils.param;
 
 public class ResultParsers {
 
@@ -26,7 +27,7 @@ public class ResultParsers {
 
     public static @NotNull ResultParser get(@NotNull RedisQuery query) {
         CommandResultParsers commandResultParsers = CRP_MAP.get(query.getCommand());
-        return commandResultParsers != null ? commandResultParsers.get(query) : DEFAULT_RESULT_PARSER;
+        return commandResultParsers != null ? commandResultParsers.get(query.getParams()) : DEFAULT_RESULT_PARSER;
     }
     
     static {
@@ -142,7 +143,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.HINCRBYFLOAT,            DOUBLE);
         CRP_MAP.put(RedisCommands.HKEYS,                   STRING);
         CRP_MAP.put(RedisCommands.HLEN,                    LONG);
-        CRP_MAP.put(RedisCommands.HRANDFIELD,              STRING, wrap(STRING_MAP, param(Keyword.WITHVALUES)));
+        CRP_MAP.put(RedisCommands.HRANDFIELD,              STRING, wrap(STRING_MAP, contains(Keyword.WITHVALUES)));
         CRP_MAP.put(RedisCommands.HSCAN,                   ENTRY_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.HSET,                    LONG);
         CRP_MAP.put(RedisCommands.HSETNX,                  BOOLEAN);
@@ -249,7 +250,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.SMEMBERS,                STRING);
         CRP_MAP.put(RedisCommands.SMISMEMBER,              BOOLEAN);
         CRP_MAP.put(RedisCommands.SMOVE,                   BOOLEAN);
-        CRP_MAP.put(RedisCommands.SORT,                    STRING, wrap(LONG, param(Keyword.STORE)));
+        CRP_MAP.put(RedisCommands.SORT,                    STRING, wrap(LONG, contains(Keyword.STORE)));
         CRP_MAP.put(RedisCommands.SORT_RO,                 STRING);
         CRP_MAP.put(RedisCommands.SPOP,                    STRING);
         CRP_MAP.put(RedisCommands.SRANDMEMBER,             STRING);
@@ -281,7 +282,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.XGROUP_SETID,            STRING);
         CRP_MAP.put(RedisCommands.XINFO_CONSUMERS,         STREAM_CONSUMER_INFO);
         CRP_MAP.put(RedisCommands.XINFO_GROUPS,            STREAM_GROUP_INFO);
-        CRP_MAP.put(RedisCommands.XINFO_STREAM,            STREAM_INFO, wrap(STREAM_INFO_FULL, param(Keyword.FULL)));
+        CRP_MAP.put(RedisCommands.XINFO_STREAM,            STREAM_INFO, wrap(STREAM_INFO_FULL, contains(Keyword.FULL)));
         CRP_MAP.put(RedisCommands.XLEN,                    LONG);
         CRP_MAP.put(RedisCommands.XPENDING,                STREAM_PENDING_ENTRY, wrap(STREAM_PENDING_SUMMARY, length(3)));
         CRP_MAP.put(RedisCommands.XRANGE,                  STREAM_ENTRY);
@@ -293,10 +294,10 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.ZADD,                    LONG);
         CRP_MAP.put(RedisCommands.ZCARD,                   LONG);
         CRP_MAP.put(RedisCommands.ZCOUNT,                  LONG);
-        CRP_MAP.put(RedisCommands.ZDIFF,                   STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZDIFF,                   STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZDIFFSTORE,              LONG);
         CRP_MAP.put(RedisCommands.ZINCRBY,                 DOUBLE);
-        CRP_MAP.put(RedisCommands.ZINTER,                  STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZINTER,                  STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZINTERCARD,              LONG);
         CRP_MAP.put(RedisCommands.ZINTERSTORE,             LONG);
         CRP_MAP.put(RedisCommands.ZLEXCOUNT,               LONG);
@@ -304,17 +305,17 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.ZMSCORE,                 DOUBLE);
         CRP_MAP.put(RedisCommands.ZPOPMAX,                 TUPLE);
         CRP_MAP.put(RedisCommands.ZPOPMIN,                 TUPLE);
-        CRP_MAP.put(RedisCommands.ZRANDMEMBER,             STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
-        CRP_MAP.put(RedisCommands.ZRANGE,                  STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZRANDMEMBER,             STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZRANGE,                  STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZRANGEBYLEX,             STRING);
-        CRP_MAP.put(RedisCommands.ZRANGEBYSCORE,           STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZRANGEBYSCORE,           STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZRANK,                   LONG);
         CRP_MAP.put(RedisCommands.ZREM,                    LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYRANK,         LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYSCORE,        LONG);
-        CRP_MAP.put(RedisCommands.ZREVRANGE,               STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZREVRANGE,               STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZREVRANGEBYLEX,          STRING);
-        CRP_MAP.put(RedisCommands.ZREVRANGEBYSCORE,        STRING, wrap(TUPLE, param(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZREVRANGEBYSCORE,        STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZREVRANK,                LONG);
         CRP_MAP.put(RedisCommands.ZSCAN,                   TUPLE_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.ZSCORE,                  DOUBLE);
@@ -368,9 +369,9 @@ public class ResultParsers {
             this.resultParserWrappers = resultParserWrappers;
         }
 
-        private @NotNull ResultParser get(@NotNull RedisQuery query) {
+        private @NotNull ResultParser get(@NotNull Params params) {
             for (ResultParserWrapper resultParserWrapper : resultParserWrappers) {
-                if (resultParserWrapper.isApplicable.test(query)) return resultParserWrapper.resultParser;
+                if (resultParserWrapper.isApplicable.test(params)) return resultParserWrapper.resultParser;
             }
             return defaultResultParser;
         }
@@ -378,16 +379,16 @@ public class ResultParsers {
 
     static class ResultParserWrapper {
         final ResultParser resultParser;
-        final Predicate<RedisQuery> isApplicable;
+        final Predicate<Params> isApplicable;
 
         private ResultParserWrapper(@NotNull ResultParser resultParser,
-                                    @NotNull Predicate<RedisQuery> isApplicable) {
+                                    @NotNull Predicate<Params> isApplicable) {
             this.resultParser = resultParser;
             this.isApplicable = isApplicable;
         }
 
         static ResultParserWrapper wrap(@NotNull ResultParser resultParser,
-                                        @NotNull Predicate<RedisQuery> isApplicable) {
+                                        @NotNull Predicate<Params> isApplicable) {
             return new ResultParserWrapper(resultParser, isApplicable);
         }
     }
