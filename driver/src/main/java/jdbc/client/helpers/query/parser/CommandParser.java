@@ -23,7 +23,6 @@ abstract class CommandParser<T extends ProtocolCommand> {
     public @NotNull RedisCommand parse() throws SQLException {
         T command = parseCommand(commandName);
         if (command != null && hasKeyword(command)) {
-            if (!hasKeyword(command)) return RedisCommand.create(command);
             String keywordName = getKeywordName(params);
             if (keywordName == null)
                 throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
