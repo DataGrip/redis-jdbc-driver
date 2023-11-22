@@ -1,11 +1,11 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.query.RedisQuery;
-import jdbc.client.structures.result.RedisListResult;
-import jdbc.client.structures.result.RedisResultBase;
-import jdbc.client.structures.result.SimpleType;
+import jdbc.client.query.structures.ColumnHint;
+import jdbc.client.query.structures.RedisQuery;
+import jdbc.client.result.structures.RedisListResult;
+import jdbc.client.result.structures.RedisResultBase;
+import jdbc.client.result.structures.SimpleType;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 

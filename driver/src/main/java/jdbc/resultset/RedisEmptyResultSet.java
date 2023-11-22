@@ -1,7 +1,7 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.result.RedisResultBase;
+import jdbc.client.result.structures.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import org.jetbrains.annotations.NotNull;
 

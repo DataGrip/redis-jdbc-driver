@@ -1,9 +1,9 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.result.RedisMapResult;
-import jdbc.client.structures.result.RedisResultBase;
-import jdbc.client.structures.result.SimpleType;
+import jdbc.client.result.structures.RedisMapResult;
+import jdbc.client.result.structures.RedisResultBase;
+import jdbc.client.result.structures.SimpleType;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.types.RedisColumnTypeHelper;
 import org.jetbrains.annotations.NotNull;

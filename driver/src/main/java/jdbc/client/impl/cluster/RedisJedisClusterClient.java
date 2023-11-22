@@ -1,14 +1,14 @@
 package jdbc.client.impl.cluster;
 
 import jdbc.client.RedisMode;
+import jdbc.client.commands.RedisCommand;
+import jdbc.client.commands.RedisCommands;
 import jdbc.client.impl.RedisClientBase;
 import jdbc.client.impl.RedisJedisURIBase.CompleteHostAndPortMapper;
 import jdbc.client.impl.standalone.RedisJedisClient;
-import jdbc.client.structures.RedisCommand;
-import jdbc.client.structures.RedisCommands;
-import jdbc.client.structures.query.NodeHint;
-import jdbc.client.structures.query.RedisKeyPatternQuery;
-import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.query.structures.NodeHint;
+import jdbc.client.query.structures.RedisKeyPatternQuery;
+import jdbc.client.query.structures.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.*;

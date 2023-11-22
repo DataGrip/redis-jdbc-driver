@@ -1,6 +1,6 @@
 package jdbc.resultset;
 
-import jdbc.client.structures.result.SimpleType;
+import jdbc.client.result.structures.SimpleType;
 import jdbc.types.RedisColumnTypeHelper;
 import org.jetbrains.annotations.NotNull;
 

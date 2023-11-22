@@ -2,7 +2,7 @@ package jdbc.client.impl.standalone;
 
 import jdbc.client.RedisMode;
 import jdbc.client.impl.RedisClientBase;
-import jdbc.client.structures.query.RedisQuery;
+import jdbc.client.query.structures.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Connection;
 import redis.clients.jedis.Jedis;

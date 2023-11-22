@@ -1,8 +1,8 @@
 package jdbc.resultset;
 
 import jdbc.RedisStatement;
-import jdbc.client.structures.query.ColumnHint;
-import jdbc.client.structures.result.RedisResultBase;
+import jdbc.client.query.structures.ColumnHint;
+import jdbc.client.result.structures.RedisResultBase;
 import jdbc.resultset.RedisResultSetMetaData.ColumnMetaData;
 import jdbc.types.ArrayImpl;
 import jdbc.types.RedisColumnTypeHelper;

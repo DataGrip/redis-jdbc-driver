@@ -1,6 +1,6 @@
 package jdbc.client;
 
-import jdbc.client.structures.result.RedisResult;
+import jdbc.client.result.structures.RedisResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;

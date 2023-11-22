@@ -1,10 +1,10 @@
 package jdbc;
 
 import jdbc.client.RedisClient;
-import jdbc.client.structures.result.RedisListResult;
-import jdbc.client.structures.result.RedisMapResult;
-import jdbc.client.structures.result.RedisObjectResult;
-import jdbc.client.structures.result.RedisResult;
+import jdbc.client.result.structures.RedisListResult;
+import jdbc.client.result.structures.RedisMapResult;
+import jdbc.client.result.structures.RedisObjectResult;
+import jdbc.client.result.structures.RedisResult;
 import jdbc.resultset.RedisEmptyResultSet;
 import jdbc.resultset.RedisListResultSet;
 import jdbc.resultset.RedisMapResultSet;

@@ -1,7 +1,7 @@
 package jdbc.utils;
 
-import jdbc.client.structures.RedisCommand;
-import jdbc.client.structures.query.Params;
+import jdbc.client.commands.RedisCommand;
+import jdbc.client.query.structures.Params;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

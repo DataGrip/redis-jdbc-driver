@@ -1,12 +1,12 @@
 package jdbc.client.impl;
 
 import jdbc.client.RedisClient;
-import jdbc.client.helpers.query.RedisQueryHelper;
-import jdbc.client.helpers.result.RedisResultHelper;
-import jdbc.client.structures.query.RedisKeyPatternQuery;
-import jdbc.client.structures.query.RedisQuery;
-import jdbc.client.structures.query.RedisSetDatabaseQuery;
-import jdbc.client.structures.result.RedisResult;
+import jdbc.client.query.RedisQueryHelper;
+import jdbc.client.query.structures.RedisKeyPatternQuery;
+import jdbc.client.query.structures.RedisQuery;
+import jdbc.client.query.structures.RedisSetDatabaseQuery;
+import jdbc.client.result.RedisResultHelper;
+import jdbc.client.result.structures.RedisResult;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.ConnectionPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
