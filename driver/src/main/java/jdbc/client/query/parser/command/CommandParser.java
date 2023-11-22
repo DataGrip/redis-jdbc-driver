@@ -10,13 +10,13 @@ import java.sql.SQLException;
 
 import static jdbc.utils.Utils.getName;
 
-public abstract class CommandParser<T extends ProtocolCommand> {
+public abstract class CommandParser<T extends ProtocolCommand, E extends ProtocolCommand> {
 
     CommandParser() {
     }
 
     public @NotNull RedisCommand parse(@NotNull String commandName, @NotNull Params params) throws SQLException {
-        T command = parseCommand(commandName);
+        ProtocolCommand command = parseCommandOrEx(commandName);
         if (command != null && hasKeyword(command)) {
             String keywordName = getKeywordName(params);
             if (keywordName == null)
@@ -26,9 +26,17 @@ public abstract class CommandParser<T extends ProtocolCommand> {
         return new RedisCommand(command, commandName, null);
     }
 
+    private @Nullable ProtocolCommand parseCommandOrEx(@NotNull String commandName) {
+        ProtocolCommand commandEx = parseCommandEx(commandName);
+        if (commandEx != null) return commandEx;
+        return parseCommand(commandName);
+    }
+
     protected abstract @Nullable T parseCommand(@NotNull String commandName);
 
-    protected abstract boolean hasKeyword(@NotNull T command);
+    protected abstract @Nullable E parseCommandEx(@NotNull String commandName);
+
+    protected abstract boolean hasKeyword(@NotNull ProtocolCommand command);
 
     @Nullable
     private static String getKeywordName(@NotNull Params params) {

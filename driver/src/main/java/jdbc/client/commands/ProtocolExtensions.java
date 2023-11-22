@@ -14,7 +14,7 @@ public class ProtocolExtensions {
 
         private final byte[] raw;
 
-        private CommandEx() {
+        CommandEx() {
             raw = SafeEncoder.encode(name());
         }
 
@@ -29,7 +29,7 @@ public class ProtocolExtensions {
 
         private final byte[] raw;
 
-        private KeywordEx() {
+        KeywordEx() {
             raw = SafeEncoder.encode(name());
         }
 
@@ -50,7 +50,7 @@ public class ProtocolExtensions {
 
         private final byte[] raw;
 
-        private JsonCommandEx(@NotNull String alt) {
+        JsonCommandEx(@NotNull String alt) {
             raw = SafeEncoder.encode(alt);
         }
 
@@ -65,7 +65,7 @@ public class ProtocolExtensions {
 
         private final byte[] raw;
 
-        private JsonKeywordEx() {
+        JsonKeywordEx() {
             raw = SafeEncoder.encode(name());
         }
 
