@@ -330,15 +330,15 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.JSON_ARRPOP,             JSON_OBJECT);
         CRP_MAP.put(RedisCommands.JSON_ARRTRIM,            LONG);
         CRP_MAP.put(RedisCommands.JSON_CLEAR,              LONG);
-        // CRP_MAP.put(RedisCommands.JSON_DEBUG_MEMORY,       LONG);
-        CRP_MAP.put(RedisCommands.JSON_DEL, LONG);
-        // CRP_MAP.put(RedisCommands.JSON_FORGET,             LONG);
+        CRP_MAP.put(RedisCommands.JSON_DEBUG_MEMORY,       LONG);
+        CRP_MAP.put(RedisCommands.JSON_DEL,                LONG);
+        CRP_MAP.put(RedisCommands.JSON_FORGET,             LONG);
         CRP_MAP.put(RedisCommands.JSON_GET,                JSON_OBJECT);
-        // CRP_MAP.put(RedisCommands.JSON_MERGE,              STRING);
+        CRP_MAP.put(RedisCommands.JSON_MERGE,              STRING);
         CRP_MAP.put(RedisCommands.JSON_MGET,               JSON_OBJECT);
-        // CRP_MAP.put(RedisCommands.JSON_MSET,               STRING);
-        // CRP_MAP.put(RedisCommands.JSON_NUMINCRBY,          ???); // - TODO: implement result parser
-        // CRP_MAP.put(RedisCommands.JSON_NUMMULTBY,          ???);
+        CRP_MAP.put(RedisCommands.JSON_MSET,               STRING);
+        CRP_MAP.put(RedisCommands.JSON_NUMINCRBY,          JSON_OBJECT);
+        CRP_MAP.put(RedisCommands.JSON_NUMMULTBY,          JSON_OBJECT);
         CRP_MAP.put(RedisCommands.JSON_OBJKEYS,            STRING_LIST);
         CRP_MAP.put(RedisCommands.JSON_RESP,               OBJECT_LIST);
         CRP_MAP.put(RedisCommands.JSON_SET,                STRING);
