@@ -1,5 +1,7 @@
 package jdbc.client.commands;
 
+import jdbc.client.commands.ProtocolExtensions.JsonCommandEx;
+import jdbc.client.commands.ProtocolExtensions.JsonKeywordEx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
@@ -315,16 +317,15 @@ public class RedisCommands {
     public static final RedisCommand JSON_ARRPOP             = create(JsonCommand.ARRPOP);
     public static final RedisCommand JSON_ARRTRIM            = create(JsonCommand.ARRTRIM);
     public static final RedisCommand JSON_CLEAR              = create(JsonCommand.CLEAR);
-    // public static final RedisCommand JSON_DEBUG              = create(JsonCommand.DEBUG); - TODO: is JSON.DEBUG without keyword allowed?
-    // public static final RedisCommand JSON_DEBUG_MEMORY       = create(JsonCommand.DEBUG, JsonKeyword.MEMORY); - Keyword.JsonKeyword.MEMORY doesn't exist
+    public static final RedisCommand JSON_DEBUG_MEMORY       = create(JsonCommand.DEBUG, JsonKeywordEx.MEMORY);
     public static final RedisCommand JSON_DEL                = create(JsonCommand.DEL);
-    // public static final RedisCommand JSON_FORGET             = create(JsonCommand.FORGET); - JsonCommand.FORGET doesn't exist
+    public static final RedisCommand JSON_FORGET             = create(JsonCommandEx.FORGET);
     public static final RedisCommand JSON_GET                = create(JsonCommand.GET);
-    // public static final RedisCommand JSON_MERGE              = create(JsonCommand.MERGE); - JsonCommand.MERGE doesn't exist
+    public static final RedisCommand JSON_MERGE              = create(JsonCommandEx.MERGE);
     public static final RedisCommand JSON_MGET               = create(JsonCommand.MGET);
-    // public static final RedisCommand JSON_MSET               = create(JsonCommand.MSET); - JsonCommand.MSET doesn't exist
+    public static final RedisCommand JSON_MSET               = create(JsonCommandEx.MSET);
     public static final RedisCommand JSON_NUMINCRBY          = create(JsonCommand.NUMINCRBY);
-    // public static final RedisCommand JSON_NUMMULTBY          = create(JsonCommand.NUMMULTBY); - JsonCommand.NUMMULTBY doesn't exist
+    public static final RedisCommand JSON_NUMMULTBY          = create(JsonCommandEx.NUMMULTBY);
     public static final RedisCommand JSON_OBJKEYS            = create(JsonCommand.OBJKEYS);
     public static final RedisCommand JSON_RESP               = create(JsonCommand.RESP);
     public static final RedisCommand JSON_SET                = create(JsonCommand.SET);
