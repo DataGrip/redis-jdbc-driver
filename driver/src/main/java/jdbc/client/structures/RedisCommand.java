@@ -1,9 +1,7 @@
 package jdbc.client.structures;
 
-import jdbc.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.util.SafeEncoder;
 
@@ -42,15 +40,6 @@ public class RedisCommand {
     @Override
     public String toString() {
         return keywordName == null ? commandName : String.format("%s %s", commandName, keywordName);
-    }
-
-
-    static RedisCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
-        return new RedisCommand(command, Utils.getName(command), Utils.getName(keyword));
-    }
-
-    static RedisCommand create(@NotNull ProtocolCommand command) {
-        return create(command, null);
     }
 
 

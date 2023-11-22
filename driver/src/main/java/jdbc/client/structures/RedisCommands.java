@@ -1,10 +1,14 @@
 package jdbc.client.structures;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.args.Rawable;
+import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 
-import static jdbc.client.structures.RedisCommand.create;
+import static jdbc.utils.Utils.getName;
 
 public class RedisCommands {
 
@@ -304,31 +308,39 @@ public class RedisCommands {
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 
-    public static final RedisCommand JSON_ARRAPPEND = create(JsonCommand.ARRAPPEND);
-    public static final RedisCommand JSON_ARRINDEX = create(JsonCommand.ARRINDEX);
-    public static final RedisCommand JSON_ARRINSERT = create(JsonCommand.ARRINSERT);
-    public static final RedisCommand JSON_ARRLEN = create(JsonCommand.ARRLEN);
-    public static final RedisCommand JSON_ARRPOP = create(JsonCommand.ARRPOP);
-    public static final RedisCommand JSON_ARRTRIM = create(JsonCommand.ARRTRIM);
-    public static final RedisCommand JSON_CLEAR = create(JsonCommand.CLEAR);
-    // public static final RedisCommand JSON_DEBUG = create(JsonCommand.DEBUG); - TODO: is JSON.DEBUG without keyword allowed?
-    // public static final RedisCommand JSON_DEBUG_MEMORY = create(JsonCommand.DEBUG, JsonKeyword.MEMORY); - Keyword.JsonKeyword.MEMORY doesn't exist
-    public static final RedisCommand JSON_DEL = create(JsonCommand.DEL);
-    // public static final RedisCommand JSON_FORGET = create(JsonCommand.FORGET); - JsonCommand.FORGET doesn't exist
-    public static final RedisCommand JSON_GET = create(JsonCommand.GET);
-    // public static final RedisCommand JSON_MERGE = create(JsonCommand.MERGE); - JsonCommand.MERGE doesn't exist
-    public static final RedisCommand JSON_MGET = create(JsonCommand.MGET);
-    // public static final RedisCommand JSON_MSET = create(JsonCommand.MSET); - JsonCommand.MSET doesn't exist
-    public static final RedisCommand JSON_NUMINCRBY = create(JsonCommand.NUMINCRBY);
-    // public static final RedisCommand JSON_NUMMULTBY = create(JsonCommand.NUMMULTBY); - JsonCommand.NUMMULTBY doesn't exist
-    public static final RedisCommand JSON_OBJKEYS = create(JsonCommand.OBJKEYS);
-    public static final RedisCommand JSON_RESP = create(JsonCommand.RESP);
-    public static final RedisCommand JSON_SET = create(JsonCommand.SET);
-    public static final RedisCommand JSON_STRAPPEND = create(JsonCommand.STRAPPEND);
-    public static final RedisCommand JSON_STRLEN = create(JsonCommand.STRLEN);
-    public static final RedisCommand JSON_TOGGLE = create(JsonCommand.TOGGLE);
-    public static final RedisCommand JSON_TYPE = create(JsonCommand.TYPE);
+    public static final RedisCommand JSON_ARRAPPEND          = create(JsonCommand.ARRAPPEND);
+    public static final RedisCommand JSON_ARRINDEX           = create(JsonCommand.ARRINDEX);
+    public static final RedisCommand JSON_ARRINSERT          = create(JsonCommand.ARRINSERT);
+    public static final RedisCommand JSON_ARRLEN             = create(JsonCommand.ARRLEN);
+    public static final RedisCommand JSON_ARRPOP             = create(JsonCommand.ARRPOP);
+    public static final RedisCommand JSON_ARRTRIM            = create(JsonCommand.ARRTRIM);
+    public static final RedisCommand JSON_CLEAR              = create(JsonCommand.CLEAR);
+    // public static final RedisCommand JSON_DEBUG              = create(JsonCommand.DEBUG); - TODO: is JSON.DEBUG without keyword allowed?
+    // public static final RedisCommand JSON_DEBUG_MEMORY       = create(JsonCommand.DEBUG, JsonKeyword.MEMORY); - Keyword.JsonKeyword.MEMORY doesn't exist
+    public static final RedisCommand JSON_DEL                = create(JsonCommand.DEL);
+    // public static final RedisCommand JSON_FORGET             = create(JsonCommand.FORGET); - JsonCommand.FORGET doesn't exist
+    public static final RedisCommand JSON_GET                = create(JsonCommand.GET);
+    // public static final RedisCommand JSON_MERGE              = create(JsonCommand.MERGE); - JsonCommand.MERGE doesn't exist
+    public static final RedisCommand JSON_MGET               = create(JsonCommand.MGET);
+    // public static final RedisCommand JSON_MSET               = create(JsonCommand.MSET); - JsonCommand.MSET doesn't exist
+    public static final RedisCommand JSON_NUMINCRBY          = create(JsonCommand.NUMINCRBY);
+    // public static final RedisCommand JSON_NUMMULTBY          = create(JsonCommand.NUMMULTBY); - JsonCommand.NUMMULTBY doesn't exist
+    public static final RedisCommand JSON_OBJKEYS            = create(JsonCommand.OBJKEYS);
+    public static final RedisCommand JSON_RESP               = create(JsonCommand.RESP);
+    public static final RedisCommand JSON_SET                = create(JsonCommand.SET);
+    public static final RedisCommand JSON_STRAPPEND          = create(JsonCommand.STRAPPEND);
+    public static final RedisCommand JSON_STRLEN             = create(JsonCommand.STRLEN);
+    public static final RedisCommand JSON_TOGGLE             = create(JsonCommand.TOGGLE);
+    public static final RedisCommand JSON_TYPE               = create(JsonCommand.TYPE);
 
     /* ------------------------------------------------------------------------------------------ */
+
+    private static RedisCommand create(@NotNull ProtocolCommand command, @Nullable Rawable keyword) {
+        return new RedisCommand(command, getName(command), getName(keyword));
+    }
+
+    private static RedisCommand create(@NotNull ProtocolCommand command) {
+        return create(command, null);
+    }
 
 }
