@@ -6,7 +6,7 @@ import jdbc.types.RedisColumnTypeHelper;
 import jdbc.utils.Utils;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
-import redis.clients.jedis.Protocol;
+import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.util.KeyValue;
 
@@ -76,9 +76,9 @@ public class TypeFactory {
 
     public static final ObjectType<GeoRadiusResponse> GEORADIUS_RESPONSE = new ObjectType<>() {{
         add("member", STRING, GeoRadiusResponse::getMemberByString);
-        add("distance", DOUBLE, GeoRadiusResponse::getDistance, Utils.contains(Protocol.Keyword.WITHDIST));
-        add("coordinate", MAP, GeoRadiusResponse::getCoordinate, ConverterFactory.GEO_COORDINATE::convert, Utils.contains(Protocol.Keyword.WITHCOORD));
-        add("raw-score", LONG, GeoRadiusResponse::getRawScore, Utils.contains(Protocol.Keyword.WITHHASH));
+        add("distance", DOUBLE, GeoRadiusResponse::getDistance, Utils.contains(Keyword.WITHDIST));
+        add("coordinate", MAP, GeoRadiusResponse::getCoordinate, ConverterFactory.GEO_COORDINATE::convert, Utils.contains(Keyword.WITHCOORD));
+        add("raw-score", LONG, GeoRadiusResponse::getRawScore, Utils.contains(Keyword.WITHHASH));
     }};
 
     public static final ObjectType<Module> MODULE = new ObjectType<>() {{
@@ -132,7 +132,7 @@ public class TypeFactory {
         add("library-name", STRING, LibraryInfo::getLibraryName);
         add("engine", STRING, LibraryInfo::getEngine);
         add("functions", LIST, LibraryInfo::getFunctions);
-        add("library-code", STRING, LibraryInfo::getLibraryCode, Utils.contains(Protocol.Keyword.WITHCODE));
+        add("library-code", STRING, LibraryInfo::getLibraryCode, Utils.contains(Keyword.WITHCODE));
     }};
 
     public static final ObjectType<Slowlog> SLOW_LOG = new ObjectType<>() {{

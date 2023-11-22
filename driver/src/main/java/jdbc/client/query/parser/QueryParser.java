@@ -2,6 +2,7 @@ package jdbc.client.query.parser;
 
 import jdbc.client.commands.RedisCommand;
 import jdbc.client.commands.RedisCommands;
+import jdbc.client.query.parser.command.CommandParsers;
 import jdbc.client.query.structures.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,9 +42,7 @@ public class QueryParser {
 
     private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine, @NotNull Params params) throws SQLException {
         String commandName = getName(commandLine.command);
-        if (NativeCommandParser.accepts(commandName)) return new NativeCommandParser(commandName, params).parse();
-        if (JsonCommandParser.accepts(commandName)) return new JsonCommandParser(commandName, params).parse();
-        return new RedisCommand(null, commandName, null);
+        return CommandParsers.get(commandName).parse(commandName, params);
     }
 
     private static @Nullable ColumnHint parseColumnHint(@Nullable ColumnHintLine columnHintLine) {

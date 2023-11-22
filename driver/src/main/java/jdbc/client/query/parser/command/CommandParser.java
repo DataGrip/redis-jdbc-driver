@@ -1,4 +1,4 @@
-package jdbc.client.query.parser;
+package jdbc.client.query.parser.command;
 
 import jdbc.client.commands.RedisCommand;
 import jdbc.client.query.structures.Params;
@@ -10,17 +10,12 @@ import java.sql.SQLException;
 
 import static jdbc.utils.Utils.getName;
 
-abstract class CommandParser<T extends ProtocolCommand> {
+public abstract class CommandParser<T extends ProtocolCommand> {
 
-    private final String commandName;
-    private final Params params;
-
-    CommandParser(@NotNull String commandName, @NotNull Params params) {
-        this.commandName = commandName;
-        this.params = params;
+    CommandParser() {
     }
 
-    public @NotNull RedisCommand parse() throws SQLException {
+    public @NotNull RedisCommand parse(@NotNull String commandName, @NotNull Params params) throws SQLException {
         T command = parseCommand(commandName);
         if (command != null && hasKeyword(command)) {
             String keywordName = getKeywordName(params);

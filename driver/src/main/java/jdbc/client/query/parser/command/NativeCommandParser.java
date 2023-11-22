@@ -1,6 +1,5 @@
-package jdbc.client.query.parser;
+package jdbc.client.query.parser.command;
 
-import jdbc.client.query.structures.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
@@ -18,10 +17,11 @@ public class NativeCommandParser extends CommandParser<Command> {
             Command.ACL, Command.CLIENT, Command.CLUSTER, Command.SENTINEL, Command.COMMAND,
             Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE, Command.OBJECT,
             Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
+            // TODO: LATENCY
     );
 
-    NativeCommandParser(@NotNull String commandName, @NotNull Params params) {
-        super(commandName, params);
+    NativeCommandParser() {
+        super();
     }
 
     @Override
@@ -32,10 +32,5 @@ public class NativeCommandParser extends CommandParser<Command> {
     @Override
     protected boolean hasKeyword(@NotNull Command command) {
         return COMMANDS_WITH_KEYWORDS.contains(command);
-    }
-
-
-    public static boolean accepts(@NotNull String commandName) {
-        return !commandName.contains(".");
     }
 }
