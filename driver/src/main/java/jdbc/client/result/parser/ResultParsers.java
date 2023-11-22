@@ -27,7 +27,8 @@ public class ResultParsers {
 
     public static @NotNull ResultParser get(@NotNull RedisQuery query) {
         CommandResultParsers commandResultParsers = CRP_MAP.get(query.getCommand());
-        return commandResultParsers != null ? commandResultParsers.get(query.getParams()) : DEFAULT_RESULT_PARSER;
+        if (commandResultParsers != null) return commandResultParsers.get(query.getParams());
+        return DEFAULT_RESULT_PARSER;
     }
     
     static {
@@ -360,6 +361,7 @@ public class ResultParsers {
     }
 
     private static class CommandResultParsers {
+
         private final ResultParser defaultResultParser;
         private final ResultParserWrapper[] resultParserWrappers;
 
@@ -378,6 +380,7 @@ public class ResultParsers {
     }
 
     static class ResultParserWrapper {
+
         final ResultParser resultParser;
         final Predicate<Params> isApplicable;
 

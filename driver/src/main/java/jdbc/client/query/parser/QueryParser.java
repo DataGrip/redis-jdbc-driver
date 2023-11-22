@@ -69,13 +69,13 @@ public class QueryParser {
                                                    @Nullable NodeHint nodeHint) throws SQLException {
         boolean isBlocking = Analyzer.isBlocking(command);
 
-        // set databases query
+        // set database query
         if (RedisCommands.SELECT.equals(command) && params.getLength() == 1) {
             int dbIndex = parseSqlDbIndex(params.getFirst());
             return new RedisSetDatabaseQuery(command, params, dbIndex, columnHint, nodeHint, isBlocking);
         }
 
-        // keys pattern queries
+        // key pattern query
         if (RedisCommands.KEYS.equals(command)) {
             String pattern = params.getFirst();
             return new RedisKeyPatternQuery(command, params, pattern, columnHint, nodeHint, isBlocking);
@@ -198,6 +198,7 @@ public class QueryParser {
 
         NodeHintLine(@NotNull List<String> tokens) {
             super(tokens);
+            if (!accepts(tokens)) throw new AssertionError(String.format("Incorrect node hint tokens: %s.", tokens));
             hostAndPort = tokens.get(3);
         }
 

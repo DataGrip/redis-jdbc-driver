@@ -18,12 +18,12 @@ public class RedisKeyPatternQuery extends RedisQuery {
         this.keyPattern = keyPattern;
     }
 
-    public @Nullable String getKeyPattern() {
+    @Override
+    public @Nullable String getSampleKey() {
         return keyPattern;
     }
 
-    @Override
-    public @Nullable String getSampleKey() {
+    public @Nullable String getKeyPattern() {
         return keyPattern;
     }
 }
