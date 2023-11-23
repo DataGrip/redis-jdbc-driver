@@ -327,6 +327,7 @@ public class RedisCommands {
     public static final RedisCommand JSON_NUMINCRBY          = create(JsonCommand.NUMINCRBY);
     public static final RedisCommand JSON_NUMMULTBY          = create(JsonCommandEx.NUMMULTBY);
     public static final RedisCommand JSON_OBJKEYS            = create(JsonCommand.OBJKEYS);
+    public static final RedisCommand JSON_OBJLEN             = create(JsonCommand.OBJLEN);
     public static final RedisCommand JSON_RESP               = create(JsonCommand.RESP);
     public static final RedisCommand JSON_SET                = create(JsonCommand.SET);
     public static final RedisCommand JSON_STRAPPEND          = create(JsonCommand.STRAPPEND);

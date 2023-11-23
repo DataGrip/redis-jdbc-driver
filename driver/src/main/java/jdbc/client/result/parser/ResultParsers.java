@@ -340,6 +340,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.JSON_NUMINCRBY,          JSON_OBJECT);
         CRP_MAP.put(RedisCommands.JSON_NUMMULTBY,          JSON_OBJECT);
         CRP_MAP.put(RedisCommands.JSON_OBJKEYS,            STRING_LIST);
+        CRP_MAP.put(RedisCommands.JSON_OBJLEN,             LONG);
         CRP_MAP.put(RedisCommands.JSON_RESP,               OBJECT_LIST);
         CRP_MAP.put(RedisCommands.JSON_SET,                STRING);
         CRP_MAP.put(RedisCommands.JSON_STRAPPEND,          LONG);
