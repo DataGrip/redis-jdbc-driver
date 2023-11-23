@@ -348,6 +348,37 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.JSON_TOGGLE,             BOOLEAN);
         CRP_MAP.put(RedisCommands.JSON_TYPE,               STRING);
 
+        /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+        CRP_MAP.put(RedisCommands.FT__LIST,                STRING);
+        // TODO: CRP_MAP.put(RedisCommands.FT_AGGREGATE,            ???);
+        CRP_MAP.put(RedisCommands.FT_ALIASADD,             STRING);
+        CRP_MAP.put(RedisCommands.FT_ALIASDEL,             STRING);
+        CRP_MAP.put(RedisCommands.FT_ALIASUPDATE,          STRING);
+        CRP_MAP.put(RedisCommands.FT_ALTER,                STRING);
+        CRP_MAP.put(RedisCommands.FT_CONFIG_GET,           STRING_MAP);
+        CRP_MAP.put(RedisCommands.FT_CONFIG_SET,           STRING);
+        CRP_MAP.put(RedisCommands.FT_CREATE,               STRING);
+        CRP_MAP.put(RedisCommands.FT_CURSOR_DEL,           STRING);
+        // TODO: CRP_MAP.put(RedisCommands.FT_CURSOR_READ,          ???);
+        CRP_MAP.put(RedisCommands.FT_DICTADD,              LONG);
+        CRP_MAP.put(RedisCommands.FT_DICTDEL,              LONG);
+        CRP_MAP.put(RedisCommands.FT_DICTDUMP,             STRING);
+        CRP_MAP.put(RedisCommands.FT_DROPINDEX,            STRING);
+        CRP_MAP.put(RedisCommands.FT_EXPLAIN,              STRING);
+        CRP_MAP.put(RedisCommands.FT_EXPLAINCLI,           STRING);
+        CRP_MAP.put(RedisCommands.FT_INFO,                 OBJECT_MAP);
+        // TODO: CRP_MAP.put(RedisCommands.FT_PROFILE,              ???);
+        // TODO: CRP_MAP.put(RedisCommands.FT_SEARCH,               ???);
+        // TODO: CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           ???);
+        CRP_MAP.put(RedisCommands.FT_SUGADD,               LONG);
+        CRP_MAP.put(RedisCommands.FT_SUGDEL,               BOOLEAN);
+        // TODO: CRP_MAP.put(RedisCommands.FT_SUGGET,               ???);
+        CRP_MAP.put(RedisCommands.FT_SUGLEN,               LONG);
+        // TODO: CRP_MAP.put(RedisCommands.FT_SYNDUMP,              ???);
+        CRP_MAP.put(RedisCommands.FT_SYNUPDATE,            STRING);
+        CRP_MAP.put(RedisCommands.FT_TAGVALS,              STRING);
+
         /* ------------------------------------------------------------------------------------------ */
 
     }
