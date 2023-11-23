@@ -8,6 +8,8 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
+import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.AbstractMap;
@@ -20,6 +22,8 @@ public class TypeFactory {
     private TypeFactory() {
     }
 
+
+    /* --------------------------------------------- Common --------------------------------------------- */
 
     public static final SimpleType<Object> OBJECT = new SimpleType<>(RedisColumnTypeHelper.OBJECT);
 
@@ -50,7 +54,6 @@ public class TypeFactory {
             super(RedisColumnTypeHelper.MAP);
         }
     }
-
 
 
     public static final ObjectType<KeyedListElement> KEYED_STRING = new ObjectType<>() {{
@@ -240,7 +243,6 @@ public class TypeFactory {
     }
 
 
-
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
         @Override
         protected Function<List<String>, List<?>> getResultsConverter() {
@@ -275,4 +277,20 @@ public class TypeFactory {
 
         protected abstract Function<List<T>, List<?>> getResultsConverter();
     }
+
+
+    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+
+
+    /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+    public static final ObjectType<AggregationResult> AGGREGATION_RESULT = new ObjectType<>() {{
+        add("total-results", LONG, AggregationResult::getTotalResults);
+        add("results", LIST, AggregationResult::getResults);
+        add("cursor-id", LONG, AggregationResult::getCursorId, Utils.contains(SearchKeyword.WITHCURSOR));
+    }};
+
+
+    /* ------------------------------------------------------------------------------------------ */
+
 }

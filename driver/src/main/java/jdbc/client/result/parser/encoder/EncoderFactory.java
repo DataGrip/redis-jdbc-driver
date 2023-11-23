@@ -7,6 +7,8 @@ import redis.clients.jedis.*;
 import redis.clients.jedis.json.DefaultGsonObjectMapper;
 import redis.clients.jedis.json.JsonObjectMapper;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.SearchBuilderFactory;
+import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.Collections;
@@ -403,6 +405,33 @@ public class EncoderFactory {
             return "List<JsonObject>";
         }
     };
+
+
+    /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+    public static final ListEncoder<AggregationResult> AGGREGATION_RESULT = new ElementListEncoder<AggregationResult>() {
+
+        private final Builder<AggregationResult> AGGREGATION_RESULT = new Builder<>() {
+            @Override
+            public AggregationResult build(Object data) {
+                List<?> list = (List<?>) data;
+                return list.get(0) instanceof List<?> ?
+                        SearchBuilderFactory.SEARCH_AGGREGATION_RESULT_WITH_CURSOR.build(data) :
+                        SearchBuilderFactory.SEARCH_AGGREGATION_RESULT.build(data);
+            }
+
+            @Override
+            public String toString() {
+                return "AggregationResult";
+            }
+        };
+
+        @Override
+        protected @NotNull Builder<AggregationResult> getBuilder() {
+            return AGGREGATION_RESULT;
+        }
+    };
+
 
 
     /* ------------------------------------------------------------------------------------------ */

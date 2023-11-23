@@ -352,7 +352,7 @@ public class ResultParsers {
         /* --------------------------------------------- RediSearch --------------------------------------------- */
 
         CRP_MAP.put(RedisCommands.FT__LIST,                STRING);
-        // TODO: CRP_MAP.put(RedisCommands.FT_AGGREGATE,            ???);
+        CRP_MAP.put(RedisCommands.FT_AGGREGATE,            AGGREGATION_RESULT);
         CRP_MAP.put(RedisCommands.FT_ALIASADD,             STRING);
         CRP_MAP.put(RedisCommands.FT_ALIASDEL,             STRING);
         CRP_MAP.put(RedisCommands.FT_ALIASUPDATE,          STRING);
@@ -361,7 +361,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_CONFIG_SET,           STRING);
         CRP_MAP.put(RedisCommands.FT_CREATE,               STRING);
         CRP_MAP.put(RedisCommands.FT_CURSOR_DEL,           STRING);
-        // TODO: CRP_MAP.put(RedisCommands.FT_CURSOR_READ,          ???);
+        CRP_MAP.put(RedisCommands.FT_CURSOR_READ,          AGGREGATION_RESULT);
         CRP_MAP.put(RedisCommands.FT_DICTADD,              LONG);
         CRP_MAP.put(RedisCommands.FT_DICTDEL,              LONG);
         CRP_MAP.put(RedisCommands.FT_DICTDUMP,             STRING);

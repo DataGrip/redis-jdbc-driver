@@ -15,12 +15,16 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
 import java.util.Map;
 
 public class ResultParserFactory {
+
+    private ResultParserFactory() {
+    }
 
 
     /* --------------------------------------------- Common --------------------------------------------- */
@@ -484,8 +488,23 @@ public class ResultParserFactory {
         }
 
         @Override
-        protected @NotNull SimpleConverter<Object, Object> getConverter() {
+        protected @NotNull IdentityConverter<Object> getConverter() {
             return ConverterFactory.OBJECT;
+        }
+    };
+
+
+    /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+    public static final ResultParser AGGREGATION_RESULT = new ObjectListResultParser<AggregationResult>() {
+        @Override
+        protected @NotNull ListEncoder<AggregationResult> getBuilder() {
+            return EncoderFactory.AGGREGATION_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<AggregationResult> getConverter() {
+            return ConverterFactory.AGGREGATION_RESULT;
         }
     };
 

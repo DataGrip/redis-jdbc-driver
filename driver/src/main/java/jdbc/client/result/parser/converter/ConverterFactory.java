@@ -8,6 +8,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class ConverterFactory {
 
     private ConverterFactory() {
     }
+
+
+    /* --------------------------------------------- Common --------------------------------------------- */
 
     public static final IdentityConverter<Object> OBJECT = new IdentityConverter<>() {
         @Override
@@ -307,4 +311,21 @@ public class ConverterFactory {
             return TypeFactory.ENTRY_SCAN_RESULT;
         }
     };
+
+
+    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+
+
+    /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+    public static final ObjectConverter<AggregationResult> AGGREGATION_RESULT = new ObjectConverter<AggregationResult>() {
+        @Override
+        public ObjectType<AggregationResult> getObjectType() {
+            return TypeFactory.AGGREGATION_RESULT;
+        }
+    };
+
+
+    /* ------------------------------------------------------------------------------------------ */
+
 }
