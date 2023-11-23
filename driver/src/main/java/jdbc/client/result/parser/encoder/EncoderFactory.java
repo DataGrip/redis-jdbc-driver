@@ -383,9 +383,8 @@ public class EncoderFactory {
 
         private final Builder<List<Object>> JSON_OBJECT_LIST = new Builder<>() {
             @Override
-            @SuppressWarnings("unchecked")
             public List<Object> build(Object data) {
-                return ((List<Object>) data).stream().map(JSON_OBJECT::build).collect(Collectors.toList());
+                return ((List<?>) data).stream().map(JSON_OBJECT::build).collect(Collectors.toList());
             }
         };
 
@@ -397,6 +396,11 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<List<Object>> getListBuilder() {
             return JSON_OBJECT_LIST;
+        }
+
+        @Override
+        public String toString() {
+            return "List<JsonObject>";
         }
     };
 
