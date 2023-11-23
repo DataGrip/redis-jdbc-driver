@@ -9,6 +9,8 @@ import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.json.JsonProtocol.JsonCommand;
+import redis.clients.jedis.search.SearchProtocol.SearchCommand;
+import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 
 import static jdbc.utils.Utils.getName;
 
@@ -334,6 +336,37 @@ public class RedisCommands {
     public static final RedisCommand JSON_STRLEN             = create(JsonCommand.STRLEN);
     public static final RedisCommand JSON_TOGGLE             = create(JsonCommand.TOGGLE);
     public static final RedisCommand JSON_TYPE               = create(JsonCommand.TYPE);
+
+    /* --------------------------------------------- RediSearch --------------------------------------------- */
+
+    public static final RedisCommand FT__LIST                = create(SearchCommand._LIST);
+    public static final RedisCommand FT_AGGREGATE            = create(SearchCommand.AGGREGATE);
+    public static final RedisCommand FT_ALIASADD             = create(SearchCommand.ALIASADD);
+    public static final RedisCommand FT_ALIASDEL             = create(SearchCommand.ALIASDEL);
+    public static final RedisCommand FT_ALIASUPDATE          = create(SearchCommand.ALIASUPDATE);
+    public static final RedisCommand FT_ALTER                = create(SearchCommand.ALTER);
+    public static final RedisCommand FT_CONFIG_GET           = create(SearchCommand.CONFIG, SearchKeyword.GET);
+    public static final RedisCommand FT_CONFIG_SET           = create(SearchCommand.CONFIG, SearchKeyword.SET);
+    public static final RedisCommand FT_CREATE               = create(SearchCommand.CREATE);
+    public static final RedisCommand FT_CURSOR_DEL           = create(SearchCommand.CURSOR, SearchKeyword.DEL);
+    public static final RedisCommand FT_CURSOR_READ          = create(SearchCommand.CURSOR, SearchKeyword.READ);
+    public static final RedisCommand FT_DICTADD              = create(SearchCommand.DICTADD);
+    public static final RedisCommand FT_DICTDEL              = create(SearchCommand.DICTDEL);
+    public static final RedisCommand FT_DICTDUMP             = create(SearchCommand.DICTDUMP);
+    public static final RedisCommand FT_DROPINDEX            = create(SearchCommand.DROPINDEX);
+    public static final RedisCommand FT_EXPLAIN              = create(SearchCommand.EXPLAIN);
+    public static final RedisCommand FT_EXPLAINCLI           = create(SearchCommand.EXPLAINCLI);
+    public static final RedisCommand FT_INFO                 = create(SearchCommand.INFO);
+    public static final RedisCommand FT_PROFILE              = create(SearchCommand.PROFILE);
+    public static final RedisCommand FT_SEARCH               = create(SearchCommand.SEARCH);
+    public static final RedisCommand FT_SPELLCHECK           = create(SearchCommand.SPELLCHECK);
+    public static final RedisCommand FT_SUGADD               = create(SearchCommand.SUGADD);
+    public static final RedisCommand FT_SUGDEL               = create(SearchCommand.SUGDEL);
+    public static final RedisCommand FT_SUGGET               = create(SearchCommand.SUGGET);
+    public static final RedisCommand FT_SUGLEN               = create(SearchCommand.SUGLEN);
+    public static final RedisCommand FT_SYNDUMP              = create(SearchCommand.SYNDUMP);
+    public static final RedisCommand FT_SYNUPDATE            = create(SearchCommand.SYNUPDATE);
+    public static final RedisCommand FT_TAGVALS              = create(SearchCommand.TAGVALS);
 
     /* ------------------------------------------------------------------------------------------ */
 
