@@ -24,7 +24,7 @@ public class ProtocolExtensions {
         }
     }
 
-    public enum KeywordEx implements Rawable {
+    enum KeywordEx implements Rawable {
         ;
 
         private final byte[] raw;
@@ -60,7 +60,7 @@ public class ProtocolExtensions {
         }
     }
 
-    public enum JsonKeywordEx implements Rawable {
+    enum JsonKeywordEx implements Rawable {
         MEMORY;
 
         private final byte[] raw;
