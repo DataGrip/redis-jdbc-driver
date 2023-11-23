@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;
-import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
 import redis.clients.jedis.util.SafeEncoder;
 
@@ -129,7 +128,7 @@ public class Utils {
     }
 
 
-    public static @NotNull Predicate<Params> contains(@NotNull Keyword keyword) {
+    public static @NotNull Predicate<Params> contains(@NotNull Rawable keyword) {
         return params -> params.contains(keyword);
     }
 

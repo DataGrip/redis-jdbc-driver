@@ -6,6 +6,7 @@ import jdbc.client.query.structures.Params;
 import jdbc.client.query.structures.RedisQuery;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 
 import java.util.HashMap;
 import java.util.function.Predicate;
@@ -373,7 +374,7 @@ public class ResultParsers {
         // TODO: CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           ???);
         CRP_MAP.put(RedisCommands.FT_SUGADD,               LONG);
         CRP_MAP.put(RedisCommands.FT_SUGDEL,               BOOLEAN);
-        // TODO: CRP_MAP.put(RedisCommands.FT_SUGGET,               ???);
+        CRP_MAP.put(RedisCommands.FT_SUGGET,               STRING, wrap(TUPLE, contains(SearchKeyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.FT_SUGLEN,               LONG);
         // TODO: CRP_MAP.put(RedisCommands.FT_SYNDUMP,              ???);
         CRP_MAP.put(RedisCommands.FT_SYNUPDATE,            STRING);

@@ -2,7 +2,7 @@ package jdbc.client.query.structures;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.args.Rawable;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,14 +32,14 @@ public class Params {
         return params.length > 0 ? params[0] : null;
     }
 
-    public @Nullable String getNext(@NotNull Keyword keyword) {
-        Integer index = getParamNames().get(keyword.name());
+    public @Nullable String getNext(@NotNull Rawable keyword) {
+        Integer index = getParamNames().get(getName(keyword));
         int nextIndex = index != null ? index + 1 : params.length;
         return nextIndex < params.length ? params[nextIndex] : null;
     }
 
-    public boolean contains(@NotNull Keyword keyword) {
-        return getParamNames().containsKey(keyword.name());
+    public boolean contains(@NotNull Rawable keyword) {
+        return getParamNames().containsKey(getName(keyword));
     }
 
     private @NotNull Map<String, Integer> getParamNames() {
