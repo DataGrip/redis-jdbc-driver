@@ -1,5 +1,6 @@
 package jdbc.client.result.parser.encoder;
 
+import jdbc.client.query.structures.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Module;
@@ -8,6 +9,9 @@ import redis.clients.jedis.json.DefaultGsonObjectMapper;
 import redis.clients.jedis.json.JsonObjectMapper;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.search.SearchBuilderFactory;
+import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
+import redis.clients.jedis.search.SearchResult;
+import redis.clients.jedis.search.SearchResult.SearchResultBuilder;
 import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
@@ -29,72 +33,72 @@ public class EncoderFactory {
 
     public static final ListEncoder<Object> OBJECT = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<Object> getBuilder() {
+        protected @NotNull Builder<Object> getBuilder(@NotNull Params params) {
             return BuilderFactory.ENCODED_OBJECT;
         }
 
         @Override
-        protected @NotNull Builder<List<Object>> getListBuilder() {
+        protected @NotNull Builder<List<Object>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.ENCODED_OBJECT_LIST;
         }
     };
 
     public static final ListEncoder<String> STRING = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<String> getBuilder() {
+        protected @NotNull Builder<String> getBuilder(@NotNull Params params) {
             return BuilderFactory.STRING;
         }
 
         @Override
-        protected @NotNull Builder<List<String>> getListBuilder() {
+        protected @NotNull Builder<List<String>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.STRING_LIST;
         }
     };
 
     public static final ListEncoder<Long> LONG = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<Long> getBuilder() {
+        protected @NotNull Builder<Long> getBuilder(@NotNull Params params) {
             return BuilderFactory.LONG;
         }
 
         @Override
-        protected @NotNull Builder<List<Long>> getListBuilder() {
+        protected @NotNull Builder<List<Long>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.LONG_LIST;
         }
     };
 
     public static final ListEncoder<Double> DOUBLE = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<Double> getBuilder() {
+        protected @NotNull Builder<Double> getBuilder(@NotNull Params params) {
             return BuilderFactory.DOUBLE;
         }
 
         @Override
-        protected @NotNull Builder<List<Double>> getListBuilder() {
+        protected @NotNull Builder<List<Double>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.DOUBLE_LIST;
         }
     };
 
     public static final ListEncoder<Boolean> BOOLEAN = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<Boolean> getBuilder() {
+        protected @NotNull Builder<Boolean> getBuilder(@NotNull Params params) {
             return BuilderFactory.BOOLEAN;
         }
 
         @Override
-        protected @NotNull Builder<List<Boolean>> getListBuilder() {
+        protected @NotNull Builder<List<Boolean>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.BOOLEAN_LIST;
         }
     };
 
     public static final ListEncoder<byte[]> BYTE_ARRAY = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<byte[]> getBuilder() {
+        protected @NotNull Builder<byte[]> getBuilder(@NotNull Params params) {
             return BuilderFactory.BYTE_ARRAY;
         }
 
         @Override
-        protected @NotNull Builder<List<byte[]>> getListBuilder() {
+        protected @NotNull Builder<List<byte[]>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.BYTE_ARRAY_LIST;
         }
     };
@@ -102,24 +106,24 @@ public class EncoderFactory {
 
     public static final ListEncoder<List<Object>> OBJECT_LIST = new ListElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<List<Object>> getBuilder() {
+        protected @NotNull Builder<List<Object>> getBuilder(@NotNull Params params) {
             return BuilderFactory.ENCODED_OBJECT_LIST;
         }
 
         @Override
-        protected @NotNull Builder<List<List<Object>>> getListBuilder() {
+        protected @NotNull Builder<List<List<Object>>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.ENCODED_OBJECT_LIST_LIST;
         }
     };
 
     public static final ListEncoder<List<String>> STRING_LIST = new ListElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<List<String>> getBuilder() {
+        protected @NotNull Builder<List<String>> getBuilder(@NotNull Params params) {
             return BuilderFactory.STRING_LIST;
         }
 
         @Override
-        protected @NotNull Builder<List<List<String>>> getListBuilder() {
+        protected @NotNull Builder<List<List<String>>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.STRING_LIST_LIST;
         }
     };
@@ -142,7 +146,7 @@ public class EncoderFactory {
 
     public static final ListEncoder<KeyedListElement> KEYED_STRING = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<KeyedListElement> getBuilder() {
+        protected @NotNull Builder<KeyedListElement> getBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_LIST_ELEMENT;
         }
     };
@@ -156,7 +160,7 @@ public class EncoderFactory {
 
     public static final ListEncoder<KeyedZSetElement> KEYED_TUPLE = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<KeyedZSetElement> getBuilder() {
+        protected @NotNull Builder<KeyedZSetElement> getBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
         }
     };
@@ -184,7 +188,7 @@ public class EncoderFactory {
 
     public static final ListEncoder<AccessControlUser> ACCESS_CONTROL_USER = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<AccessControlUser> getBuilder() {
+        protected @NotNull Builder<AccessControlUser> getBuilder(@NotNull Params params) {
             return BuilderFactory.ACCESS_CONTROL_USER;
         }
     };
@@ -212,7 +216,7 @@ public class EncoderFactory {
 
     public static final ListEncoder<FunctionStats> FUNCTION_STATS = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<FunctionStats> getBuilder() {
+        protected @NotNull Builder<FunctionStats> getBuilder(@NotNull Params params) {
             return FunctionStats.FUNCTION_STATS_BUILDER;
         }
     };
@@ -231,11 +235,6 @@ public class EncoderFactory {
             public List<Slowlog> build(Object data) {
                 return Slowlog.from(RAW_OBJECT_LIST.build(data));
             }
-
-            @Override
-            public String toString() {
-                return "List<SlowLog>";
-            }
         };
 
         @Override
@@ -246,12 +245,12 @@ public class EncoderFactory {
 
     public static final ListEncoder<StreamEntryID> STREAM_ENTRY_ID = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<StreamEntryID> getBuilder() {
+        protected @NotNull Builder<StreamEntryID> getBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_ENTRY_ID;
         }
 
         @Override
-        protected @NotNull Builder<List<StreamEntryID>> getListBuilder() {
+        protected @NotNull Builder<List<StreamEntryID>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_ENTRY_ID_LIST;
         }
     };
@@ -286,14 +285,14 @@ public class EncoderFactory {
 
     public static final ListEncoder<StreamInfo> STREAM_INFO = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<StreamInfo> getBuilder() {
+        protected @NotNull Builder<StreamInfo> getBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_INFO;
         }
     };
 
     public static final ListEncoder<StreamFullInfo> STREAM_INFO_FULL = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<StreamFullInfo> getBuilder() {
+        protected @NotNull Builder<StreamFullInfo> getBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_INFO_FULL;
         }
     };
@@ -307,7 +306,7 @@ public class EncoderFactory {
 
     public static final ListEncoder<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<StreamPendingSummary> getBuilder() {
+        protected @NotNull Builder<StreamPendingSummary> getBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_PENDING_SUMMARY;
         }
     };
@@ -315,19 +314,19 @@ public class EncoderFactory {
 
     public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ListElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder() {
+        protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_STRING_LIST;
         }
 
         @Override
-        protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder() {
+        protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_STRING_LIST_LIST;
         }
     };
 
     public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ListElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder() {
+        protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_TUPLE_LIST;
         }
     };
@@ -335,37 +334,22 @@ public class EncoderFactory {
 
     public static final ListEncoder<ScanResult<String>> STRING_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<ScanResult<String>> getBuilder() {
+        protected @NotNull Builder<ScanResult<String>> getBuilder(@NotNull Params params) {
             return BuilderFactory.SCAN_RESPONSE;
-        }
-
-        @Override
-        public String toString() {
-            return "ScanResult<String>";
         }
     };
 
     public static final ListEncoder<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<ScanResult<Tuple>> getBuilder() {
+        protected @NotNull Builder<ScanResult<Tuple>> getBuilder(@NotNull Params params) {
             return BuilderFactory.ZSCAN_RESPONSE;
-        }
-
-        @Override
-        public String toString() {
-            return "ScanResult<Tuple>";
         }
     };
 
     public static final ListEncoder<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<ScanResult<Map.Entry<String, String>>> getBuilder() {
+        protected @NotNull Builder<ScanResult<Map.Entry<String, String>>> getBuilder(@NotNull Params params) {
             return BuilderFactory.HSCAN_RESPONSE;
-        }
-
-        @Override
-        public String toString() {
-            return "ScanResult<Map.Entry<String, String>>";
         }
     };
 
@@ -391,48 +375,37 @@ public class EncoderFactory {
         };
 
         @Override
-        protected @NotNull Builder<Object> getBuilder() {
+        protected @NotNull Builder<Object> getBuilder(@NotNull Params params) {
             return JSON_OBJECT;
         }
 
         @Override
-        protected @NotNull Builder<List<Object>> getListBuilder() {
+        protected @NotNull Builder<List<Object>> getListBuilder(@NotNull Params params) {
             return JSON_OBJECT_LIST;
-        }
-
-        @Override
-        public String toString() {
-            return "List<JsonObject>";
         }
     };
 
 
     /* --------------------------------------------- RediSearch --------------------------------------------- */
 
-    public static final ListEncoder<AggregationResult> AGGREGATION_RESULT = new ElementListEncoder<AggregationResult>() {
-
-        private final Builder<AggregationResult> AGGREGATION_RESULT = new Builder<>() {
-            @Override
-            public AggregationResult build(Object data) {
-                List<?> list = (List<?>) data;
-                return list.get(0) instanceof List<?> ?
-                        SearchBuilderFactory.SEARCH_AGGREGATION_RESULT_WITH_CURSOR.build(data) :
-                        SearchBuilderFactory.SEARCH_AGGREGATION_RESULT.build(data);
-            }
-
-            @Override
-            public String toString() {
-                return "AggregationResult";
-            }
-        };
-
+    public static final ListEncoder<AggregationResult> AGGREGATION_RESULT = new ElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<AggregationResult> getBuilder() {
-            return AGGREGATION_RESULT;
+        protected @NotNull Builder<AggregationResult> getBuilder(@NotNull Params params) {
+            boolean withCursor = params.contains(SearchKeyword.WITHCURSOR);
+            if (withCursor) return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT_WITH_CURSOR;
+            return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT;
         }
     };
 
-
+    public static final ListEncoder<SearchResult> SEARCH_RESULT = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<SearchResult> getBuilder(@NotNull Params params) {
+            boolean hasContent = !params.contains(SearchKeyword.NOCONTENT);
+            boolean hasScores = params.contains(SearchKeyword.WITHSCORES);
+            boolean hasPayloads = params.contains(SearchKeyword.WITHPAYLOADS);
+            return new SearchResultBuilder(hasContent, hasScores, hasPayloads, true);
+        }
+    };
 
     /* ------------------------------------------------------------------------------------------ */
 
@@ -441,14 +414,9 @@ public class EncoderFactory {
         protected abstract @NotNull Builder<List<T>> getListBuilder();
 
         @Override
-        public final @NotNull List<T> encode(Object data) {
+        public final @NotNull List<T> encode(@Nullable Object data, @NotNull Params params) {
             if (data == null) return Collections.emptyList();
             return getListBuilder().build(data);
-        }
-
-        @Override
-        public String toString() {
-            return getListBuilder().toString();
         }
     }
 
@@ -457,46 +425,36 @@ public class EncoderFactory {
         protected abstract @NotNull Builder<Map<String, T>> getMapBuilder();
 
         @Override
-        public final @NotNull Map<String, T> encode(Object data) {
+        public final @NotNull Map<String, T> encode(@Nullable Object data, @NotNull Params params) {
             if (data == null) return Collections.emptyMap();
             return getMapBuilder().build(data);
-        }
-
-        @Override
-        public String toString() {
-            return getMapBuilder().toString();
         }
     }
 
     private static abstract class ElementListEncoder<T> extends ListEncoder<T> {
 
-        protected abstract @NotNull Builder<T> getBuilder();
+        protected abstract @NotNull Builder<T> getBuilder(@NotNull Params params);
 
-        protected @Nullable Builder<List<T>> getListBuilder() {
+        protected @Nullable Builder<List<T>> getListBuilder(@NotNull Params params) {
             return null;
         }
 
-        protected boolean isElementList(@NotNull Object data) {
-            return getListBuilder() != null && data instanceof List;
+        protected boolean isElementList(@NotNull Object data, @NotNull Params params) {
+            return getListBuilder(params) != null && data instanceof List;
         }
 
         @Override
-        public @NotNull List<T> encode(@Nullable Object data) {
+        public @NotNull List<T> encode(@Nullable Object data, @NotNull Params params) {
             if (data == null) return Collections.singletonList(null);
-            if (isElementList(data)) return Objects.requireNonNull(getListBuilder()).build(data);
-            return Collections.singletonList(getBuilder().build(data));
-        }
-
-        @Override
-        public String toString() {
-            return String.format("List<%s>", getBuilder());
+            if (isElementList(data, params)) return Objects.requireNonNull(getListBuilder(params)).build(data);
+            return Collections.singletonList(getBuilder(params).build(data));
         }
     }
 
     private static abstract class ListElementListEncoder<T> extends ElementListEncoder<T> {
         @Override
-        protected boolean isElementList(@NotNull Object data) {
-            if (!super.isElementList(data)) return false;
+        protected boolean isElementList(@NotNull Object data, @NotNull Params params) {
+            if (!super.isElementList(data, params)) return false;
             List<?> dataList = (List<?>) data;
             return dataList.isEmpty() || dataList.get(0) instanceof List;
         }

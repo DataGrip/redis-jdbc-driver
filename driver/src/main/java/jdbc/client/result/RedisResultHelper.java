@@ -12,6 +12,6 @@ public class RedisResultHelper {
     }
 
     public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {
-        return ResultParsers.get(query).parse(query, data);
+        return ResultParsers.get(query).parse(data, query);
     }
 }

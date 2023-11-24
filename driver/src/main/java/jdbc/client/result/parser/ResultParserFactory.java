@@ -521,8 +521,8 @@ public class ResultParserFactory {
 
         @Override
         @SuppressWarnings("unchecked")
-        public final @NotNull RedisListResult parse(@NotNull RedisQuery query, @Nullable Object data) {
-            List<T> encoded = getBuilder().encode(data);
+        public final @NotNull RedisListResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+            List<T> encoded = getBuilder().encode(data, query.getParams());
             List<S> converted = getConverter().convertList(encoded);
             return new RedisListResult(query, getType(), (List<Object>) converted);
         }
@@ -538,8 +538,8 @@ public class ResultParserFactory {
 
         @Override
         @SuppressWarnings("unchecked")
-        public final @NotNull RedisMapResult parse(@NotNull RedisQuery query, @Nullable Object data) {
-            Map<String, T> encoded = getBuilder().encode(data);
+        public final @NotNull RedisMapResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+            Map<String, T> encoded = getBuilder().encode(data, query.getParams());
             Map<String, S> converted = getConverter().convertMap(encoded);
             return new RedisMapResult(query, getType(), (Map<String, Object>) converted);
         }
@@ -554,8 +554,8 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
-            List<T> encoded = getBuilder().encode(data);
+        public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+            List<T> encoded = getBuilder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertList(encoded);
             return new RedisObjectResult(query, getType(), converted);
         }
@@ -570,8 +570,8 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
-            Map<String, T> encoded = getBuilder().encode(data);
+        public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+            Map<String, T> encoded = getBuilder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertMap(encoded);
             return new RedisObjectResult(query, getType(), converted);
         }
