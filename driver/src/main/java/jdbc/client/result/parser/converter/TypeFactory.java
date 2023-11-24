@@ -8,7 +8,9 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
+import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
@@ -16,6 +18,8 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class TypeFactory {
 
@@ -290,6 +294,19 @@ public class TypeFactory {
         add("cursor-id", LONG, AggregationResult::getCursorId, Utils.contains(SearchKeyword.WITHCURSOR));
     }};
 
+    // TODO (stack): think about deprecated "payload"
+    public static final ObjectType<Document> DOCUMENT = new ObjectType<>() {{
+        add("id", STRING, Document::getId);
+        add("score", DOUBLE, Document::getScore);
+        add("properties", MAP, d -> StreamSupport
+                .stream(d.getProperties().spliterator(), false)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+    }};
+
+    public static final ObjectType<SearchResult> SEARCH_RESULT = new ObjectType<>() {{
+        add("total-results", LONG, SearchResult::getTotalResults);
+        add("documents", LIST, SearchResult::getDocuments, ConverterFactory.DOCUMENT::convertList);
+    }};
 
     /* ------------------------------------------------------------------------------------------ */
 

@@ -8,6 +8,8 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.Document;
+import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
@@ -318,13 +320,26 @@ public class ConverterFactory {
 
     /* --------------------------------------------- RediSearch --------------------------------------------- */
 
-    public static final ObjectConverter<AggregationResult> AGGREGATION_RESULT = new ObjectConverter<AggregationResult>() {
+    public static final ObjectConverter<AggregationResult> AGGREGATION_RESULT = new ObjectConverter<>() {
         @Override
         public ObjectType<AggregationResult> getObjectType() {
             return TypeFactory.AGGREGATION_RESULT;
         }
     };
 
+    public static final ObjectConverter<Document> DOCUMENT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Document> getObjectType() {
+            return TypeFactory.DOCUMENT;
+        }
+    };
+
+    public static final ObjectConverter<SearchResult> SEARCH_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<SearchResult> getObjectType() {
+            return TypeFactory.SEARCH_RESULT;
+        }
+    };
 
     /* ------------------------------------------------------------------------------------------ */
 
