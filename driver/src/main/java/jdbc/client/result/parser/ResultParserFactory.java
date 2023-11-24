@@ -15,6 +15,7 @@ import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
 import redis.clients.jedis.util.KeyValue;
 
@@ -505,6 +506,18 @@ public class ResultParserFactory {
         @Override
         protected @NotNull ObjectConverter<AggregationResult> getConverter() {
             return ConverterFactory.AGGREGATION_RESULT;
+        }
+    };
+
+    public static final ResultParser SEARCH_RESULT = new ObjectListResultParser<SearchResult>() {
+        @Override
+        protected @NotNull ListEncoder<SearchResult> getBuilder() {
+            return EncoderFactory.SEARCH_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<SearchResult> getConverter() {
+            return ConverterFactory.SEARCH_RESULT;
         }
     };
 

@@ -370,7 +370,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_EXPLAINCLI,           STRING);
         CRP_MAP.put(RedisCommands.FT_INFO,                 OBJECT_MAP);
         // TODO: CRP_MAP.put(RedisCommands.FT_PROFILE,              ???);
-        // TODO: CRP_MAP.put(RedisCommands.FT_SEARCH,               ???);
+        CRP_MAP.put(RedisCommands.FT_SEARCH,               SEARCH_RESULT);
         // TODO: CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           ???);
         CRP_MAP.put(RedisCommands.FT_SUGADD,               LONG);
         CRP_MAP.put(RedisCommands.FT_SUGDEL,               BOOLEAN);
