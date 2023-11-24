@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.args.Rawable;
+import redis.clients.jedis.bloom.RedisBloomProtocol.*;
 import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 import redis.clients.jedis.search.SearchProtocol.SearchCommand;
@@ -367,6 +368,62 @@ public class RedisCommands {
     public static final RedisCommand FT_SYNDUMP              = create(SearchCommand.SYNDUMP);
     public static final RedisCommand FT_SYNUPDATE            = create(SearchCommand.SYNUPDATE);
     public static final RedisCommand FT_TAGVALS              = create(SearchCommand.TAGVALS);
+
+    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+    public static final RedisCommand BF_ADD                  = create(BloomFilterCommand.ADD);
+    public static final RedisCommand BF_CARD                 = create(BloomFilterCommand.CARD);
+    public static final RedisCommand BF_EXISTS               = create(BloomFilterCommand.EXISTS);
+    public static final RedisCommand BF_INFO                 = create(BloomFilterCommand.INFO);
+    public static final RedisCommand BF_INSERT               = create(BloomFilterCommand.INSERT);
+    public static final RedisCommand BF_LOADCHUNK            = create(BloomFilterCommand.LOADCHUNK);
+    public static final RedisCommand BF_MADD                 = create(BloomFilterCommand.MADD);
+    public static final RedisCommand BF_MEXISTS              = create(BloomFilterCommand.MEXISTS);
+    public static final RedisCommand BF_RESERVE              = create(BloomFilterCommand.RESERVE);
+    public static final RedisCommand BF_SCANDUMP             = create(BloomFilterCommand.SCANDUMP);
+
+    public static final RedisCommand CF_ADD                  = create(CuckooFilterCommand.ADD);
+    public static final RedisCommand CF_ADDNX                = create(CuckooFilterCommand.ADDNX);
+    public static final RedisCommand CF_COUNT                = create(CuckooFilterCommand.COUNT);
+    public static final RedisCommand CF_DEL                  = create(CuckooFilterCommand.DEL);
+    public static final RedisCommand CF_EXISTS               = create(CuckooFilterCommand.EXISTS);
+    public static final RedisCommand CF_INFO                 = create(CuckooFilterCommand.INFO);
+    public static final RedisCommand CF_INSERT               = create(CuckooFilterCommand.INSERT);
+    public static final RedisCommand CF_INSERTNX             = create(CuckooFilterCommand.INSERTNX);
+    public static final RedisCommand CF_LOADCHUNK            = create(CuckooFilterCommand.LOADCHUNK);
+    public static final RedisCommand CF_MEXISTS              = create(CuckooFilterCommand.MEXISTS);
+    public static final RedisCommand CF_RESERVE              = create(CuckooFilterCommand.RESERVE);
+    public static final RedisCommand CF_SCANDUMP             = create(CuckooFilterCommand.SCANDUMP);
+
+    public static final RedisCommand CMS_INCRBY              = create(CountMinSketchCommand.INCRBY);
+    public static final RedisCommand CMS_INFO                = create(CountMinSketchCommand.INFO);
+    public static final RedisCommand CMS_INITBYDIM           = create(CountMinSketchCommand.INITBYDIM);
+    public static final RedisCommand CMS_INITBYPROB          = create(CountMinSketchCommand.INITBYPROB);
+    public static final RedisCommand CMS_MERGE               = create(CountMinSketchCommand.MERGE);
+    public static final RedisCommand CMS_QUERY               = create(CountMinSketchCommand.QUERY);
+
+    public static final RedisCommand TDIGEST_ADD             = create(TDigestCommand.ADD);
+    public static final RedisCommand TDIGEST_BYRUNK          = create(TDigestCommand.BYRANK);
+    public static final RedisCommand TDIGEST_BYREVRANK       = create(TDigestCommand.BYREVRANK);
+    public static final RedisCommand TDIGEST_CDF             = create(TDigestCommand.CDF);
+    public static final RedisCommand TDIGEST_CREATE          = create(TDigestCommand.CREATE);
+    public static final RedisCommand TDIGEST_INFO            = create(TDigestCommand.INFO);
+    public static final RedisCommand TDIGEST_MAX             = create(TDigestCommand.MAX);
+    public static final RedisCommand TDIGEST_MERGE           = create(TDigestCommand.MERGE);
+    public static final RedisCommand TDIGEST_MIN             = create(TDigestCommand.MIN);
+    public static final RedisCommand TDIGEST_QUANTILE        = create(TDigestCommand.QUANTILE);
+    public static final RedisCommand TDIGEST_RANK            = create(TDigestCommand.RANK);
+    public static final RedisCommand TDIGEST_RESET           = create(TDigestCommand.RESET);
+    public static final RedisCommand TDIGEST_REVRANK         = create(TDigestCommand.REVRANK);
+    public static final RedisCommand TDIGEST_TRIMMED_MEAN    = create(TDigestCommand.TRIMMED_MEAN);
+
+    public static final RedisCommand TOPK_ADD                = create(TopKCommand.ADD);
+    public static final RedisCommand TOPK_COUNT              = create(TopKCommand.COUNT);
+    public static final RedisCommand TOPK_INCRBY             = create(TopKCommand.INCRBY);
+    public static final RedisCommand TOPK_INFO               = create(TopKCommand.INFO);
+    public static final RedisCommand TOPK_LIST               = create(TopKCommand.LIST);
+    public static final RedisCommand TOPK_QUERY              = create(TopKCommand.QUERY);
+    public static final RedisCommand TOPK_RESERVE            = create(TopKCommand.RESERVE);
 
     /* ------------------------------------------------------------------------------------------ */
 
