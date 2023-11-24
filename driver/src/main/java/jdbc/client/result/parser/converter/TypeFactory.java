@@ -294,6 +294,11 @@ public class TypeFactory {
         add("cursor-id", LONG, AggregationResult::getCursorId, Utils.contains(SearchKeyword.WITHCURSOR));
     }};
 
+    public static final ObjectType<Map.Entry<AggregationResult, Map<String, Object>>> AGGREGATION_PROFILE_RESPONSE = new ObjectType<>() {{
+        add("aggregation-result", MAP, Map.Entry::getKey, ConverterFactory.AGGREGATION_RESULT::convert);
+        add("profile", MAP, Map.Entry::getValue);
+    }};
+
     // TODO (stack): think about deprecated "payload"
     public static final ObjectType<Document> DOCUMENT = new ObjectType<>() {{
         add("id", STRING, Document::getId);
@@ -306,6 +311,11 @@ public class TypeFactory {
     public static final ObjectType<SearchResult> SEARCH_RESULT = new ObjectType<>() {{
         add("total-results", LONG, SearchResult::getTotalResults);
         add("documents", LIST, SearchResult::getDocuments, ConverterFactory.DOCUMENT::convertList);
+    }};
+
+    public static final ObjectType<Map.Entry<SearchResult, Map<String, Object>>> SEARCH_PROFILE_RESPONSE = new ObjectType<>() {{
+        add("search-result", MAP, Map.Entry::getKey, ConverterFactory.SEARCH_RESULT::convert);
+        add("profile", MAP, Map.Entry::getValue);
     }};
 
     /* ------------------------------------------------------------------------------------------ */

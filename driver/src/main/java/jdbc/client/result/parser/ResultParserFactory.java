@@ -509,6 +509,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser AGGREGATION_PROFILE_RESPONSE = new ObjectListResultParser<Map.Entry<AggregationResult, Map<String, Object>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<AggregationResult, Map<String, Object>>> getBuilder() {
+            return EncoderFactory.AGGREGATION_PROFILE_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<AggregationResult, Map<String, Object>>> getConverter() {
+            return ConverterFactory.AGGREGATION_PROFILE_RESPONSE;
+        }
+    };
+
     public static final ResultParser SEARCH_RESULT = new ObjectListResultParser<SearchResult>() {
         @Override
         protected @NotNull ListEncoder<SearchResult> getBuilder() {
@@ -520,6 +532,19 @@ public class ResultParserFactory {
             return ConverterFactory.SEARCH_RESULT;
         }
     };
+
+    public static final ResultParser SEARCH_PROFILE_RESPONSE = new ObjectListResultParser<Map.Entry<SearchResult, Map<String, Object>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<SearchResult, Map<String, Object>>> getBuilder() {
+            return EncoderFactory.SEARCH_PROFILE_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<SearchResult, Map<String, Object>>> getConverter() {
+            return ConverterFactory.SEARCH_PROFILE_RESPONSE;
+        }
+    };
+
 
     public static final ResultParser SEARCH_SPELLCHECK_RESPONSE = new MapResultParser<Map<String, Double>, Map<String, Double>>() {
         @Override

@@ -327,6 +327,13 @@ public class ConverterFactory {
         }
     };
 
+    public static final ObjectConverter<Map.Entry<AggregationResult, Map<String, Object>>> AGGREGATION_PROFILE_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<AggregationResult, Map<String, Object>>> getObjectType() {
+            return TypeFactory.AGGREGATION_PROFILE_RESPONSE;
+        }
+    };
+
     public static final ObjectConverter<Document> DOCUMENT = new ObjectConverter<>() {
         @Override
         public ObjectType<Document> getObjectType() {
@@ -341,6 +348,14 @@ public class ConverterFactory {
         }
     };
 
+    public static final ObjectConverter<Map.Entry<SearchResult, Map<String, Object>>> SEARCH_PROFILE_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<SearchResult, Map<String, Object>>> getObjectType() {
+            return TypeFactory.SEARCH_PROFILE_RESPONSE;
+        }
+    };
+
+
     public static final IdentityConverter<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new IdentityConverter<>() {
         private final SimpleType<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new TypeFactory.MapSimpleType<>();
 
@@ -350,10 +365,13 @@ public class ConverterFactory {
         }
     };
 
-    public static final IdentityConverter<List<String>> SEARCH_SYNONYM_GROUPS = new IdentityConverter<List<String>>() {
+
+    public static final IdentityConverter<List<String>> SEARCH_SYNONYM_GROUPS = new IdentityConverter<>() {
+        private final SimpleType<List<String>> SEARCH_SYNONYM_GROUPS = new TypeFactory.ListSimpleType<>();
+
         @Override
         public SimpleType<List<String>> getSimpleType() {
-            return null;
+            return SEARCH_SYNONYM_GROUPS;
         }
     };
 

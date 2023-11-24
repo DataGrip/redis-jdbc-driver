@@ -369,7 +369,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_EXPLAIN,              STRING);
         CRP_MAP.put(RedisCommands.FT_EXPLAINCLI,           STRING);
         CRP_MAP.put(RedisCommands.FT_INFO,                 OBJECT_MAP);
-        // TODO: CRP_MAP.put(RedisCommands.FT_PROFILE,              ???);
+        CRP_MAP.put(RedisCommands.FT_PROFILE,              wrap(AGGREGATION_PROFILE_RESPONSE, contains(SearchKeyword.AGGREGATE)),
+                                                           wrap(SEARCH_PROFILE_RESPONSE, contains(SearchKeyword.SEARCH)));
         CRP_MAP.put(RedisCommands.FT_SEARCH,               SEARCH_RESULT);
         CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           SEARCH_SPELLCHECK_RESPONSE);
         CRP_MAP.put(RedisCommands.FT_SUGADD,               LONG);
@@ -390,6 +391,11 @@ public class ResultParsers {
                  @NotNull ResultParser defaultResultParser,
                  @NotNull ResultParserWrapper... resultParserWrappers) {
             put(command, new CommandResultParsers(defaultResultParser, resultParserWrappers));
+        }
+
+        void put(@NotNull RedisCommand command,
+                 @NotNull ResultParserWrapper... resultParserWrappers) {
+            put(command, new CommandResultParsers(DEFAULT_RESULT_PARSER, resultParserWrappers));
         }
     }
 

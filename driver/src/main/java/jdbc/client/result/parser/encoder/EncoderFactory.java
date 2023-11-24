@@ -388,24 +388,63 @@ public class EncoderFactory {
 
     /* --------------------------------------------- RediSearch --------------------------------------------- */
 
+    private static class SearchProfileResponseBuilder<T> extends Builder<Map.Entry<T, Map<String, Object>>> {
+
+        private final Builder<T> replyBuilder;
+
+        public SearchProfileResponseBuilder(@NotNull Builder<T> replyBuilder) {
+            this.replyBuilder = replyBuilder;
+        }
+
+        @Override
+        public Map.Entry<T, Map<String, Object>> build(Object data) {
+            List<?> list = (List<?>) data;
+            return KeyValue.of(replyBuilder.build(list.get(0)),
+                    SearchBuilderFactory.SEARCH_PROFILE_PROFILE.build(list.get(1)));
+        }
+    }
+
+    private static @NotNull Builder<AggregationResult> getAggregationResultBuilder(@NotNull Params params) {
+        boolean withCursor = params.contains(SearchKeyword.WITHCURSOR);
+        if (withCursor) return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT_WITH_CURSOR;
+        return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT;
+    }
+
     public static final ListEncoder<AggregationResult> AGGREGATION_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<AggregationResult> getBuilder(@NotNull Params params) {
-            boolean withCursor = params.contains(SearchKeyword.WITHCURSOR);
-            if (withCursor) return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT_WITH_CURSOR;
-            return SearchBuilderFactory.SEARCH_AGGREGATION_RESULT;
+            return getAggregationResultBuilder(params);
         }
     };
+
+    public static final ListEncoder<Map.Entry<AggregationResult, Map<String, Object>>> AGGREGATION_PROFILE_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map.Entry<AggregationResult, Map<String, Object>>> getBuilder(@NotNull Params params) {
+            return new SearchProfileResponseBuilder<>(getAggregationResultBuilder(params));
+        }
+    };
+
+    private static @NotNull Builder<SearchResult> getSearchResultBuilder(@NotNull Params params) {
+        boolean hasContent = !params.contains(SearchKeyword.NOCONTENT);
+        boolean hasScores = params.contains(SearchKeyword.WITHSCORES);
+        boolean hasPayloads = params.contains(SearchKeyword.WITHPAYLOADS);
+        return new SearchResultBuilder(hasContent, hasScores, hasPayloads, true);
+    }
 
     public static final ListEncoder<SearchResult> SEARCH_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<SearchResult> getBuilder(@NotNull Params params) {
-            boolean hasContent = !params.contains(SearchKeyword.NOCONTENT);
-            boolean hasScores = params.contains(SearchKeyword.WITHSCORES);
-            boolean hasPayloads = params.contains(SearchKeyword.WITHPAYLOADS);
-            return new SearchResultBuilder(hasContent, hasScores, hasPayloads, true);
+            return getSearchResultBuilder(params);
         }
     };
+
+    public static final ListEncoder<Map.Entry<SearchResult, Map<String, Object>>> SEARCH_PROFILE_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map.Entry<SearchResult, Map<String, Object>>> getBuilder(@NotNull Params params) {
+            return new SearchProfileResponseBuilder<>(getSearchResultBuilder(params));
+        }
+    };
+
 
     public static final MapEncoder<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new SimpleMapEncoder<>() {
         @Override
