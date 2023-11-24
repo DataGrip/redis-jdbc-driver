@@ -407,6 +407,13 @@ public class EncoderFactory {
         }
     };
 
+    public static final MapEncoder<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new SimpleMapEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map<String, Map<String, Double>>> getMapBuilder() {
+            return SearchBuilderFactory.SEARCH_SPELLCHECK_RESPONSE;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
 
     private abstract static class SimpleListEncoder<T> extends ListEncoder<T> {

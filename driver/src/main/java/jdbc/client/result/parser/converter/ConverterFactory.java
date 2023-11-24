@@ -341,6 +341,15 @@ public class ConverterFactory {
         }
     };
 
+    public static final IdentityConverter<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new IdentityConverter<>() {
+        private final SimpleType<Map<String, Double>> SEARCH_SPELLCHECK_RESPONSE = new TypeFactory.MapSimpleType<>();
+
+        @Override
+        public SimpleType<Map<String, Double>> getSimpleType() {
+            return SEARCH_SPELLCHECK_RESPONSE;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
 
 }

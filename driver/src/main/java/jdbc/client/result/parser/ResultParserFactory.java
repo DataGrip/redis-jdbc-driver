@@ -521,6 +521,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser SEARCH_SPELLCHECK_RESPONSE = new MapResultParser<Map<String, Double>, Map<String, Double>>() {
+        @Override
+        protected @NotNull MapEncoder<Map<String, Double>> getBuilder() {
+            return EncoderFactory.SEARCH_SPELLCHECK_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull IdentityConverter<Map<String, Double>> getConverter() {
+            return ConverterFactory.SEARCH_SPELLCHECK_RESPONSE;
+        }
+    };
+
 
     /* ------------------------------------------------------------------------------------------ */
 

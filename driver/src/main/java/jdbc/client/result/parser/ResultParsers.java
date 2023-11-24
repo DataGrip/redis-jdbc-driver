@@ -371,7 +371,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_INFO,                 OBJECT_MAP);
         // TODO: CRP_MAP.put(RedisCommands.FT_PROFILE,              ???);
         CRP_MAP.put(RedisCommands.FT_SEARCH,               SEARCH_RESULT);
-        // TODO: CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           ???);
+        CRP_MAP.put(RedisCommands.FT_SPELLCHECK,           SEARCH_SPELLCHECK_RESPONSE);
         CRP_MAP.put(RedisCommands.FT_SUGADD,               LONG);
         CRP_MAP.put(RedisCommands.FT_SUGDEL,               BOOLEAN);
         CRP_MAP.put(RedisCommands.FT_SUGGET,               STRING, wrap(TUPLE, contains(SearchKeyword.WITHSCORES)));
