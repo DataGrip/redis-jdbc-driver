@@ -350,6 +350,13 @@ public class ConverterFactory {
         }
     };
 
+    public static final IdentityConverter<List<String>> SEARCH_SYNONYM_GROUPS = new IdentityConverter<List<String>>() {
+        @Override
+        public SimpleType<List<String>> getSimpleType() {
+            return null;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
 
 }

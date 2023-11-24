@@ -533,6 +533,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser SEARCH_SYNONYM_GROUPS = new MapResultParser<List<String>, List<String>>() {
+        @Override
+        protected @NotNull MapEncoder<List<String>> getBuilder() {
+            return EncoderFactory.SEARCH_SYNONYM_GROUPS;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<List<String>, List<String>> getConverter() {
+            return ConverterFactory.SEARCH_SYNONYM_GROUPS;
+        }
+    };
+
 
     /* ------------------------------------------------------------------------------------------ */
 

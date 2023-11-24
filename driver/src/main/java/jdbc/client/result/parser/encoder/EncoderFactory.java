@@ -414,6 +414,13 @@ public class EncoderFactory {
         }
     };
 
+    public static final MapEncoder<List<String>> SEARCH_SYNONYM_GROUPS = new SimpleMapEncoder<List<String>>() {
+        @Override
+        protected @NotNull Builder<Map<String, List<String>>> getMapBuilder() {
+            return SearchBuilderFactory.SEARCH_SYNONYM_GROUPS;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
 
     private abstract static class SimpleListEncoder<T> extends ListEncoder<T> {
