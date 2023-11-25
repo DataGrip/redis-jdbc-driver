@@ -16,6 +16,7 @@ public class CommandParsers {
     private static final CommandParser<?, ?> COUNT_MIN_SKETCH_COMMAND_PARSER = new CountMinSketchCommandParser();
     private static final CommandParser<?, ?> T_DIGEST_COMMAND_PARSER = new TDigestCommandParser();
     private static final CommandParser<?, ?> TOP_K_COMMAND_PARSER = new TopKCommandParser();
+    private static final CommandParser<?, ?> TIME_SERIES_COMMAND_PARSER = new TimeSeriesCommandParser();
     private static final CommandParser<?, ?> UNKNOWN_COMMAND_PARSER = new UnknownCommandParser();
 
     public static @NotNull CommandParser<?, ?> get(@NotNull String commandName) {
@@ -27,6 +28,7 @@ public class CommandParsers {
             if (commandName.startsWith("CMS.")) return COUNT_MIN_SKETCH_COMMAND_PARSER;
             if (commandName.startsWith("TDIGEST.")) return T_DIGEST_COMMAND_PARSER;
             if (commandName.startsWith("TOPK.")) return TOP_K_COMMAND_PARSER;
+            if (commandName.startsWith("TS.")) return TIME_SERIES_COMMAND_PARSER;
             return UNKNOWN_COMMAND_PARSER;
         }
         return NATIVE_COMMAND_PARSER;
