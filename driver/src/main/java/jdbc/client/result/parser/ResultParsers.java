@@ -381,6 +381,62 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_SYNUPDATE,            STRING);
         CRP_MAP.put(RedisCommands.FT_TAGVALS,              STRING);
 
+        /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+        CRP_MAP.put(RedisCommands.BF_ADD,                  BOOLEAN);
+        CRP_MAP.put(RedisCommands.BF_CARD,                 LONG);
+        CRP_MAP.put(RedisCommands.BF_EXISTS,               BOOLEAN);
+        CRP_MAP.put(RedisCommands.BF_INFO,                 OBJECT_MAP);
+        CRP_MAP.put(RedisCommands.BF_INSERT,               BOOLEAN);
+        CRP_MAP.put(RedisCommands.BF_LOADCHUNK,            STRING);
+        CRP_MAP.put(RedisCommands.BF_MADD,                 BOOLEAN);
+        CRP_MAP.put(RedisCommands.BF_MEXISTS,              BOOLEAN);
+        CRP_MAP.put(RedisCommands.BF_RESERVE,              STRING);
+        // TODO: CRP_MAP.put(RedisCommands.BF_SCANDUMP,             ???);
+
+        CRP_MAP.put(RedisCommands.CF_ADD,                  BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_ADDNX,                BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_COUNT,                LONG);
+        CRP_MAP.put(RedisCommands.CF_DEL,                  BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_EXISTS,               BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_INFO,                 OBJECT_MAP);
+        CRP_MAP.put(RedisCommands.CF_INSERT,               BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_INSERTNX,             BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_LOADCHUNK,            STRING);
+        CRP_MAP.put(RedisCommands.CF_MEXISTS,              BOOLEAN);
+        CRP_MAP.put(RedisCommands.CF_RESERVE,              STRING);
+        // TODO: CRP_MAP.put(RedisCommands.CF_SCANDUMP,             ???);
+
+        CRP_MAP.put(RedisCommands.CMS_INCRBY,              LONG);
+        CRP_MAP.put(RedisCommands.CMS_INFO,                OBJECT_MAP);
+        CRP_MAP.put(RedisCommands.CMS_INITBYDIM,           STRING);
+        CRP_MAP.put(RedisCommands.CMS_INITBYPROB,          STRING);
+        CRP_MAP.put(RedisCommands.CMS_MERGE,               STRING);
+        CRP_MAP.put(RedisCommands.CMS_QUERY,               LONG);
+
+        CRP_MAP.put(RedisCommands.TDIGEST_ADD,             STRING);
+        CRP_MAP.put(RedisCommands.TDIGEST_BYRUNK,          DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_BYREVRANK,       DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_CDF,             DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_CREATE,          STRING);
+        CRP_MAP.put(RedisCommands.TDIGEST_INFO,            OBJECT_MAP);
+        CRP_MAP.put(RedisCommands.TDIGEST_MAX,             DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_MERGE,           STRING);
+        CRP_MAP.put(RedisCommands.TDIGEST_MIN,             DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_QUANTILE,        DOUBLE);
+        CRP_MAP.put(RedisCommands.TDIGEST_RANK,            LONG);
+        CRP_MAP.put(RedisCommands.TDIGEST_RESET,           STRING);
+        CRP_MAP.put(RedisCommands.TDIGEST_REVRANK,         LONG);
+        CRP_MAP.put(RedisCommands.TDIGEST_TRIMMED_MEAN,    DOUBLE);
+
+        CRP_MAP.put(RedisCommands.TOPK_ADD,                STRING);
+        CRP_MAP.put(RedisCommands.TOPK_COUNT,              LONG);
+        CRP_MAP.put(RedisCommands.TOPK_INCRBY,             STRING);
+        CRP_MAP.put(RedisCommands.TOPK_INFO,               OBJECT_MAP);
+        CRP_MAP.put(RedisCommands.TOPK_LIST,               STRING);
+        CRP_MAP.put(RedisCommands.TOPK_QUERY,              BOOLEAN);
+        CRP_MAP.put(RedisCommands.TOPK_RESERVE,            STRING);
+
         /* ------------------------------------------------------------------------------------------ */
 
     }
