@@ -318,6 +318,15 @@ public class TypeFactory {
         add("profile", MAP, Map.Entry::getValue);
     }};
 
+
+    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+    public static final ObjectType<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ObjectType<>() {{
+        add("iterator", LONG, Map.Entry::getKey);
+        add("data", BYTE_ARRAY, Map.Entry::getValue);
+    }};
+
+
     /* ------------------------------------------------------------------------------------------ */
 
 }

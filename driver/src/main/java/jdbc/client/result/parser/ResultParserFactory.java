@@ -571,6 +571,21 @@ public class ResultParserFactory {
     };
 
 
+    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+    public static final ResultParser BLOOM_SCANDUMP_RESPONSE = new ObjectListResultParser<Map.Entry<Long, byte[]>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<Long, byte[]>> getBuilder() {
+            return EncoderFactory.BLOOM_SCANDUMP_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<Long, byte[]>> getConverter() {
+            return ConverterFactory.BLOOM_SCANDUMP_RESPONSE;
+        }
+    };
+
+
     /* ------------------------------------------------------------------------------------------ */
 
     private static abstract class ListResultParser<T, S> implements ResultParser {

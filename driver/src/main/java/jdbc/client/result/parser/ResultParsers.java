@@ -392,7 +392,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.BF_MADD,                 BOOLEAN);
         CRP_MAP.put(RedisCommands.BF_MEXISTS,              BOOLEAN);
         CRP_MAP.put(RedisCommands.BF_RESERVE,              STRING);
-        // TODO: CRP_MAP.put(RedisCommands.BF_SCANDUMP,             ???);
+        CRP_MAP.put(RedisCommands.BF_SCANDUMP,             BLOOM_SCANDUMP_RESPONSE);
 
         CRP_MAP.put(RedisCommands.CF_ADD,                  BOOLEAN);
         CRP_MAP.put(RedisCommands.CF_ADDNX,                BOOLEAN);
@@ -405,7 +405,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CF_LOADCHUNK,            STRING);
         CRP_MAP.put(RedisCommands.CF_MEXISTS,              BOOLEAN);
         CRP_MAP.put(RedisCommands.CF_RESERVE,              STRING);
-        // TODO: CRP_MAP.put(RedisCommands.CF_SCANDUMP,             ???);
+        CRP_MAP.put(RedisCommands.CF_SCANDUMP,             BLOOM_SCANDUMP_RESPONSE);
 
         CRP_MAP.put(RedisCommands.CMS_INCRBY,              LONG);
         CRP_MAP.put(RedisCommands.CMS_INFO,                OBJECT_MAP);

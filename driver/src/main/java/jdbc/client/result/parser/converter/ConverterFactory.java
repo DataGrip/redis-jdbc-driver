@@ -375,6 +375,17 @@ public class ConverterFactory {
         }
     };
 
+
+    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+    public static final ObjectConverter<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<Long, byte[]>> getObjectType() {
+            return TypeFactory.BLOOM_SCANDUMP_RESPONSE;
+        }
+    };
+
+
     /* ------------------------------------------------------------------------------------------ */
 
 }

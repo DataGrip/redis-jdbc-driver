@@ -324,7 +324,7 @@ public class EncoderFactory {
         }
     };
 
-    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ListElementListEncoder<>() {
+    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder(@NotNull Params params) {
             return BuilderFactory.KEYED_TUPLE_LIST;
@@ -459,6 +459,26 @@ public class EncoderFactory {
             return SearchBuilderFactory.SEARCH_SYNONYM_GROUPS;
         }
     };
+
+
+    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+
+    public static final ListEncoder<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ElementListEncoder<>() {
+
+        private final Builder<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new Builder<>() {
+            @Override
+            public Map.Entry<Long, byte[]> build(Object data) {
+                List<?> list = (List<?>) data;
+                return new KeyValue<>(BuilderFactory.LONG.build(list.get(0)), BuilderFactory.BINARY.build(list.get(1)));
+            }
+        };
+
+        @Override
+        protected @NotNull Builder<Map.Entry<Long, byte[]>> getBuilder(@NotNull Params params) {
+            return BLOOM_SCANDUMP_RESPONSE;
+        }
+    };
+
 
     /* ------------------------------------------------------------------------------------------ */
 
