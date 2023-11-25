@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class SearchCommandParser extends CommandParser<SearchCommand, ProtocolCommand> {
+public class SearchCommandParser extends CommandParserWithoutEx<SearchCommand> {
 
     private static final Map<String, SearchCommand> SEARCH_COMMANDS = toMap(SearchCommand.values());
 
@@ -20,11 +20,6 @@ public class SearchCommandParser extends CommandParser<SearchCommand, ProtocolCo
     @Override
     protected @Nullable SearchCommand parseCommand(@NotNull String commandName) {
         return SEARCH_COMMANDS.get(commandName);
-    }
-
-    @Override
-    protected @Nullable ProtocolCommand parseCommandEx(@NotNull String commandName) {
-        return null;
     }
 
     @Override
