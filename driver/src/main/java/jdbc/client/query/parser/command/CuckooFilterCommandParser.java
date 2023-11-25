@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class CuckooFilterCommandParser extends CommandParserWithoutEx<CuckooFilterCommand> {
+class CuckooFilterCommandParser extends CommandParserWithoutEx<CuckooFilterCommand> {
 
     private static final Map<String, CuckooFilterCommand> CUCKOO_FILTER_COMMANDS = toMap(CuckooFilterCommand.values());
-
-    CuckooFilterCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable CuckooFilterCommand parseCommand(@NotNull String commandName) {

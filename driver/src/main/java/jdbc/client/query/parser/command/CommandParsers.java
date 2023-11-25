@@ -2,34 +2,39 @@ package jdbc.client.query.parser.command;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CommandParsers {
 
     private CommandParsers() {
     }
 
-    // TODO (anya) [stack]: improve
+
     private static final CommandParser<?, ?> NATIVE_COMMAND_PARSER = new NativeCommandParser();
-    private static final CommandParser<?, ?> JSON_COMMAND_PARSER = new JsonCommandParser();
-    private static final CommandParser<?, ?> SEARCH_COMMAND_PARSER = new SearchCommandParser();
-    private static final CommandParser<?, ?> BLOOM_FILTER_COMMAND_PARSER = new BloomFilterCommandParser();
-    private static final CommandParser<?, ?> CUCKOO_FILTER_COMMAND_PARSER = new CuckooFilterCommandParser();
-    private static final CommandParser<?, ?> COUNT_MIN_SKETCH_COMMAND_PARSER = new CountMinSketchCommandParser();
-    private static final CommandParser<?, ?> T_DIGEST_COMMAND_PARSER = new TDigestCommandParser();
-    private static final CommandParser<?, ?> TOP_K_COMMAND_PARSER = new TopKCommandParser();
-    private static final CommandParser<?, ?> TIME_SERIES_COMMAND_PARSER = new TimeSeriesCommandParser();
-    private static final CommandParser<?, ?> UNKNOWN_COMMAND_PARSER = new UnknownCommandParser();
+
+    private static final Map<String, CommandParser<?, ?>> MODULE_COMMAND_PARSERS = new HashMap<>();
+
+    static {
+        MODULE_COMMAND_PARSERS.put("JSON",    new JsonCommandParser());
+        MODULE_COMMAND_PARSERS.put("FT",      new SearchCommandParser());
+        MODULE_COMMAND_PARSERS.put("BF",      new BloomFilterCommandParser());
+        MODULE_COMMAND_PARSERS.put("CF",      new CuckooFilterCommandParser());
+        MODULE_COMMAND_PARSERS.put("CMS",     new CountMinSketchCommandParser());
+        MODULE_COMMAND_PARSERS.put("TDIGEST", new TDigestCommandParser());
+        MODULE_COMMAND_PARSERS.put("TOPK",    new TopKCommandParser());
+        MODULE_COMMAND_PARSERS.put("TS",      new TimeSeriesCommandParser());
+    }
+
+    private static final CommandParser<?, ?> UNKNOWN_MODULE_COMMAND_PARSER = new UnknownModuleCommandParser();
+
 
     public static @NotNull CommandParser<?, ?> get(@NotNull String commandName) {
         if (commandName.contains(".")) {
-            if (commandName.startsWith("JSON.")) return JSON_COMMAND_PARSER;
-            if (commandName.startsWith("FT.")) return SEARCH_COMMAND_PARSER;
-            if (commandName.startsWith("BF.")) return BLOOM_FILTER_COMMAND_PARSER;
-            if (commandName.startsWith("CF.")) return CUCKOO_FILTER_COMMAND_PARSER;
-            if (commandName.startsWith("CMS.")) return COUNT_MIN_SKETCH_COMMAND_PARSER;
-            if (commandName.startsWith("TDIGEST.")) return T_DIGEST_COMMAND_PARSER;
-            if (commandName.startsWith("TOPK.")) return TOP_K_COMMAND_PARSER;
-            if (commandName.startsWith("TS.")) return TIME_SERIES_COMMAND_PARSER;
-            return UNKNOWN_COMMAND_PARSER;
+            String moduleName = commandName.substring(0, commandName.indexOf("."));
+            CommandParser<?, ?> moduleCommandParser = MODULE_COMMAND_PARSERS.get(moduleName);
+            if (moduleCommandParser != null) return moduleCommandParser;
+            return UNKNOWN_MODULE_COMMAND_PARSER;
         }
         return NATIVE_COMMAND_PARSER;
     }

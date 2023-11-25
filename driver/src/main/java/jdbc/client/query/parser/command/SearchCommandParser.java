@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class SearchCommandParser extends CommandParserWithoutEx<SearchCommand> {
+class SearchCommandParser extends CommandParserWithoutEx<SearchCommand> {
 
     private static final Map<String, SearchCommand> SEARCH_COMMANDS = toMap(SearchCommand.values());
-
-    SearchCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable SearchCommand parseCommand(@NotNull String commandName) {

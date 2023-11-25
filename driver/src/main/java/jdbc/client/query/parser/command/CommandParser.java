@@ -12,9 +12,6 @@ import static jdbc.utils.Utils.getName;
 
 public abstract class CommandParser<T extends ProtocolCommand, E extends ProtocolCommand> {
 
-    CommandParser() {
-    }
-
     public @NotNull RedisCommand parse(@NotNull String commandName, @NotNull Params params) throws SQLException {
         ProtocolCommand command = parseCommandOrEx(commandName);
         if (command != null && hasKeyword(command)) {

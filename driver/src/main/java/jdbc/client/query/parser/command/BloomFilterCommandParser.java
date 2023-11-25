@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class BloomFilterCommandParser extends CommandParserWithoutEx<BloomFilterCommand> {
+class BloomFilterCommandParser extends CommandParserWithoutEx<BloomFilterCommand> {
 
     private static final Map<String, BloomFilterCommand> BLOOM_FILTER_COMMANDS = toMap(BloomFilterCommand.values());
-
-    BloomFilterCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable BloomFilterCommand parseCommand(@NotNull String commandName) {

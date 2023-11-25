@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static jdbc.utils.Utils.toMap;
 
-public class NativeCommandParser extends CommandParser<Command, CommandEx> {
+class NativeCommandParser extends CommandParser<Command, CommandEx> {
 
     private static final Map<String, Command> COMMANDS = toMap(Command.values());
     private static final Map<String, CommandEx> COMMANDS_EX = toMap(CommandEx.values());
@@ -21,10 +21,6 @@ public class NativeCommandParser extends CommandParser<Command, CommandEx> {
             Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
             // TODO: LATENCY
     );
-
-    NativeCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable Command parseCommand(@NotNull String commandName) {

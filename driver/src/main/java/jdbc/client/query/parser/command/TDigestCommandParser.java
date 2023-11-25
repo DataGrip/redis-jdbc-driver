@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class TDigestCommandParser extends CommandParserWithoutEx<TDigestCommand> {
+class TDigestCommandParser extends CommandParserWithoutEx<TDigestCommand> {
 
     private static final Map<String, TDigestCommand> T_DIGEST_COMMANDS = toMap(TDigestCommand.values());
-
-    TDigestCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable TDigestCommand parseCommand(@NotNull String commandName) {

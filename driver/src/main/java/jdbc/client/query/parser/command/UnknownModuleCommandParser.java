@@ -4,11 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.commands.ProtocolCommand;
 
-public class UnknownCommandParser extends CommandParserWithoutEx<ProtocolCommand> {
-
-    UnknownCommandParser() {
-        super();
-    }
+class UnknownModuleCommandParser extends CommandParserWithoutEx<ProtocolCommand> {
 
     @Override
     protected @Nullable ProtocolCommand parseCommand(@NotNull String commandName) {

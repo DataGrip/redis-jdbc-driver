@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class TopKCommandParser extends CommandParserWithoutEx<TopKCommand> {
+class TopKCommandParser extends CommandParserWithoutEx<TopKCommand> {
 
     private static final Map<String, TopKCommand> TOP_K_COMMANDS = toMap(TopKCommand.values());
-
-    TopKCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable TopKCommand parseCommand(@NotNull String commandName) {

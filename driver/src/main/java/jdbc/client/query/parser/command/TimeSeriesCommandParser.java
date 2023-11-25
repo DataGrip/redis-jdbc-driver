@@ -9,13 +9,9 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-public class TimeSeriesCommandParser extends CommandParserWithoutEx<TimeSeriesCommand> {
+class TimeSeriesCommandParser extends CommandParserWithoutEx<TimeSeriesCommand> {
 
     private static final Map<String, TimeSeriesCommand> TIME_SERIES_COMMANDS = toMap(TimeSeriesCommand.values());
-
-    TimeSeriesCommandParser() {
-        super();
-    }
 
     @Override
     protected @Nullable TimeSeriesCommand parseCommand(@NotNull String commandName) {
