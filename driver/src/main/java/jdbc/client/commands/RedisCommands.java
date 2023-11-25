@@ -12,6 +12,7 @@ import redis.clients.jedis.commands.ProtocolCommand;
 import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 import redis.clients.jedis.search.SearchProtocol.SearchCommand;
 import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
+import redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesCommand;
 
 import static jdbc.utils.Utils.getName;
 
@@ -424,6 +425,26 @@ public class RedisCommands {
     public static final RedisCommand TOPK_LIST               = create(TopKCommand.LIST);
     public static final RedisCommand TOPK_QUERY              = create(TopKCommand.QUERY);
     public static final RedisCommand TOPK_RESERVE            = create(TopKCommand.RESERVE);
+
+    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+    public static final RedisCommand TS_ADD                  = create(TimeSeriesCommand.ADD);
+    public static final RedisCommand TS_ALTER                = create(TimeSeriesCommand.ALTER);
+    public static final RedisCommand TS_CREATE               = create(TimeSeriesCommand.CREATE);
+    public static final RedisCommand TS_CREATERULE           = create(TimeSeriesCommand.CREATERULE);
+    public static final RedisCommand TS_DECRBY               = create(TimeSeriesCommand.DECRBY);
+    public static final RedisCommand TS_DEL                  = create(TimeSeriesCommand.DEL);
+    public static final RedisCommand TS_DELETERULE           = create(TimeSeriesCommand.DELETERULE);
+    public static final RedisCommand TS_GET                  = create(TimeSeriesCommand.GET);
+    public static final RedisCommand TS_INCRBY               = create(TimeSeriesCommand.INCRBY);
+    public static final RedisCommand TS_INFO                 = create(TimeSeriesCommand.INFO);
+    public static final RedisCommand TS_MADD                 = create(TimeSeriesCommand.MADD);
+    public static final RedisCommand TS_MGET                 = create(TimeSeriesCommand.MGET);
+    public static final RedisCommand TS_MRANGE               = create(TimeSeriesCommand.MRANGE);
+    public static final RedisCommand TS_MREVRANGE            = create(TimeSeriesCommand.MREVRANGE);
+    public static final RedisCommand TS_QUERYINDEX           = create(TimeSeriesCommand.QUERYINDEX);
+    public static final RedisCommand TS_RANGE                = create(TimeSeriesCommand.RANGE);
+    public static final RedisCommand TS_REVRANGE             = create(TimeSeriesCommand.REVRANGE);
 
     /* ------------------------------------------------------------------------------------------ */
 
