@@ -483,7 +483,7 @@ public class EncoderFactory {
 
     /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
-    public static final ListEncoder<TSElement> TS_ELEMENT = new ListElementListEncoder<>() {
+    public static final ListEncoder<TSElement> TIMESERIES_ELEMENT = new ListElementListEncoder<>() {
         @Override
         protected @NotNull Builder<TSElement> getBuilder(@NotNull Params params) {
             return TimeSeriesBuilderFactory.TIMESERIES_ELEMENT;
@@ -510,7 +510,7 @@ public class EncoderFactory {
     };
 
 
-    public static final MapEncoder<Object> TS_INFO = new SimpleMapEncoder<>() {
+    public static final MapEncoder<Object> TIMESERIES_INFO = new SimpleMapEncoder<>() {
 
         private final Builder<Map<String, Object>> TS_INFO = new Builder<>() {
             @Override

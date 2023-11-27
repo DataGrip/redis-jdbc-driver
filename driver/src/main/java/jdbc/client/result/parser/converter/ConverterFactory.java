@@ -340,7 +340,7 @@ public class ConverterFactory {
     public static final ObjectConverter<Document> DOCUMENT = new ObjectConverter<>() {
         @Override
         public ObjectType<Document> getObjectType() {
-            return TypeFactory.DOCUMENT;
+            return TypeFactory.SEARCH_DOCUMENT;
         }
     };
 
@@ -391,7 +391,7 @@ public class ConverterFactory {
 
     /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
-    public static final ObjectConverter<TSElement> TS_ELEMENT = new ObjectConverter<>() {
+    public static final ObjectConverter<TSElement> TIMESERIES_ELEMENT = new ObjectConverter<>() {
         @Override
         public ObjectType<TSElement> getObjectType() {
             return TypeFactory.TS_ELEMENT;

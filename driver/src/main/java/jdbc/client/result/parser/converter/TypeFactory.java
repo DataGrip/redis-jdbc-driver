@@ -303,8 +303,7 @@ public class TypeFactory {
         add("profile", MAP, Map.Entry::getValue);
     }};
 
-    // TODO (stack): think about deprecated "payload"
-    public static final ObjectType<Document> DOCUMENT = new ObjectType<>() {{
+    public static final ObjectType<Document> SEARCH_DOCUMENT = new ObjectType<>() {{
         add("id", STRING, Document::getId);
         add("score", DOUBLE, Document::getScore);
         add("properties", MAP, d -> StreamSupport
@@ -342,13 +341,13 @@ public class TypeFactory {
     public static final ObjectType<TSKeyValue<TSElement>> TIMESERIES_MGET_RESPONSE = new ObjectType<>() {{
         add("key", STRING, TSKeyValue::getKey);
         add("labels", MAP, TSKeyValue::getLabels, Utils.contains(TimeSeriesKeyword.WITHLABELS, TimeSeriesKeyword.SELECTED_LABELS));
-        add("element", MAP, TSKeyValue::getValue, ConverterFactory.TS_ELEMENT::convert);
+        add("element", MAP, TSKeyValue::getValue, ConverterFactory.TIMESERIES_ELEMENT::convert);
     }};
 
     // TODO (stack): elements?
     public static final ObjectType<TSKeyedElements> TIMESERIES_MRANGE_RESPONSE = new ObjectType<>() {{
         add("key", STRING, TSKeyedElements::getKey);
-        add("elements", LIST, TSKeyedElements::getValue, ConverterFactory.TS_ELEMENT::convertList);
+        add("elements", LIST, TSKeyedElements::getValue, ConverterFactory.TIMESERIES_ELEMENT::convertList);
     }};
 
     // TODO (stack): unify KeyValue types?

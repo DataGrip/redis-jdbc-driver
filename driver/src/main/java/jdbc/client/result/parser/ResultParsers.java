@@ -446,16 +446,16 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.TS_DECRBY,               LONG);
         CRP_MAP.put(RedisCommands.TS_DEL,                  LONG);
         CRP_MAP.put(RedisCommands.TS_DELETERULE,           STRING);
-        CRP_MAP.put(RedisCommands.TS_GET,                  TS_ELEMENT);
+        CRP_MAP.put(RedisCommands.TS_GET,                  TIMESERIES_ELEMENT);
         CRP_MAP.put(RedisCommands.TS_INCRBY,               LONG);
-        CRP_MAP.put(RedisCommands.TS_INFO,                 TS_INFO);
+        CRP_MAP.put(RedisCommands.TS_INFO,                 TIMESERIES_INFO);
         CRP_MAP.put(RedisCommands.TS_MADD,                 LONG);
         CRP_MAP.put(RedisCommands.TS_MGET,                 TIMESERIES_MGET_RESPONSE);
         CRP_MAP.put(RedisCommands.TS_MRANGE,               TIMESERIES_MRANGE_RESPONSE);
         CRP_MAP.put(RedisCommands.TS_MREVRANGE,            TIMESERIES_MRANGE_RESPONSE);
         CRP_MAP.put(RedisCommands.TS_QUERYINDEX,           STRING);
-        CRP_MAP.put(RedisCommands.TS_RANGE,                TS_ELEMENT);
-        CRP_MAP.put(RedisCommands.TS_REVRANGE,             TS_ELEMENT);
+        CRP_MAP.put(RedisCommands.TS_RANGE,                TIMESERIES_ELEMENT);
+        CRP_MAP.put(RedisCommands.TS_REVRANGE,             TIMESERIES_ELEMENT);
 
         /* ------------------------------------------------------------------------------------------ */
 

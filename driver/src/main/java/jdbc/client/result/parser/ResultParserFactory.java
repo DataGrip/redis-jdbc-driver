@@ -593,15 +593,15 @@ public class ResultParserFactory {
 
     // TODO (stack): rename?
 
-    public static final ResultParser TS_ELEMENT = new ObjectListResultParser<TSElement>() {
+    public static final ResultParser TIMESERIES_ELEMENT = new ObjectListResultParser<TSElement>() {
         @Override
         protected @NotNull ListEncoder<TSElement> getBuilder() {
-            return EncoderFactory.TS_ELEMENT;
+            return EncoderFactory.TIMESERIES_ELEMENT;
         }
 
         @Override
         protected @NotNull ObjectConverter<TSElement> getConverter() {
-            return ConverterFactory.TS_ELEMENT;
+            return ConverterFactory.TIMESERIES_ELEMENT;
         }
     };
 
@@ -629,10 +629,11 @@ public class ResultParserFactory {
         }
     };
 
-    public static final ResultParser TS_INFO = new MapResultParser<>() {
+
+    public static final ResultParser TIMESERIES_INFO = new MapResultParser<>() {
         @Override
         protected @NotNull MapEncoder<Object> getBuilder() {
-            return EncoderFactory.TS_INFO;
+            return EncoderFactory.TIMESERIES_INFO;
         }
 
         @Override
