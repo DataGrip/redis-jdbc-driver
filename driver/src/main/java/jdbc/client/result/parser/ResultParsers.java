@@ -437,6 +437,26 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.TOPK_QUERY,              BOOLEAN);
         CRP_MAP.put(RedisCommands.TOPK_RESERVE,            STRING);
 
+        /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+        CRP_MAP.put(RedisCommands.TS_ADD,                  LONG);
+        CRP_MAP.put(RedisCommands.TS_ALTER,                STRING);
+        CRP_MAP.put(RedisCommands.TS_CREATE,               STRING);
+        CRP_MAP.put(RedisCommands.TS_CREATERULE,           STRING);
+        CRP_MAP.put(RedisCommands.TS_DECRBY,               LONG);
+        CRP_MAP.put(RedisCommands.TS_DEL,                  LONG);
+        CRP_MAP.put(RedisCommands.TS_DELETERULE,           STRING);
+        // TODO: CRP_MAP.put(RedisCommands.TS_GET,                  ???);
+        CRP_MAP.put(RedisCommands.TS_INCRBY,               LONG);
+        // TODO: CRP_MAP.put(RedisCommands.TS_INFO,                 ???);
+        CRP_MAP.put(RedisCommands.TS_MADD,                 LONG);
+        // TODO: CRP_MAP.put(RedisCommands.TS_MGET,                 ???);
+        // TODO: CRP_MAP.put(RedisCommands.TS_MRANGE,               ???);
+        // TODO: CRP_MAP.put(RedisCommands.TS_MREVRANGE,            ???);
+        CRP_MAP.put(RedisCommands.TS_QUERYINDEX,           STRING);
+        // TODO: CRP_MAP.put(RedisCommands.TS_RANGE,                ???);
+        // TODO: CRP_MAP.put(RedisCommands.TS_REVRANGE,             ???);
+
         /* ------------------------------------------------------------------------------------------ */
 
     }
