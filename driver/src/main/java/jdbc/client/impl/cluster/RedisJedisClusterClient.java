@@ -24,7 +24,8 @@ import java.util.Set;
 
 public class RedisJedisClusterClient extends RedisClientBase {
 
-    private static final Set<RedisCommand> UNSUPPORTED_COMMANDS = Set.of(RedisCommands.DBSIZE, RedisCommands.WAIT);
+    private static final Set<RedisCommand> UNSUPPORTED_COMMANDS =
+            Set.of(RedisCommands.DBSIZE, RedisCommands.WAIT, RedisCommands.WAITAOF);
 
 
     private final JedisCluster jedisCluster;

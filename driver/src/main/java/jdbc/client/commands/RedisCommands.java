@@ -261,6 +261,7 @@ public class RedisCommands {
     public static final RedisCommand UNLINK                  = create(Command.UNLINK);
     public static final RedisCommand UNWATCH                 = create(Command.UNWATCH);
     public static final RedisCommand WAIT                    = create(Command.WAIT);
+    public static final RedisCommand WAITAOF                 = create(Command.WAITAOF); // TODO: result parser
     public static final RedisCommand WATCH                   = create(Command.WATCH);
     public static final RedisCommand XACK                    = create(Command.XACK);
     public static final RedisCommand XADD                    = create(Command.XADD);
