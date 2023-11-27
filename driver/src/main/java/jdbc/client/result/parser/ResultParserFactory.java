@@ -35,7 +35,7 @@ public class ResultParserFactory {
 
     public static final ResultParser OBJECT = new ListResultParser<>() {
         @Override
-        protected @NotNull ListEncoder<Object> getBuilder() {
+        protected @NotNull ListEncoder<Object> getEncoder() {
             return EncoderFactory.OBJECT;
         }
 
@@ -47,7 +47,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STRING = new ListResultParser<String, String>() {
         @Override
-        protected @NotNull ListEncoder<String> getBuilder() {
+        protected @NotNull ListEncoder<String> getEncoder() {
             return EncoderFactory.STRING;
         }
 
@@ -59,7 +59,7 @@ public class ResultParserFactory {
 
     public static final ResultParser LONG = new ListResultParser<Long, Long>() {
         @Override
-        protected @NotNull ListEncoder<Long> getBuilder() {
+        protected @NotNull ListEncoder<Long> getEncoder() {
             return EncoderFactory.LONG;
         }
 
@@ -71,7 +71,7 @@ public class ResultParserFactory {
 
     public static final ResultParser DOUBLE = new ListResultParser<Double, Double>() {
         @Override
-        protected @NotNull ListEncoder<Double> getBuilder() {
+        protected @NotNull ListEncoder<Double> getEncoder() {
             return EncoderFactory.DOUBLE;
         }
 
@@ -83,7 +83,7 @@ public class ResultParserFactory {
 
     public static final ResultParser BOOLEAN = new ListResultParser<Boolean, Boolean>() {
         @Override
-        protected @NotNull ListEncoder<Boolean> getBuilder() {
+        protected @NotNull ListEncoder<Boolean> getEncoder() {
             return EncoderFactory.BOOLEAN;
         }
 
@@ -95,7 +95,7 @@ public class ResultParserFactory {
 
     public static final ResultParser BYTE_ARRAY = new ListResultParser<byte[], byte[]>() {
         @Override
-        protected @NotNull ListEncoder<byte[]> getBuilder() {
+        protected @NotNull ListEncoder<byte[]> getEncoder() {
             return EncoderFactory.BYTE_ARRAY;
         }
 
@@ -108,7 +108,7 @@ public class ResultParserFactory {
 
     public static final ResultParser OBJECT_LIST = new ListResultParser<List<Object>, List<Object>>() {
         @Override
-        protected @NotNull ListEncoder<List<Object>> getBuilder() {
+        protected @NotNull ListEncoder<List<Object>> getEncoder() {
             return EncoderFactory.OBJECT_LIST;
         }
 
@@ -120,7 +120,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STRING_LIST = new ListResultParser<List<String>, List<String>>() {
         @Override
-        protected @NotNull ListEncoder<List<String>> getBuilder() {
+        protected @NotNull ListEncoder<List<String>> getEncoder() {
             return EncoderFactory.STRING_LIST;
         }
 
@@ -133,7 +133,7 @@ public class ResultParserFactory {
 
     public static final ResultParser OBJECT_MAP = new MapResultParser<>() {
         @Override
-        protected @NotNull MapEncoder<Object> getBuilder() {
+        protected @NotNull MapEncoder<Object> getEncoder() {
             return EncoderFactory.OBJECT_MAP;
         }
 
@@ -145,7 +145,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STRING_MAP = new MapResultParser<String, String>() {
         @Override
-        protected @NotNull MapEncoder<String> getBuilder() {
+        protected @NotNull MapEncoder<String> getEncoder() {
             return EncoderFactory.STRING_MAP;
         }
 
@@ -158,7 +158,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_STRING = new ObjectListResultParser<KeyedListElement>() {
         @Override
-        protected @NotNull ListEncoder<KeyedListElement> getBuilder() {
+        protected @NotNull ListEncoder<KeyedListElement> getEncoder() {
             return EncoderFactory.KEYED_STRING;
         }
 
@@ -170,7 +170,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TUPLE = new ObjectListResultParser<Tuple>() {
         @Override
-        protected @NotNull ListEncoder<Tuple> getBuilder() {
+        protected @NotNull ListEncoder<Tuple> getEncoder() {
             return EncoderFactory.TUPLE;
         }
 
@@ -182,7 +182,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_TUPLE = new ObjectListResultParser<KeyedZSetElement>() {
         @Override
-        protected @NotNull ListEncoder<KeyedZSetElement> getBuilder() {
+        protected @NotNull ListEncoder<KeyedZSetElement> getEncoder() {
             return EncoderFactory.KEYED_TUPLE;
         }
 
@@ -194,7 +194,7 @@ public class ResultParserFactory {
 
     public static final ResultParser GEO_COORDINATE = new ObjectListResultParser<GeoCoordinate>() {
         @Override
-        protected @NotNull ListEncoder<GeoCoordinate> getBuilder() {
+        protected @NotNull ListEncoder<GeoCoordinate> getEncoder() {
             return EncoderFactory.GEO_COORDINATE;
         }
 
@@ -206,7 +206,7 @@ public class ResultParserFactory {
 
     public static final ResultParser GEORADIUS_RESPONSE = new ObjectListResultParser<GeoRadiusResponse>() {
         @Override
-        protected @NotNull ListEncoder<GeoRadiusResponse> getBuilder() {
+        protected @NotNull ListEncoder<GeoRadiusResponse> getEncoder() {
             return EncoderFactory.GEORADIUS_RESPONSE;
         }
 
@@ -218,7 +218,7 @@ public class ResultParserFactory {
 
     public static final ResultParser MODULE = new ObjectListResultParser<Module>() {
         @Override
-        protected @NotNull ListEncoder<Module> getBuilder() {
+        protected @NotNull ListEncoder<Module> getEncoder() {
             return EncoderFactory.MODULE;
         }
 
@@ -230,7 +230,7 @@ public class ResultParserFactory {
 
     public static final ResultParser ACCESS_CONTROL_USER = new ObjectListResultParser<AccessControlUser>() {
         @Override
-        protected @NotNull ListEncoder<AccessControlUser> getBuilder() {
+        protected @NotNull ListEncoder<AccessControlUser> getEncoder() {
             return EncoderFactory.ACCESS_CONTROL_USER;
         }
 
@@ -242,7 +242,7 @@ public class ResultParserFactory {
 
     public static final ResultParser ACCESS_CONTROL_LOG_ENTRY = new ObjectListResultParser<AccessControlLogEntry>() {
         @Override
-        protected @NotNull ListEncoder<AccessControlLogEntry> getBuilder() {
+        protected @NotNull ListEncoder<AccessControlLogEntry> getEncoder() {
             return EncoderFactory.ACCESS_CONTROL_LOG_ENTRY;
         }
 
@@ -254,7 +254,7 @@ public class ResultParserFactory {
 
     public static final ResultParser COMMAND_DOCUMENT = new ObjectMapResultParser<CommandDocument>() {
         @Override
-        protected @NotNull MapEncoder<CommandDocument> getBuilder() {
+        protected @NotNull MapEncoder<CommandDocument> getEncoder() {
             return EncoderFactory.COMMAND_DOCUMENT;
         }
 
@@ -266,7 +266,7 @@ public class ResultParserFactory {
 
     public static final ResultParser COMMAND_INFO = new ObjectMapResultParser<CommandInfo>() {
         @Override
-        protected @NotNull MapEncoder<CommandInfo> getBuilder() {
+        protected @NotNull MapEncoder<CommandInfo> getEncoder() {
             return EncoderFactory.COMMAND_INFO;
         }
 
@@ -278,7 +278,7 @@ public class ResultParserFactory {
 
     public static final ResultParser FUNCTION_STATS = new ObjectListResultParser<FunctionStats>() {
         @Override
-        protected @NotNull ListEncoder<FunctionStats> getBuilder() {
+        protected @NotNull ListEncoder<FunctionStats> getEncoder() {
             return EncoderFactory.FUNCTION_STATS;
         }
 
@@ -290,7 +290,7 @@ public class ResultParserFactory {
 
     public static final ResultParser LIBRARY_INFO = new ObjectListResultParser<LibraryInfo>() {
         @Override
-        protected @NotNull ListEncoder<LibraryInfo> getBuilder() {
+        protected @NotNull ListEncoder<LibraryInfo> getEncoder() {
             return EncoderFactory.LIBRARY_INFO;
         }
 
@@ -302,7 +302,7 @@ public class ResultParserFactory {
 
     public static final ResultParser SLOW_LOG = new ObjectListResultParser<Slowlog>() {
         @Override
-        protected @NotNull ListEncoder<Slowlog> getBuilder() {
+        protected @NotNull ListEncoder<Slowlog> getEncoder() {
             return EncoderFactory.SLOW_LOG;
         }
 
@@ -314,7 +314,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_ENTRY_ID = new ListResultParser<StreamEntryID, String>() {
         @Override
-        protected @NotNull ListEncoder<StreamEntryID> getBuilder() {
+        protected @NotNull ListEncoder<StreamEntryID> getEncoder() {
             return EncoderFactory.STREAM_ENTRY_ID;
         }
 
@@ -326,7 +326,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_ENTRY = new ObjectListResultParser<StreamEntry>() {
         @Override
-        protected @NotNull ListEncoder<StreamEntry> getBuilder() {
+        protected @NotNull ListEncoder<StreamEntry> getEncoder() {
             return EncoderFactory.STREAM_ENTRY;
         }
 
@@ -338,7 +338,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_READ = new ObjectListResultParser<Map.Entry<String, List<StreamEntry>>>() {
         @Override
-        protected @NotNull ListEncoder<Map.Entry<String, List<StreamEntry>>> getBuilder() {
+        protected @NotNull ListEncoder<Map.Entry<String, List<StreamEntry>>> getEncoder() {
             return EncoderFactory.STREAM_READ_ENTRY;
         }
 
@@ -350,7 +350,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_CONSUMER_INFO = new ObjectListResultParser<StreamConsumersInfo>() {
         @Override
-        protected @NotNull ListEncoder<StreamConsumersInfo> getBuilder() {
+        protected @NotNull ListEncoder<StreamConsumersInfo> getEncoder() {
             return EncoderFactory.STREAM_CONSUMER_INFO;
         }
 
@@ -362,7 +362,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_GROUP_INFO = new ObjectListResultParser<StreamGroupInfo>() {
         @Override
-        protected @NotNull ListEncoder<StreamGroupInfo> getBuilder() {
+        protected @NotNull ListEncoder<StreamGroupInfo> getEncoder() {
             return EncoderFactory.STREAM_GROUP_INFO;
         }
 
@@ -374,7 +374,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_INFO = new ObjectListResultParser<StreamInfo>() {
         @Override
-        protected @NotNull ListEncoder<StreamInfo> getBuilder() {
+        protected @NotNull ListEncoder<StreamInfo> getEncoder() {
             return EncoderFactory.STREAM_INFO;
         }
 
@@ -386,7 +386,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_INFO_FULL = new ObjectListResultParser<StreamFullInfo>() {
         @Override
-        protected @NotNull ListEncoder<StreamFullInfo> getBuilder() {
+        protected @NotNull ListEncoder<StreamFullInfo> getEncoder() {
             return EncoderFactory.STREAM_INFO_FULL;
         }
 
@@ -398,7 +398,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_PENDING_ENTRY = new ObjectListResultParser<StreamPendingEntry>() {
         @Override
-        protected @NotNull ListEncoder<StreamPendingEntry> getBuilder() {
+        protected @NotNull ListEncoder<StreamPendingEntry> getEncoder() {
             return EncoderFactory.STREAM_PENDING_ENTRY;
         }
 
@@ -410,7 +410,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STREAM_PENDING_SUMMARY = new ObjectListResultParser<StreamPendingSummary>() {
         @Override
-        protected @NotNull ListEncoder<StreamPendingSummary> getBuilder() {
+        protected @NotNull ListEncoder<StreamPendingSummary> getEncoder() {
             return EncoderFactory.STREAM_PENDING_SUMMARY;
         }
 
@@ -423,7 +423,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
         @Override
-        protected @NotNull ListEncoder<KeyValue<String, List<String>>> getBuilder() {
+        protected @NotNull ListEncoder<KeyValue<String, List<String>>> getEncoder() {
             return EncoderFactory.KEYED_STRING_LIST;
         }
 
@@ -435,7 +435,7 @@ public class ResultParserFactory {
 
     public static final ResultParser KEYED_TUPLE_LIST = new ObjectListResultParser<KeyValue<String, List<Tuple>>>() {
         @Override
-        protected @NotNull ListEncoder<KeyValue<String, List<Tuple>>> getBuilder() {
+        protected @NotNull ListEncoder<KeyValue<String, List<Tuple>>> getEncoder() {
             return EncoderFactory.KEYED_TUPLE_LIST;
         }
 
@@ -448,7 +448,7 @@ public class ResultParserFactory {
 
     public static final ResultParser STRING_SCAN_RESULT = new ObjectListResultParser<ScanResult<String>>() {
         @Override
-        protected @NotNull ListEncoder<ScanResult<String>> getBuilder() {
+        protected @NotNull ListEncoder<ScanResult<String>> getEncoder() {
             return EncoderFactory.STRING_SCAN_RESULT;
         }
 
@@ -460,7 +460,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TUPLE_SCAN_RESULT = new ObjectListResultParser<ScanResult<Tuple>>() {
         @Override
-        protected @NotNull ListEncoder<ScanResult<Tuple>> getBuilder() {
+        protected @NotNull ListEncoder<ScanResult<Tuple>> getEncoder() {
             return EncoderFactory.TUPLE_SCAN_RESULT;
         }
 
@@ -472,7 +472,7 @@ public class ResultParserFactory {
 
     public static final ResultParser ENTRY_SCAN_RESULT = new ObjectListResultParser<ScanResult<Map.Entry<String, String>>>() {
         @Override
-        protected @NotNull ListEncoder<ScanResult<Map.Entry<String, String>>> getBuilder() {
+        protected @NotNull ListEncoder<ScanResult<Map.Entry<String, String>>> getEncoder() {
             return EncoderFactory.ENTRY_SCAN_RESULT;
         }
 
@@ -487,7 +487,7 @@ public class ResultParserFactory {
 
     public static final ResultParser JSON_OBJECT = new ListResultParser<>() {
         @Override
-        protected @NotNull ListEncoder<Object> getBuilder() {
+        protected @NotNull ListEncoder<Object> getEncoder() {
             return EncoderFactory.JSON_OBJECT;
         }
 
@@ -502,7 +502,7 @@ public class ResultParserFactory {
 
     public static final ResultParser AGGREGATION_RESULT = new ObjectListResultParser<AggregationResult>() {
         @Override
-        protected @NotNull ListEncoder<AggregationResult> getBuilder() {
+        protected @NotNull ListEncoder<AggregationResult> getEncoder() {
             return EncoderFactory.AGGREGATION_RESULT;
         }
 
@@ -514,7 +514,7 @@ public class ResultParserFactory {
 
     public static final ResultParser AGGREGATION_PROFILE_RESPONSE = new ObjectListResultParser<Map.Entry<AggregationResult, Map<String, Object>>>() {
         @Override
-        protected @NotNull ListEncoder<Map.Entry<AggregationResult, Map<String, Object>>> getBuilder() {
+        protected @NotNull ListEncoder<Map.Entry<AggregationResult, Map<String, Object>>> getEncoder() {
             return EncoderFactory.AGGREGATION_PROFILE_RESPONSE;
         }
 
@@ -526,7 +526,7 @@ public class ResultParserFactory {
 
     public static final ResultParser SEARCH_RESULT = new ObjectListResultParser<SearchResult>() {
         @Override
-        protected @NotNull ListEncoder<SearchResult> getBuilder() {
+        protected @NotNull ListEncoder<SearchResult> getEncoder() {
             return EncoderFactory.SEARCH_RESULT;
         }
 
@@ -538,7 +538,7 @@ public class ResultParserFactory {
 
     public static final ResultParser SEARCH_PROFILE_RESPONSE = new ObjectListResultParser<Map.Entry<SearchResult, Map<String, Object>>>() {
         @Override
-        protected @NotNull ListEncoder<Map.Entry<SearchResult, Map<String, Object>>> getBuilder() {
+        protected @NotNull ListEncoder<Map.Entry<SearchResult, Map<String, Object>>> getEncoder() {
             return EncoderFactory.SEARCH_PROFILE_RESPONSE;
         }
 
@@ -551,7 +551,7 @@ public class ResultParserFactory {
 
     public static final ResultParser SEARCH_SPELLCHECK_RESPONSE = new MapResultParser<Map<String, Double>, Map<String, Double>>() {
         @Override
-        protected @NotNull MapEncoder<Map<String, Double>> getBuilder() {
+        protected @NotNull MapEncoder<Map<String, Double>> getEncoder() {
             return EncoderFactory.SEARCH_SPELLCHECK_RESPONSE;
         }
 
@@ -563,7 +563,7 @@ public class ResultParserFactory {
 
     public static final ResultParser SEARCH_SYNONYM_GROUPS = new MapResultParser<List<String>, List<String>>() {
         @Override
-        protected @NotNull MapEncoder<List<String>> getBuilder() {
+        protected @NotNull MapEncoder<List<String>> getEncoder() {
             return EncoderFactory.SEARCH_SYNONYM_GROUPS;
         }
 
@@ -578,7 +578,7 @@ public class ResultParserFactory {
 
     public static final ResultParser BLOOM_SCANDUMP_RESPONSE = new ObjectListResultParser<Map.Entry<Long, byte[]>>() {
         @Override
-        protected @NotNull ListEncoder<Map.Entry<Long, byte[]>> getBuilder() {
+        protected @NotNull ListEncoder<Map.Entry<Long, byte[]>> getEncoder() {
             return EncoderFactory.BLOOM_SCANDUMP_RESPONSE;
         }
 
@@ -595,7 +595,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TIMESERIES_ELEMENT = new ObjectListResultParser<TSElement>() {
         @Override
-        protected @NotNull ListEncoder<TSElement> getBuilder() {
+        protected @NotNull ListEncoder<TSElement> getEncoder() {
             return EncoderFactory.TIMESERIES_ELEMENT;
         }
 
@@ -607,7 +607,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TIMESERIES_MGET_RESPONSE = new ObjectListResultParser<TSKeyValue<TSElement>>() {
         @Override
-        protected @NotNull ListEncoder<TSKeyValue<TSElement>> getBuilder() {
+        protected @NotNull ListEncoder<TSKeyValue<TSElement>> getEncoder() {
             return EncoderFactory.TIMESERIES_MGET_RESPONSE;
         }
 
@@ -619,7 +619,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TIMESERIES_MRANGE_RESPONSE = new ObjectListResultParser<TSKeyedElements>() {
         @Override
-        protected @NotNull ListEncoder<TSKeyedElements> getBuilder() {
+        protected @NotNull ListEncoder<TSKeyedElements> getEncoder() {
             return EncoderFactory.TIMESERIES_MRANGE_RESPONSE;
         }
 
@@ -632,7 +632,7 @@ public class ResultParserFactory {
 
     public static final ResultParser TIMESERIES_INFO = new MapResultParser<>() {
         @Override
-        protected @NotNull MapEncoder<Object> getBuilder() {
+        protected @NotNull MapEncoder<Object> getEncoder() {
             return EncoderFactory.TIMESERIES_INFO;
         }
 
@@ -646,7 +646,7 @@ public class ResultParserFactory {
 
 
     private static abstract class ListResultParser<T, S> implements ResultParser {
-        protected abstract @NotNull ListEncoder<T> getBuilder();
+        protected abstract @NotNull ListEncoder<T> getEncoder();
         protected abstract @NotNull SimpleConverter<T, S> getConverter();
 
         protected final @NotNull SimpleType<S> getType() {
@@ -656,14 +656,14 @@ public class ResultParserFactory {
         @Override
         @SuppressWarnings("unchecked")
         public final @NotNull RedisListResult parse(@Nullable Object data, @NotNull RedisQuery query) {
-            List<T> encoded = getBuilder().encode(data, query.getParams());
+            List<T> encoded = getEncoder().encode(data, query.getParams());
             List<S> converted = getConverter().convertList(encoded);
             return new RedisListResult(query, getType(), (List<Object>) converted);
         }
     }
 
     private static abstract class MapResultParser<T, S> implements ResultParser {
-        protected abstract @NotNull MapEncoder<T> getBuilder();
+        protected abstract @NotNull MapEncoder<T> getEncoder();
         protected abstract @NotNull SimpleConverter<T, S> getConverter();
 
         protected final @NotNull SimpleType<S> getType() {
@@ -673,14 +673,14 @@ public class ResultParserFactory {
         @Override
         @SuppressWarnings("unchecked")
         public final @NotNull RedisMapResult parse(@Nullable Object data, @NotNull RedisQuery query) {
-            Map<String, T> encoded = getBuilder().encode(data, query.getParams());
+            Map<String, T> encoded = getEncoder().encode(data, query.getParams());
             Map<String, S> converted = getConverter().convertMap(encoded);
             return new RedisMapResult(query, getType(), (Map<String, Object>) converted);
         }
     }
 
     private static abstract class ObjectListResultParser<T> implements ResultParser {
-        protected abstract @NotNull ListEncoder<T> getBuilder();
+        protected abstract @NotNull ListEncoder<T> getEncoder();
         protected abstract @NotNull ObjectConverter<T> getConverter();
 
         protected final @NotNull ObjectType<T> getType() {
@@ -689,14 +689,14 @@ public class ResultParserFactory {
 
         @Override
         public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
-            List<T> encoded = getBuilder().encode(data, query.getParams());
+            List<T> encoded = getEncoder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertList(encoded);
             return new RedisObjectResult(query, getType(), converted);
         }
     }
 
     private static abstract class ObjectMapResultParser<T> implements ResultParser {
-        protected abstract @NotNull MapEncoder<T> getBuilder();
+        protected abstract @NotNull MapEncoder<T> getEncoder();
         protected abstract @NotNull ObjectConverter<T> getConverter();
 
         protected final @NotNull ObjectType<T> getType() {
@@ -705,7 +705,7 @@ public class ResultParserFactory {
 
         @Override
         public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
-            Map<String, T> encoded = getBuilder().encode(data, query.getParams());
+            Map<String, T> encoded = getEncoder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertMap(encoded);
             return new RedisObjectResult(query, getType(), converted);
         }
