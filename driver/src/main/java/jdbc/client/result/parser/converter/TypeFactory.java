@@ -12,6 +12,10 @@ import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
+import redis.clients.jedis.timeseries.TSElement;
+import redis.clients.jedis.timeseries.TSKeyValue;
+import redis.clients.jedis.timeseries.TSKeyedElements;
+import redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.AbstractMap;
@@ -326,6 +330,28 @@ public class TypeFactory {
         add("data", BYTE_ARRAY, Map.Entry::getValue);
     }};
 
+
+    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+    public static final ObjectType<TSElement> TS_ELEMENT = new ObjectType<>() {{
+        add("timestamp", LONG, TSElement::getTimestamp);
+        add("value", DOUBLE, TSElement::getValue);
+    }};
+
+    // TODO (stack): element?
+    public static final ObjectType<TSKeyValue<TSElement>> TIMESERIES_MGET_RESPONSE = new ObjectType<>() {{
+        add("key", STRING, TSKeyValue::getKey);
+        add("labels", MAP, TSKeyValue::getLabels, Utils.contains(TimeSeriesKeyword.WITHLABELS, TimeSeriesKeyword.SELECTED_LABELS));
+        add("element", MAP, TSKeyValue::getValue, ConverterFactory.TS_ELEMENT::convert);
+    }};
+
+    // TODO (stack): elements?
+    public static final ObjectType<TSKeyedElements> TIMESERIES_MRANGE_RESPONSE = new ObjectType<>() {{
+        add("key", STRING, TSKeyedElements::getKey);
+        add("elements", LIST, TSKeyedElements::getValue, ConverterFactory.TS_ELEMENT::convertList);
+    }};
+
+    // TODO (stack): unify KeyValue types?
 
     /* ------------------------------------------------------------------------------------------ */
 

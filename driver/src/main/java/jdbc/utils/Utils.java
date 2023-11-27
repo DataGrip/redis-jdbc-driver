@@ -128,8 +128,12 @@ public class Utils {
     }
 
 
-    public static @NotNull Predicate<Params> contains(@NotNull Rawable keyword) {
-        return params -> params.contains(keyword);
+    public static @NotNull Predicate<Params> contains(@NotNull Rawable firstKeyword, @NotNull Rawable... keywords) {
+        Predicate<Params> p = params -> params.contains(firstKeyword);
+        for (Rawable keyword : keywords) {
+            p = p.or(params -> params.contains(keyword));
+        }
+        return p;
     }
 
     public static @NotNull Predicate<Params> length(int length) {

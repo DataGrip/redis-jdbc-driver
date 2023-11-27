@@ -13,6 +13,10 @@ import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.SearchResult.SearchResultBuilder;
 import redis.clients.jedis.search.aggr.AggregationResult;
+import redis.clients.jedis.timeseries.TSElement;
+import redis.clients.jedis.timeseries.TSKeyValue;
+import redis.clients.jedis.timeseries.TSKeyedElements;
+import redis.clients.jedis.timeseries.TimeSeriesBuilderFactory;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.Collections;
@@ -476,6 +480,35 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<Map.Entry<Long, byte[]>> getBuilder(@NotNull Params params) {
             return BLOOM_SCANDUMP_RESPONSE;
+        }
+    };
+
+
+    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+    public static final ListEncoder<TSElement> TS_ELEMENT = new ListElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<TSElement> getBuilder(@NotNull Params params) {
+            return TimeSeriesBuilderFactory.TIMESERIES_ELEMENT;
+        }
+
+        @Override
+        protected @NotNull Builder<List<TSElement>> getListBuilder(@NotNull Params params) {
+            return TimeSeriesBuilderFactory.TIMESERIES_ELEMENT_LIST;
+        }
+    };
+
+    public static final ListEncoder<TSKeyValue<TSElement>> TIMESERIES_MGET_RESPONSE = new SimpleListEncoder<>() {
+        @Override
+        protected @NotNull Builder<List<TSKeyValue<TSElement>>> getListBuilder() {
+            return TimeSeriesBuilderFactory.TIMESERIES_MGET_RESPONSE;
+        }
+    };
+
+    public static final ListEncoder<TSKeyedElements> TIMESERIES_MRANGE_RESPONSE = new SimpleListEncoder<>() {
+        @Override
+        protected @NotNull Builder<List<TSKeyedElements>> getListBuilder() {
+            return TimeSeriesBuilderFactory.TIMESERIES_MRANGE_RESPONSE;
         }
     };
 

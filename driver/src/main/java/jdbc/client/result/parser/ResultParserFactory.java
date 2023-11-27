@@ -17,6 +17,9 @@ import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
+import redis.clients.jedis.timeseries.TSElement;
+import redis.clients.jedis.timeseries.TSKeyValue;
+import redis.clients.jedis.timeseries.TSKeyedElements;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
@@ -586,7 +589,48 @@ public class ResultParserFactory {
     };
 
 
+    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+    // TODO (stack): rename?
+
+    public static final ResultParser TS_ELEMENT = new ObjectListResultParser<TSElement>() {
+        @Override
+        protected @NotNull ListEncoder<TSElement> getBuilder() {
+            return EncoderFactory.TS_ELEMENT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<TSElement> getConverter() {
+            return ConverterFactory.TS_ELEMENT;
+        }
+    };
+
+    public static final ResultParser TIMESERIES_MGET_RESPONSE = new ObjectListResultParser<TSKeyValue<TSElement>>() {
+        @Override
+        protected @NotNull ListEncoder<TSKeyValue<TSElement>> getBuilder() {
+            return EncoderFactory.TIMESERIES_MGET_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<TSKeyValue<TSElement>> getConverter() {
+            return ConverterFactory.TIMESERIES_MGET_RESPONSE;
+        }
+    };
+
+    public static final ResultParser TIMESERIES_MRANGE_RESPONSE = new ObjectListResultParser<TSKeyedElements>() {
+        @Override
+        protected @NotNull ListEncoder<TSKeyedElements> getBuilder() {
+            return EncoderFactory.TIMESERIES_MRANGE_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<TSKeyedElements> getConverter() {
+            return ConverterFactory.TIMESERIES_MRANGE_RESPONSE;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
+
 
     private static abstract class ListResultParser<T, S> implements ResultParser {
         protected abstract @NotNull ListEncoder<T> getBuilder();

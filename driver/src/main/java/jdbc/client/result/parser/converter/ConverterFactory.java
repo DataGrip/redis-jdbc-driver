@@ -11,6 +11,9 @@ import redis.clients.jedis.resps.*;
 import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
+import redis.clients.jedis.timeseries.TSElement;
+import redis.clients.jedis.timeseries.TSKeyValue;
+import redis.clients.jedis.timeseries.TSKeyedElements;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.List;
@@ -385,6 +388,29 @@ public class ConverterFactory {
         }
     };
 
+
+    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+
+    public static final ObjectConverter<TSElement> TS_ELEMENT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<TSElement> getObjectType() {
+            return TypeFactory.TS_ELEMENT;
+        }
+    };
+
+    public static final ObjectConverter<TSKeyValue<TSElement>> TIMESERIES_MGET_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<TSKeyValue<TSElement>> getObjectType() {
+            return TypeFactory.TIMESERIES_MGET_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<TSKeyedElements> TIMESERIES_MRANGE_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<TSKeyedElements> getObjectType() {
+            return TypeFactory.TIMESERIES_MRANGE_RESPONSE;
+        }
+    };
 
     /* ------------------------------------------------------------------------------------------ */
 
