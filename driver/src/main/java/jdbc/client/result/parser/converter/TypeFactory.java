@@ -126,8 +126,8 @@ public class TypeFactory {
     public static final ObjectType<CommandInfo> COMMAND_INFO = new ObjectType<>("command-name") {{
         add("arity", LONG, CommandInfo::getArity);
         add("flags", LIST, CommandInfo::getFlags);
-        add("firstKey", LONG, CommandInfo::getFirstKey);
-        add("lastKey", LONG, CommandInfo::getLastKey);
+        add("first-key", LONG, CommandInfo::getFirstKey);
+        add("last-key", LONG, CommandInfo::getLastKey);
         add("step", LONG, CommandInfo::getStep);
         add("acl-categories", LIST, CommandInfo::getAclCategories);
         add("tips", LIST, CommandInfo::getTips);
