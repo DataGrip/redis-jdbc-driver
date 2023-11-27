@@ -629,6 +629,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser TS_INFO = new MapResultParser<>() {
+        @Override
+        protected @NotNull MapEncoder<Object> getBuilder() {
+            return EncoderFactory.TS_INFO;
+        }
+
+        @Override
+        protected @NotNull IdentityConverter<Object> getConverter() {
+            return ConverterFactory.OBJECT;
+        }
+    };
+
     /* ------------------------------------------------------------------------------------------ */
 
 

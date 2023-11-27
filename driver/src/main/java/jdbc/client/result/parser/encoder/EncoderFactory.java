@@ -13,10 +13,7 @@ import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.SearchResult.SearchResultBuilder;
 import redis.clients.jedis.search.aggr.AggregationResult;
-import redis.clients.jedis.timeseries.TSElement;
-import redis.clients.jedis.timeseries.TSKeyValue;
-import redis.clients.jedis.timeseries.TSKeyedElements;
-import redis.clients.jedis.timeseries.TimeSeriesBuilderFactory;
+import redis.clients.jedis.timeseries.*;
 import redis.clients.jedis.util.KeyValue;
 
 import java.util.Collections;
@@ -509,6 +506,22 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<List<TSKeyedElements>> getListBuilder() {
             return TimeSeriesBuilderFactory.TIMESERIES_MRANGE_RESPONSE;
+        }
+    };
+
+
+    public static final MapEncoder<Object> TS_INFO = new SimpleMapEncoder<>() {
+
+        private final Builder<Map<String, Object>> TS_INFO = new Builder<>() {
+            @Override
+            public Map<String, Object> build(Object data) {
+                return TSInfo.TIMESERIES_INFO.build(data).getProperties();
+            }
+        };
+
+        @Override
+        protected @NotNull Builder<Map<String, Object>> getMapBuilder() {
+            return TS_INFO;
         }
     };
 
