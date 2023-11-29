@@ -1,6 +1,7 @@
 package jdbc.client.query.parser.command;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +27,11 @@ public class CommandParsers {
         MODULE_COMMAND_PARSERS.put("TS",      new TimeSeriesCommandParser());
     }
 
-    private static final CommandParser<?, ?> UNKNOWN_MODULE_COMMAND_PARSER = new UnknownModuleCommandParser();
 
-
-    public static @NotNull CommandParser<?, ?> get(@NotNull String commandName) {
+    public static @Nullable CommandParser<?, ?> get(@NotNull String commandName) {
         if (commandName.contains(".")) {
             String moduleName = commandName.substring(0, commandName.indexOf("."));
-            CommandParser<?, ?> moduleCommandParser = MODULE_COMMAND_PARSERS.get(moduleName);
-            if (moduleCommandParser != null) return moduleCommandParser;
-            return UNKNOWN_MODULE_COMMAND_PARSER;
+            return MODULE_COMMAND_PARSERS.get(moduleName);
         }
         return NATIVE_COMMAND_PARSER;
     }
