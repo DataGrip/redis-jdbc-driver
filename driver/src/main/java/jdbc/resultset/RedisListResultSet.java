@@ -18,6 +18,8 @@ import static jdbc.utils.Utils.getColumnTitle;
 
 public class RedisListResultSet extends RedisResultSetBase<SimpleType<?>, List<Object>, Object> {
 
+    private static final String RAW_VALUE = "raw-value";
+
     public RedisListResultSet(RedisStatement statement, @NotNull RedisListResult result) {
         super(statement, result);
     }
@@ -26,7 +28,7 @@ public class RedisListResultSet extends RedisResultSetBase<SimpleType<?>, List<O
     protected @NotNull List<ColumnMetaData> createResultColumns(@NotNull RedisResultBase<SimpleType<?>, List<Object>> result) {
         RedisQuery query = result.getQuery();
         ColumnHint columnHint = query.getColumnHint();
-        String resultColumnName = VALUE;
+        String resultColumnName = ((RedisListResult) result).isRaw() ? RAW_VALUE : VALUE;
         if (columnHint != null && columnHint.getName().equals(resultColumnName)) {
             resultColumnName = getColumnTitle(query.getCommand());
         }

@@ -1,6 +1,7 @@
 package jdbc.client.result;
 
 import jdbc.client.query.structures.RedisQuery;
+import jdbc.client.result.parser.ResultParser;
 import jdbc.client.result.parser.ResultParsers;
 import jdbc.client.result.structures.RedisResult;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,14 @@ public class RedisResultHelper {
     }
 
     public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {
-        return ResultParsers.get(query).parse(data, query);
+        ResultParser resultParser = ResultParsers.get(query);
+        if (resultParser != null) {
+            try {
+                return resultParser.parse(query, data);
+            }
+            catch (Exception ignored) {
+            }
+        }
+        return ResultParsers.getDefault().parse(query, data);
     }
 }

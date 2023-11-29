@@ -6,5 +6,5 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ResultParser {
-    @NotNull RedisResult parse(@Nullable Object data, @NotNull RedisQuery query);
+    @NotNull RedisResult parse(@NotNull RedisQuery query, @Nullable Object data);
 }

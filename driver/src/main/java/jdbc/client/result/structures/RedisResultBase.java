@@ -9,9 +9,7 @@ public abstract class RedisResultBase<T, R> implements RedisResult {
     private final T type;
     private final R result;
 
-    protected RedisResultBase(@NotNull RedisQuery query,
-                              @NotNull T type,
-                              @NotNull R result) {
+    protected RedisResultBase(@NotNull RedisQuery query, @NotNull T type, @NotNull R result) {
         this.query = query;
         this.type = type;
         this.result = result;

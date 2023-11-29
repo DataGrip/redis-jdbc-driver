@@ -5,6 +5,7 @@ import jdbc.client.commands.RedisCommands;
 import jdbc.client.query.structures.Params;
 import jdbc.client.query.structures.RedisQuery;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Keyword;
 import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
 
@@ -22,16 +23,8 @@ public class ResultParsers {
     }
 
 
-    private static final ResultParser DEFAULT_RESULT_PARSER = OBJECT;
-    
     private static final CommandResultParsersMap CRP_MAP = new CommandResultParsersMap();
 
-    public static @NotNull ResultParser get(@NotNull RedisQuery query) {
-        CommandResultParsers commandResultParsers = CRP_MAP.get(query.getCommand());
-        if (commandResultParsers != null) return commandResultParsers.get(query.getParams());
-        return DEFAULT_RESULT_PARSER;
-    }
-    
     static {
         
         /* --------------------------------------------- Native --------------------------------------------- */
@@ -462,16 +455,26 @@ public class ResultParsers {
     }
 
 
+    public static @Nullable ResultParser get(@NotNull RedisQuery query) {
+        CommandResultParsers commandResultParsers = CRP_MAP.get(query.getCommand());
+        return commandResultParsers != null ? commandResultParsers.get(query.getParams()) : null;
+    }
+
+    public static @NotNull ResultParser getDefault() {
+        return RAW_OBJECT;
+    }
+
+
     private static class CommandResultParsersMap extends HashMap<RedisCommand, CommandResultParsers> {
         void put(@NotNull RedisCommand command,
-                 @NotNull ResultParser defaultResultParser,
+                 @Nullable ResultParser defaultResultParser,
                  @NotNull ResultParserWrapper... resultParserWrappers) {
             put(command, new CommandResultParsers(defaultResultParser, resultParserWrappers));
         }
 
         void put(@NotNull RedisCommand command,
                  @NotNull ResultParserWrapper... resultParserWrappers) {
-            put(command, new CommandResultParsers(DEFAULT_RESULT_PARSER, resultParserWrappers));
+            put(command, null, resultParserWrappers);
         }
     }
 
@@ -480,13 +483,13 @@ public class ResultParsers {
         private final ResultParser defaultResultParser;
         private final ResultParserWrapper[] resultParserWrappers;
 
-        CommandResultParsers(@NotNull ResultParser defaultResultParser,
+        CommandResultParsers(@Nullable ResultParser defaultResultParser,
                              @NotNull ResultParserWrapper... resultParserWrappers) {
             this.defaultResultParser = defaultResultParser;
             this.resultParserWrappers = resultParserWrappers;
         }
 
-        private @NotNull ResultParser get(@NotNull Params params) {
+        private @Nullable ResultParser get(@NotNull Params params) {
             for (ResultParserWrapper resultParserWrapper : resultParserWrappers) {
                 if (resultParserWrapper.isApplicable.test(params)) return resultParserWrapper.resultParser;
             }

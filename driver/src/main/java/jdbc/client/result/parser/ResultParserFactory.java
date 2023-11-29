@@ -33,6 +33,23 @@ public class ResultParserFactory {
 
     /* --------------------------------------------- Common --------------------------------------------- */
 
+    public static final ResultParser RAW_OBJECT = new ListResultParser<>() {
+        @Override
+        protected @NotNull ListEncoder<Object> getEncoder() {
+            return EncoderFactory.OBJECT;
+        }
+
+        @Override
+        protected @NotNull IdentityConverter<Object> getConverter() {
+            return ConverterFactory.OBJECT;
+        }
+
+        @Override
+        boolean isRaw() {
+            return true;
+        }
+    };
+
     public static final ResultParser OBJECT = new ListResultParser<>() {
         @Override
         protected @NotNull ListEncoder<Object> getEncoder() {
@@ -655,10 +672,14 @@ public class ResultParserFactory {
 
         @Override
         @SuppressWarnings("unchecked")
-        public final @NotNull RedisListResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+        public final @NotNull RedisListResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getEncoder().encode(data, query.getParams());
             List<S> converted = getConverter().convertList(encoded);
-            return new RedisListResult(query, getType(), (List<Object>) converted);
+            return new RedisListResult(query, getType(), (List<Object>) converted, isRaw());
+        }
+
+        boolean isRaw() {
+            return false;
         }
     }
 
@@ -672,7 +693,7 @@ public class ResultParserFactory {
 
         @Override
         @SuppressWarnings("unchecked")
-        public final @NotNull RedisMapResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+        public final @NotNull RedisMapResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             Map<String, T> encoded = getEncoder().encode(data, query.getParams());
             Map<String, S> converted = getConverter().convertMap(encoded);
             return new RedisMapResult(query, getType(), (Map<String, Object>) converted);
@@ -688,7 +709,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+        public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             List<T> encoded = getEncoder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertList(encoded);
             return new RedisObjectResult(query, getType(), converted);
@@ -704,7 +725,7 @@ public class ResultParserFactory {
         }
 
         @Override
-        public final @NotNull RedisObjectResult parse(@Nullable Object data, @NotNull RedisQuery query) {
+        public final @NotNull RedisObjectResult parse(@NotNull RedisQuery query, @Nullable Object data) {
             Map<String, T> encoded = getEncoder().encode(data, query.getParams());
             List<Map<String, Object>> converted = getConverter().convertMap(encoded);
             return new RedisObjectResult(query, getType(), converted);
