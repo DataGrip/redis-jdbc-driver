@@ -104,7 +104,7 @@ public class RedisCommands {
     public static final RedisCommand FUNCTION_KILL           = create(Command.FUNCTION, Keyword.KILL);
     public static final RedisCommand FUNCTION_LIST           = create(Command.FUNCTION, Keyword.LIST);
     public static final RedisCommand FUNCTION_LOAD           = create(Command.FUNCTION, Keyword.LOAD);
-    public static final RedisCommand FUNCTION_RESTORE        = create(Command.FUNCTION, KeywordEx.RESTORE); // TODO: result parser
+    public static final RedisCommand FUNCTION_RESTORE        = create(Command.FUNCTION, KeywordEx.RESTORE);
     public static final RedisCommand FUNCTION_STATS          = create(Command.FUNCTION, Keyword.STATS);
     public static final RedisCommand GEOADD                  = create(Command.GEOADD);
     public static final RedisCommand GEODIST                 = create(Command.GEODIST);
@@ -123,7 +123,7 @@ public class RedisCommands {
     public static final RedisCommand GETRANGE                = create(Command.GETRANGE);
     public static final RedisCommand GETSET                  = create(Command.GETSET);
     public static final RedisCommand HDEL                    = create(Command.HDEL);
-    public static final RedisCommand HELLO                   = create(CommandEx.HELLO); // TODO: result parser
+    public static final RedisCommand HELLO                   = create(CommandEx.HELLO);
     public static final RedisCommand HEXISTS                 = create(Command.HEXISTS);
     public static final RedisCommand HGET                    = create(Command.HGET);
     public static final RedisCommand HGETALL                 = create(Command.HGETALL);
@@ -143,12 +143,12 @@ public class RedisCommands {
     public static final RedisCommand INFO                    = create(Command.INFO);
     public static final RedisCommand KEYS                    = create(Command.KEYS);
     public static final RedisCommand LASTSAVE                = create(Command.LASTSAVE);
-    public static final RedisCommand LATENCY_DOCTOR          = create(Command.LATENCY, Keyword.DOCTOR); // TODO: result parser
-    public static final RedisCommand LATENCY_GRAPH           = create(Command.LATENCY, KeywordEx.GRAPH); // TODO: result parser
-    public static final RedisCommand LATENCY_HISTOGRAM       = create(Command.LATENCY, KeywordEx.HISTOGRAM);
-    public static final RedisCommand LATENCY_HISTORY         = create(Command.LATENCY, KeywordEx.HISTORY); // TODO: result parser
-    public static final RedisCommand LATENCY_LATEST          = create(Command.LATENCY, KeywordEx.LATEST); // TODO: result parser
-    public static final RedisCommand LATENCY_RESET           = create(Command.LATENCY, Keyword.RESET); // TODO: result parser
+    public static final RedisCommand LATENCY_DOCTOR          = create(Command.LATENCY, Keyword.DOCTOR);
+    public static final RedisCommand LATENCY_GRAPH           = create(Command.LATENCY, KeywordEx.GRAPH);
+    public static final RedisCommand LATENCY_HISTOGRAM       = create(Command.LATENCY, KeywordEx.HISTOGRAM); // TODO: implement result parser
+    public static final RedisCommand LATENCY_HISTORY         = create(Command.LATENCY, KeywordEx.HISTORY); // TODO: implement result parser
+    public static final RedisCommand LATENCY_LATEST          = create(Command.LATENCY, KeywordEx.LATEST); // TODO: implement result parser
+    public static final RedisCommand LATENCY_RESET           = create(Command.LATENCY, Keyword.RESET);
     public static final RedisCommand LCS                     = create(Command.LCS); // TODO: implement result parser
     public static final RedisCommand LINDEX                  = create(Command.LINDEX);
     public static final RedisCommand LINSERT                 = create(Command.LINSERT);
@@ -165,7 +165,7 @@ public class RedisCommands {
     public static final RedisCommand LSET                    = create(Command.LSET);
     public static final RedisCommand LTRIM                   = create(Command.LTRIM);
     public static final RedisCommand MEMORY_DOCTOR           = create(Command.MEMORY, Keyword.DOCTOR);
-    public static final RedisCommand MEMORY_MALLOCSTATS      = create(Command.MEMORY, KeywordEx.MALLOCSTATS); // TODO: result parser
+    public static final RedisCommand MEMORY_MALLOCSTATS      = create(Command.MEMORY, KeywordEx.MALLOCSTATS);
     public static final RedisCommand MEMORY_PURGE            = create(Command.MEMORY, Keyword.PURGE);
     public static final RedisCommand MEMORY_STATS            = create(Command.MEMORY, Keyword.STATS);
     public static final RedisCommand MEMORY_USAGE            = create(Command.MEMORY, Keyword.USAGE);
@@ -173,8 +173,8 @@ public class RedisCommands {
     public static final RedisCommand MIGRATE                 = create(Command.MIGRATE);
     public static final RedisCommand MODULE_LIST             = create(Command.MODULE, Keyword.LIST);
     public static final RedisCommand MODULE_LOAD             = create(Command.MODULE, Keyword.LOAD);
-    public static final RedisCommand MODULE_LOADEX           = create(Command.MODULE, Keyword.LOADEX); // TODO: result parser
-    public static final RedisCommand MODULE_UNLOAD           = create(Command.MODULE, Keyword.UNLOAD); // TODO: result parser
+    public static final RedisCommand MODULE_LOADEX           = create(Command.MODULE, Keyword.LOADEX);
+    public static final RedisCommand MODULE_UNLOAD           = create(Command.MODULE, Keyword.UNLOAD);
     public static final RedisCommand MONITOR                 = create(Command.MONITOR);
     public static final RedisCommand MOVE                    = create(Command.MOVE);
     public static final RedisCommand MSET                    = create(Command.MSET);
@@ -201,26 +201,26 @@ public class RedisCommands {
     public static final RedisCommand PUBSUB_CHANNELS         = create(Command.PUBSUB, Keyword.CHANNELS);
     public static final RedisCommand PUBSUB_NUMPAT           = create(Command.PUBSUB, Keyword.NUMPAT);
     public static final RedisCommand PUBSUB_NUMSUB           = create(Command.PUBSUB, Keyword.NUMSUB); // TODO: implement result parser
-    public static final RedisCommand PUBSUB_SHARDCHANNELS    = create(Command.PUBSUB, KeywordEx.SHARDCHANNELS); // TODO: result parser
+    public static final RedisCommand PUBSUB_SHARDCHANNELS    = create(Command.PUBSUB, KeywordEx.SHARDCHANNELS);
     public static final RedisCommand PUBSUB_SHARDNUMSUB      = create(Command.PUBSUB, KeywordEx.SHARDNUMSUB); // TODO: result parser
     public static final RedisCommand QUIT                    = create(Command.QUIT);
     public static final RedisCommand RANDOMKEY               = create(Command.RANDOMKEY);
-    public static final RedisCommand READONLY                = create(Command.READONLY); // TODO: result parser
-    public static final RedisCommand READWRITE               = create(Command.READWRITE); // TODO: result parser
+    public static final RedisCommand READONLY                = create(Command.READONLY);
+    public static final RedisCommand READWRITE               = create(Command.READWRITE);
     public static final RedisCommand RENAME                  = create(Command.RENAME);
     public static final RedisCommand RENAMENX                = create(Command.RENAMENX);
-    public static final RedisCommand REPLCONF                = create(CommandEx.REPLCONF); // TODO: result parser
+    public static final RedisCommand REPLCONF                = create(CommandEx.REPLCONF);
     public static final RedisCommand REPLICAOF               = create(Command.REPLICAOF);
-    public static final RedisCommand RESET                   = create(CommandEx.RESET);  // TODO: result parser
+    public static final RedisCommand RESET                   = create(CommandEx.RESET);
     public static final RedisCommand RESTORE                 = create(Command.RESTORE);
-    public static final RedisCommand RESTOREASKING           = create(CommandEx.RESTOREASKING); // TODO: result parser
+    public static final RedisCommand RESTOREASKING           = create(CommandEx.RESTOREASKING);
     public static final RedisCommand ROLE                    = create(Command.ROLE);
     public static final RedisCommand RPOP                    = create(Command.RPOP);
     public static final RedisCommand RPOPLPUSH               = create(Command.RPOPLPUSH);
     public static final RedisCommand RPUSH                   = create(Command.RPUSH);
     public static final RedisCommand RPUSHX                  = create(Command.RPUSHX);
     public static final RedisCommand SADD                    = create(Command.SADD);
-    public static final RedisCommand SAVE                    = create(Command.SAVE); // TODO: result parser
+    public static final RedisCommand SAVE                    = create(Command.SAVE);
     public static final RedisCommand SCAN                    = create(Command.SCAN);
     public static final RedisCommand SCARD                   = create(Command.SCARD);
     // public static final RedisCommand SCRIPT_DEBUG            = create(Command.SCRIPT, Keyword.DEBUG); - Keyword.DEBUG doesn't exist [???]
@@ -230,7 +230,7 @@ public class RedisCommands {
     public static final RedisCommand SCRIPT_LOAD             = create(Command.SCRIPT, Keyword.LOAD);
     public static final RedisCommand SDIFF                   = create(Command.SDIFF);
     public static final RedisCommand SDIFFSTORE              = create(Command.SDIFFSTORE);
-    public static final RedisCommand SELECT                  = create(Command.SELECT); // TODO: result parser stub
+    public static final RedisCommand SELECT                  = create(Command.SELECT);
     public static final RedisCommand SET                     = create(Command.SET);
     public static final RedisCommand SETBIT                  = create(Command.SETBIT);
     public static final RedisCommand SETEX                   = create(Command.SETEX);
@@ -267,7 +267,7 @@ public class RedisCommands {
     public static final RedisCommand UNLINK                  = create(Command.UNLINK);
     public static final RedisCommand UNWATCH                 = create(Command.UNWATCH);
     public static final RedisCommand WAIT                    = create(Command.WAIT);
-    public static final RedisCommand WAITAOF                 = create(Command.WAITAOF); // TODO: result parser
+    public static final RedisCommand WAITAOF                 = create(Command.WAITAOF); // TODO: implement result parser
     public static final RedisCommand WATCH                   = create(Command.WATCH);
     public static final RedisCommand XACK                    = create(Command.XACK);
     public static final RedisCommand XADD                    = create(Command.XADD);
@@ -310,7 +310,7 @@ public class RedisCommands {
     public static final RedisCommand ZRANGEBYSCORE           = create(Command.ZRANGEBYSCORE);
     public static final RedisCommand ZRANK                   = create(Command.ZRANK);
     public static final RedisCommand ZREM                    = create(Command.ZREM);
-    public static final RedisCommand ZREMRANGEBYLEX          = create(Command.ZREMRANGEBYLEX); // TODO: result parser
+    public static final RedisCommand ZREMRANGEBYLEX          = create(Command.ZREMRANGEBYLEX);
     public static final RedisCommand ZREMRANGEBYRANK         = create(Command.ZREMRANGEBYRANK);
     public static final RedisCommand ZREMRANGEBYSCORE        = create(Command.ZREMRANGEBYSCORE);
     public static final RedisCommand ZREVRANGE               = create(Command.ZREVRANGE);
@@ -319,8 +319,8 @@ public class RedisCommands {
     public static final RedisCommand ZREVRANK                = create(Command.ZREVRANK);
     public static final RedisCommand ZSCAN                   = create(Command.ZSCAN);
     public static final RedisCommand ZSCORE                  = create(Command.ZSCORE);
-    public static final RedisCommand ZUNION                  = create(Command.ZUNION); // TODO: result parser
-    public static final RedisCommand ZUNIONSTORE             = create(Command.ZUNIONSTORE); // TODO: result parser
+    public static final RedisCommand ZUNION                  = create(Command.ZUNION);
+    public static final RedisCommand ZUNIONSTORE             = create(Command.ZUNIONSTORE);
 
     public static final RedisCommand CLUSTER_ADDSLOTS        = create(Command.CLUSTER, ClusterKeyword.ADDSLOTS);
     public static final RedisCommand CLUSTER_ADDSLOTSRANGE   = create(Command.CLUSTER, ClusterKeyword.ADDSLOTSRANGE);
@@ -335,7 +335,7 @@ public class RedisCommands {
     public static final RedisCommand CLUSTER_GETKEYSINSLOT   = create(Command.CLUSTER, ClusterKeyword.GETKEYSINSLOT);
     public static final RedisCommand CLUSTER_INFO            = create(Command.CLUSTER, ClusterKeyword.INFO);
     public static final RedisCommand CLUSTER_KEYSLOT         = create(Command.CLUSTER, ClusterKeyword.KEYSLOT);
-    public static final RedisCommand CLUSTER_LINKS           = create(Command.CLUSTER, ClusterKeyword.LINKS);
+    public static final RedisCommand CLUSTER_LINKS           = create(Command.CLUSTER, ClusterKeyword.LINKS); // TODO: result parser
     public static final RedisCommand CLUSTER_MEET            = create(Command.CLUSTER, ClusterKeyword.MEET);
     public static final RedisCommand CLUSTER_MYID            = create(Command.CLUSTER, ClusterKeyword.MYID);
     public static final RedisCommand CLUSTER_MYSHARDID       = create(Command.CLUSTER, ClusterKeyword.MYSHARDID);
@@ -343,12 +343,12 @@ public class RedisCommands {
     public static final RedisCommand CLUSTER_REPLICAS        = create(Command.CLUSTER, ClusterKeyword.REPLICAS);
     public static final RedisCommand CLUSTER_REPLICATE       = create(Command.CLUSTER, ClusterKeyword.REPLICATE);
     public static final RedisCommand CLUSTER_RESET           = create(Command.CLUSTER, ClusterKeyword.RESET);
-    public static final RedisCommand CLUSTER_SAVECONFIG      = create(Command.CLUSTER, ClusterKeyword.SAVECONFIG);
+    public static final RedisCommand CLUSTER_SAVECONFIG      = create(Command.CLUSTER, ClusterKeyword.SAVECONFIG);  // TODO: result parser
     public static final RedisCommand CLUSTER_SETCONFIGEPOCH  = create(Command.CLUSTER, ClusterKeywordEx.SETCONFIGEPOCH);
     public static final RedisCommand CLUSTER_SETSLOT         = create(Command.CLUSTER, ClusterKeyword.SETSLOT);
-    public static final RedisCommand CLUSTER_SHARDS          = create(Command.CLUSTER, ClusterKeywordEx.SHARDS);
+    public static final RedisCommand CLUSTER_SHARDS          = create(Command.CLUSTER, ClusterKeywordEx.SHARDS);  // TODO: result parser
     public static final RedisCommand CLUSTER_SLAVES          = create(Command.CLUSTER, ClusterKeyword.SLAVES);
-    public static final RedisCommand CLUSTER_SLOTS           = create(Command.CLUSTER, ClusterKeyword.SLOTS);
+    public static final RedisCommand CLUSTER_SLOTS           = create(Command.CLUSTER, ClusterKeyword.SLOTS);  // TODO: result parser
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 

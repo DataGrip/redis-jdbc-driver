@@ -112,7 +112,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FUNCTION_KILL,           STRING);
         CRP_MAP.put(RedisCommands.FUNCTION_LIST,           LIBRARY_INFO);
         CRP_MAP.put(RedisCommands.FUNCTION_LOAD,           STRING);
-        // CRP_MAP.put(RedisCommands.FUNCTION_RESTORE,        STRING);
+        CRP_MAP.put(RedisCommands.FUNCTION_RESTORE,        STRING);
         CRP_MAP.put(RedisCommands.FUNCTION_STATS,          FUNCTION_STATS);
         CRP_MAP.put(RedisCommands.GEOADD,                  LONG);
         CRP_MAP.put(RedisCommands.GEODIST,                 DOUBLE);
@@ -131,7 +131,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.GETRANGE,                STRING);
         CRP_MAP.put(RedisCommands.GETSET,                  STRING);
         CRP_MAP.put(RedisCommands.HDEL,                    LONG);
-        // CRP_MAP.put(RedisCommands.HELLO,                   ???);
+        CRP_MAP.put(RedisCommands.HELLO,                   OBJECT_MAP);
         CRP_MAP.put(RedisCommands.HEXISTS,                 BOOLEAN);
         CRP_MAP.put(RedisCommands.HGET,                    STRING);
         CRP_MAP.put(RedisCommands.HGETALL,                 STRING_MAP);
@@ -151,8 +151,13 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.INFO,                    STRING);
         CRP_MAP.put(RedisCommands.KEYS,                    STRING);
         CRP_MAP.put(RedisCommands.LASTSAVE,                LONG);
-        // CRP_MAP.put(RedisCommands.LATENCY,                 ???);
-        // CRP_MAP.put(RedisCommands.LCS,                     ???); - TODO: implement result parser: LCSMatchResult (MatchedPosition, Position)
+        CRP_MAP.put(RedisCommands.LATENCY_DOCTOR,          STRING);
+        CRP_MAP.put(RedisCommands.LATENCY_GRAPH,           STRING);
+        // TODO: CRP_MAP.put(RedisCommands.LATENCY_HISTOGRAM,       ???);
+        // TODO: CRP_MAP.put(RedisCommands.LATENCY_HISTORY,         ???);
+        // TODO: CRP_MAP.put(RedisCommands.LATENCY_LATEST,          ???);
+        CRP_MAP.put(RedisCommands.LATENCY_RESET,           LONG);
+        // TODO: CRP_MAP.put(RedisCommands.LCS,                     ???); - implement result parser: LCSMatchResult (MatchedPosition, Position)
         CRP_MAP.put(RedisCommands.LINDEX,                  STRING);
         CRP_MAP.put(RedisCommands.LINSERT,                 LONG);
         CRP_MAP.put(RedisCommands.LLEN,                    LONG);
@@ -168,7 +173,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.LSET,                    STRING);
         CRP_MAP.put(RedisCommands.LTRIM,                   STRING);
         CRP_MAP.put(RedisCommands.MEMORY_DOCTOR,           STRING);
-        // CRP_MAP.put(RedisCommands.MEMORY_MALLOC-STATS,     ???);
+        CRP_MAP.put(RedisCommands.MEMORY_MALLOCSTATS,     STRING);
         CRP_MAP.put(RedisCommands.MEMORY_PURGE,            STRING);
         CRP_MAP.put(RedisCommands.MEMORY_STATS,            OBJECT_MAP);
         CRP_MAP.put(RedisCommands.MEMORY_USAGE,            LONG);
@@ -176,7 +181,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.MIGRATE,                 STRING);
         CRP_MAP.put(RedisCommands.MODULE_LIST,             MODULE);
         CRP_MAP.put(RedisCommands.MODULE_LOAD,             STRING);
-        // CRP_MAP.put(RedisCommands.MODULE_LOADEX,           ???);
+        CRP_MAP.put(RedisCommands.MODULE_LOADEX,           STRING);
         CRP_MAP.put(RedisCommands.MODULE_UNLOAD,           STRING);
         CRP_MAP.put(RedisCommands.MONITOR,                 STRING);
         CRP_MAP.put(RedisCommands.MOVE,                    BOOLEAN);
@@ -203,23 +208,27 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.PUBLISH,                 LONG);
         CRP_MAP.put(RedisCommands.PUBSUB_CHANNELS,         STRING);
         CRP_MAP.put(RedisCommands.PUBSUB_NUMPAT,           LONG);
-        // CRP_MAP.put(RedisCommands.PUBSUB_NUMSUB,           LONG_MAP); - TODO: implement result parser: LONG_MAP
-        // CRP_MAP.put(RedisCommands.PUBSUB_SHARDCHANNELS,    ???);
-        // CRP_MAP.put(RedisCommands.PUBSUB_SHARDNUMSUB,      ???);
+        // TODO: CRP_MAP.put(RedisCommands.PUBSUB_NUMSUB,           LONG_MAP); TODO: implement result parser: LONG_MAP
+        CRP_MAP.put(RedisCommands.PUBSUB_SHARDCHANNELS,    STRING);
+        // TODO: CRP_MAP.put(RedisCommands.PUBSUB_SHARDNUMSUB,      LONG_MAP); TODO: implement result parser: LONG_MAP
         CRP_MAP.put(RedisCommands.QUIT,                    STRING);
         CRP_MAP.put(RedisCommands.RANDOMKEY,               STRING);
+        CRP_MAP.put(RedisCommands.READONLY,                STRING);
+        CRP_MAP.put(RedisCommands.READWRITE,               STRING);
         CRP_MAP.put(RedisCommands.RENAME,                  STRING);
         CRP_MAP.put(RedisCommands.RENAMENX,                BOOLEAN);
-        // CRP_MAP.put(RedisCommands.REPLCONF,                ???);
+        CRP_MAP.put(RedisCommands.REPLCONF,                STRING);
         CRP_MAP.put(RedisCommands.REPLICAOF,               STRING);
-        // CRP_MAP.put(RedisCommands.RESET,                   ???);
+        CRP_MAP.put(RedisCommands.RESET,                   STRING);
         CRP_MAP.put(RedisCommands.RESTORE,                 STRING);
+        CRP_MAP.put(RedisCommands.RESTOREASKING,           STRING);
         CRP_MAP.put(RedisCommands.ROLE,                    OBJECT);
         CRP_MAP.put(RedisCommands.RPOP,                    STRING);
         CRP_MAP.put(RedisCommands.RPOPLPUSH,               STRING);
         CRP_MAP.put(RedisCommands.RPUSH,                   LONG);
         CRP_MAP.put(RedisCommands.RPUSHX,                  LONG);
         CRP_MAP.put(RedisCommands.SADD,                    LONG);
+        CRP_MAP.put(RedisCommands.SAVE,                    STRING);
         CRP_MAP.put(RedisCommands.SCAN,                    STRING_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.SCARD,                   LONG);
         // CRP_MAP.put(RedisCommands.SCRIPT_DEBUG,            ???);
@@ -229,6 +238,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.SCRIPT_LOAD,             STRING);
         CRP_MAP.put(RedisCommands.SDIFF,                   STRING);
         CRP_MAP.put(RedisCommands.SDIFFSTORE,              LONG);
+        CRP_MAP.put(RedisCommands.SELECT,                  STRING); // TODO: ???
         CRP_MAP.put(RedisCommands.SET,                     STRING);
         CRP_MAP.put(RedisCommands.SETBIT,                  LONG);
         CRP_MAP.put(RedisCommands.SETEX,                   STRING);
@@ -265,10 +275,11 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.UNLINK,                  LONG);
         CRP_MAP.put(RedisCommands.UNWATCH,                 STRING);
         CRP_MAP.put(RedisCommands.WAIT,                    LONG);
+        // TODO: CRP_MAP.put(RedisCommands.WAITAOF,                 ???);
         CRP_MAP.put(RedisCommands.WATCH,                   STRING);
         CRP_MAP.put(RedisCommands.XACK,                    LONG);
         CRP_MAP.put(RedisCommands.XADD,                    STREAM_ENTRY_ID);
-        // CRP_MAP.put(RedisCommands.XAUTOCLAIM,              ???); - TODO: implement result parsers
+        // TODO: CRP_MAP.put(RedisCommands.XAUTOCLAIM,              ???); - implement result parsers
         CRP_MAP.put(RedisCommands.XCLAIM,                  STREAM_ENTRY);
         CRP_MAP.put(RedisCommands.XDEL,                    LONG);
         CRP_MAP.put(RedisCommands.XGROUP_CREATE,           STRING);
@@ -307,6 +318,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.ZRANGEBYSCORE,           STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZRANK,                   LONG);
         CRP_MAP.put(RedisCommands.ZREM,                    LONG);
+        CRP_MAP.put(RedisCommands.ZREMRANGEBYLEX,          LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYRANK,         LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYSCORE,        LONG);
         CRP_MAP.put(RedisCommands.ZREVRANGE,               STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
@@ -315,6 +327,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.ZREVRANK,                LONG);
         CRP_MAP.put(RedisCommands.ZSCAN,                   TUPLE_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.ZSCORE,                  DOUBLE);
+        CRP_MAP.put(RedisCommands.ZUNION,                  STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
+        CRP_MAP.put(RedisCommands.ZUNIONSTORE,             LONG);
 
         CRP_MAP.put(RedisCommands.CLUSTER_ADDSLOTS,        STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_ADDSLOTSRANGE,   STRING);
@@ -341,7 +355,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLUSTER_SETSLOT,         STRING);
         // TODO: CRP_MAP.put(RedisCommands.CLUSTER_SHARDS,          ???);
         CRP_MAP.put(RedisCommands.CLUSTER_SLAVES,          STRING);
-        CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,           OBJECT);
+        // TODO: CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,           ???);
 
         /* --------------------------------------------- RedisJSON --------------------------------------------- */
 
