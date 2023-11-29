@@ -1,7 +1,9 @@
 package jdbc.client.commands;
 
+import jdbc.client.commands.ProtocolExtensions.CommandEx;
 import jdbc.client.commands.ProtocolExtensions.JsonCommandEx;
 import jdbc.client.commands.ProtocolExtensions.JsonKeywordEx;
+import jdbc.client.commands.ProtocolExtensions.KeywordEx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Protocol.Command;
@@ -49,22 +51,22 @@ public class RedisCommands {
     public static final RedisCommand BZMPOP                  = create(Command.BZMPOP);
     public static final RedisCommand BZPOPMAX                = create(Command.BZPOPMAX);
     public static final RedisCommand BZPOPMIN                = create(Command.BZPOPMIN);
-    // public static final RedisCommand CLIENT_CACHING         = create(Command.CLIENT, Keyword.CACHING); - Keyword.CACHING doesn't exist
+    public static final RedisCommand CLIENT_CACHING         = create(Command.CLIENT, KeywordEx.CACHING); // TODO: result parser
     public static final RedisCommand CLIENT_GETNAME          = create(Command.CLIENT, Keyword.GETNAME);
-    // public static final RedisCommand CLIENT_GETREDIR        = create(Command.CLIENT, Keyword.GETREDIR); - Keyword.GETREDIR doesn't exist
+    public static final RedisCommand CLIENT_GETREDIR        = create(Command.CLIENT, KeywordEx.GETREDIR); // TODO: result parser
     public static final RedisCommand CLIENT_ID               = create(Command.CLIENT, Keyword.ID);
     public static final RedisCommand CLIENT_INFO             = create(Command.CLIENT, Keyword.INFO);
     public static final RedisCommand CLIENT_KILL             = create(Command.CLIENT, Keyword.KILL);
     public static final RedisCommand CLIENT_LIST             = create(Command.CLIENT, Keyword.LIST);
-    // public static final RedisCommand CLIENT_NOEVICT          = create(Command.CLIENT, Keyword.NO-EVICT); - Keyword.NO-EVICT doesn't exist
+    public static final RedisCommand CLIENT_NOEVICT          = create(Command.CLIENT, KeywordEx.NOEVICT); // TODO: result parser
     public static final RedisCommand CLIENT_PAUSE            = create(Command.CLIENT, Keyword.PAUSE);
-    // public static final RedisCommand CLIENT_REPLY            = create(Command.CLIENT, Keyword.REPLY); - Keyword.REPLY doesn't exist
+    public static final RedisCommand CLIENT_REPLY            = create(Command.CLIENT, KeywordEx.REPLY); // TODO: result parser
     public static final RedisCommand CLIENT_SETNAME          = create(Command.CLIENT, Keyword.SETNAME);
-    // public static final RedisCommand CLIENT_TRACKING         = create(Command.CLIENT, Keyword.TRACKING); - Keyword.TRACKING doesn't exist
-    // public static final RedisCommand CLIENT_TRACKINGINFO     = create(Command.CLIENT, Keyword.TRACKINGINFO); - Keyword.TRACKINGINFO doesn't exist
+    public static final RedisCommand CLIENT_TRACKING         = create(Command.CLIENT, KeywordEx.TRACKING); // TODO: result parser
+    public static final RedisCommand CLIENT_TRACKINGINFO     = create(Command.CLIENT, KeywordEx.TRACKINGINFO); // TODO: result parser
     public static final RedisCommand CLIENT_UNBLOCK          = create(Command.CLIENT, Keyword.UNBLOCK);
-    public static final RedisCommand CLIENT_UNPAUSE          = create(Command.CLIENT, Keyword.UNPAUSE);
-    // public static final RedisCommand COMMAND                 = create(Command.COMMAND); - TODO: is COMMAND without keyword allowed?
+    public static final RedisCommand CLIENT_UNPAUSE          = create(Command.CLIENT, Keyword.UNPAUSE); // TODO: result parser
+    public static final RedisCommand COMMAND                 = create(Command.COMMAND); // TODO: result parser
     public static final RedisCommand COMMAND_COUNT           = create(Command.COMMAND, Keyword.COUNT);
     public static final RedisCommand COMMAND_DOCS            = create(Command.COMMAND, Keyword.DOCS);
     public static final RedisCommand COMMAND_GETKEYS         = create(Command.COMMAND, Keyword.GETKEYS);
@@ -102,7 +104,7 @@ public class RedisCommands {
     public static final RedisCommand FUNCTION_KILL           = create(Command.FUNCTION, Keyword.KILL);
     public static final RedisCommand FUNCTION_LIST           = create(Command.FUNCTION, Keyword.LIST);
     public static final RedisCommand FUNCTION_LOAD           = create(Command.FUNCTION, Keyword.LOAD);
-    // public static final RedisCommand FUNCTION_RESTORE        = create(Command.FUNCTION, Keyword.RESTORE); - Keyword.RESTORE doesn't exist
+    public static final RedisCommand FUNCTION_RESTORE        = create(Command.FUNCTION, KeywordEx.RESTORE); // TODO: result parser
     public static final RedisCommand FUNCTION_STATS          = create(Command.FUNCTION, Keyword.STATS);
     public static final RedisCommand GEOADD                  = create(Command.GEOADD);
     public static final RedisCommand GEODIST                 = create(Command.GEODIST);
@@ -121,7 +123,7 @@ public class RedisCommands {
     public static final RedisCommand GETRANGE                = create(Command.GETRANGE);
     public static final RedisCommand GETSET                  = create(Command.GETSET);
     public static final RedisCommand HDEL                    = create(Command.HDEL);
-    // public static final RedisCommand HELLO                   = create(Command.HELLO); - Command.HELLO doesn't exist
+    public static final RedisCommand HELLO                   = create(CommandEx.HELLO); // TODO: result parser
     public static final RedisCommand HEXISTS                 = create(Command.HEXISTS);
     public static final RedisCommand HGET                    = create(Command.HGET);
     public static final RedisCommand HGETALL                 = create(Command.HGETALL);
@@ -142,10 +144,10 @@ public class RedisCommands {
     public static final RedisCommand KEYS                    = create(Command.KEYS);
     public static final RedisCommand LASTSAVE                = create(Command.LASTSAVE);
     public static final RedisCommand LATENCY_DOCTOR          = create(Command.LATENCY, Keyword.DOCTOR); // TODO: result parser
-    // public static final RedisCommand LATENCY_GRAPH           = create(Command.LATENCY, Keyword.GRAPH); - Keyword.GRAPH doesn't exist
-    // public static final RedisCommand LATENCY_HISTOGRAM       = create(Command.LATENCY, Keyword.HISTOGRAM); - Keyword.HISTOGRAM doesn't exist
-    // public static final RedisCommand LATENCY_HISTORY         = create(Command.LATENCY, Keyword.HISTORY); - Keyword.HISTORY doesn't exist
-    // public static final RedisCommand LATENCY_LATEST          = create(Command.LATENCY, Keyword.LATEST); - Keyword.LATEST doesn't exist
+    public static final RedisCommand LATENCY_GRAPH           = create(Command.LATENCY, KeywordEx.GRAPH); // TODO: result parser
+    public static final RedisCommand LATENCY_HISTOGRAM       = create(Command.LATENCY, KeywordEx.HISTOGRAM);
+    public static final RedisCommand LATENCY_HISTORY         = create(Command.LATENCY, KeywordEx.HISTORY); // TODO: result parser
+    public static final RedisCommand LATENCY_LATEST          = create(Command.LATENCY, KeywordEx.LATEST); // TODO: result parser
     public static final RedisCommand LATENCY_RESET           = create(Command.LATENCY, Keyword.RESET); // TODO: result parser
     public static final RedisCommand LCS                     = create(Command.LCS); // TODO: implement result parser
     public static final RedisCommand LINDEX                  = create(Command.LINDEX);
@@ -163,7 +165,7 @@ public class RedisCommands {
     public static final RedisCommand LSET                    = create(Command.LSET);
     public static final RedisCommand LTRIM                   = create(Command.LTRIM);
     public static final RedisCommand MEMORY_DOCTOR           = create(Command.MEMORY, Keyword.DOCTOR);
-    // public static final RedisCommand MEMORY_MALLOCSTATS      = create(Command.MEMORY, Keyword.MALLOC-STATS); - Keyword.MALLOC-STATS doesn't exist
+    public static final RedisCommand MEMORY_MALLOCSTATS      = create(Command.MEMORY, KeywordEx.MALLOCSTATS); // TODO: result parser
     public static final RedisCommand MEMORY_PURGE            = create(Command.MEMORY, Keyword.PURGE);
     public static final RedisCommand MEMORY_STATS            = create(Command.MEMORY, Keyword.STATS);
     public static final RedisCommand MEMORY_USAGE            = create(Command.MEMORY, Keyword.USAGE);
@@ -188,26 +190,26 @@ public class RedisCommands {
     public static final RedisCommand PEXPIRETIME             = create(Command.PEXPIRETIME);
     public static final RedisCommand PFADD                   = create(Command.PFADD);
     public static final RedisCommand PFCOUNT                 = create(Command.PFCOUNT);
-    // public static final RedisCommand PFDEBUG                 = create(Command.PFDEBUG); - Command.PFDEBUG doesn't exist
+    // public static final RedisCommand PFDEBUG                 = create(Command.PFDEBUG); - Command.PFDEBUG doesn't exist [INTERNAL]
     public static final RedisCommand PFMERGE                 = create(Command.PFMERGE);
-    // public static final RedisCommand PFSELFTEST              = create(Command.PFSELFTEST); - Command.PFSELFTEST doesn't exist
+    // public static final RedisCommand PFSELFTEST              = create(Command.PFSELFTEST); - Command.PFSELFTEST doesn't exist [INTERNAL]
     public static final RedisCommand PING                    = create(Command.PING);
     public static final RedisCommand PSETEX                  = create(Command.PSETEX);
-    // public static final RedisCommand PSYNC                   = create(Command.PSYNC); - Command.PSYNC doesn't exist
+    // public static final RedisCommand PSYNC                   = create(Command.PSYNC); - Command.PSYNC doesn't exist [???]
     public static final RedisCommand PTTL                    = create(Command.PTTL);
     public static final RedisCommand PUBLISH                 = create(Command.PUBLISH);
     public static final RedisCommand PUBSUB_CHANNELS         = create(Command.PUBSUB, Keyword.CHANNELS);
     public static final RedisCommand PUBSUB_NUMPAT           = create(Command.PUBSUB, Keyword.NUMPAT);
     public static final RedisCommand PUBSUB_NUMSUB           = create(Command.PUBSUB, Keyword.NUMSUB); // TODO: implement result parser
-    // public static final RedisCommand PUBSUB_SHARDCHANNELS    = create(Command.PUBSUB, Keyword.SHARDCHANNELS); - Keyword.SHARDCHANNELS doesn't exist
-    // public static final RedisCommand PUBSUB_SHARDNUMSUB      = create(Command.PUBSUB, Keyword.SHARDNUMSUB); - Keyword.SHARDNUMSUB doesn't exist
+    public static final RedisCommand PUBSUB_SHARDCHANNELS    = create(Command.PUBSUB, KeywordEx.SHARDCHANNELS); // TODO: result parser
+    public static final RedisCommand PUBSUB_SHARDNUMSUB      = create(Command.PUBSUB, KeywordEx.SHARDNUMSUB); // TODO: result parser
     public static final RedisCommand QUIT                    = create(Command.QUIT);
     public static final RedisCommand RANDOMKEY               = create(Command.RANDOMKEY);
     public static final RedisCommand RENAME                  = create(Command.RENAME);
     public static final RedisCommand RENAMENX                = create(Command.RENAMENX);
-    // public static final RedisCommand REPLCONF                = create(Command.REPLCONF); - Command.REPLCONF doesn't exist
+    public static final RedisCommand REPLCONF                = create(CommandEx.REPLCONF); // TODO: result parser
     public static final RedisCommand REPLICAOF               = create(Command.REPLICAOF);
-    // public static final RedisCommand RESET                   = create(Command.RESET); - Command.RESET doesn't exist
+    public static final RedisCommand RESET                   = create(CommandEx.RESET);  // TODO: result parser
     public static final RedisCommand RESTORE                 = create(Command.RESTORE);
     public static final RedisCommand ROLE                    = create(Command.ROLE);
     public static final RedisCommand RPOP                    = create(Command.RPOP);
@@ -217,7 +219,7 @@ public class RedisCommands {
     public static final RedisCommand SADD                    = create(Command.SADD);
     public static final RedisCommand SCAN                    = create(Command.SCAN);
     public static final RedisCommand SCARD                   = create(Command.SCARD);
-    // public static final RedisCommand SCRIPT_DEBUG            = create(Command.SCRIPT, Keyword.DEBUG); - Keyword.DEBUG doesn't exist
+    // public static final RedisCommand SCRIPT_DEBUG            = create(Command.SCRIPT, Keyword.DEBUG); - Keyword.DEBUG doesn't exist [???]
     public static final RedisCommand SCRIPT_EXISTS           = create(Command.SCRIPT, Keyword.EXISTS);
     public static final RedisCommand SCRIPT_FLUSH            = create(Command.SCRIPT, Keyword.FLUSH);
     public static final RedisCommand SCRIPT_KILL             = create(Command.SCRIPT, Keyword.KILL);
@@ -253,7 +255,7 @@ public class RedisCommands {
     public static final RedisCommand SUNION                  = create(Command.SUNION);
     public static final RedisCommand SUNIONSTORE             = create(Command.SUNIONSTORE);
     public static final RedisCommand SWAPDB                  = create(Command.SWAPDB);
-    // public static final RedisCommand SYNC                    = create(Command.SYNC); - Command.SYNC doesn't exist
+    // public static final RedisCommand SYNC                    = create(Command.SYNC); - Command.SYNC doesn't exist [???]
     public static final RedisCommand TIME                    = create(Command.TIME);
     public static final RedisCommand TOUCH                   = create(Command.TOUCH);
     public static final RedisCommand TTL                     = create(Command.TTL);
@@ -282,7 +284,7 @@ public class RedisCommands {
     public static final RedisCommand XREAD                   = create(Command.XREAD);
     public static final RedisCommand XREADGROUP              = create(Command.XREADGROUP);
     public static final RedisCommand XREVRANGE               = create(Command.XREVRANGE);
-    // public static final RedisCommand XSETID                  = create(Command.XSETID); - Command.XSETID doesn't exist
+    // public static final RedisCommand XSETID                  = create(Command.XSETID); - Command.XSETID doesn't exist [INTERNAL]
     public static final RedisCommand XTRIM                   = create(Command.XTRIM);
     public static final RedisCommand ZADD                    = create(Command.ZADD);
     public static final RedisCommand ZCARD                   = create(Command.ZCARD);

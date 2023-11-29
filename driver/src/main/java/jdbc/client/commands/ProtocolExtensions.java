@@ -10,7 +10,7 @@ public class ProtocolExtensions {
     /* --------------------------------------------- Native --------------------------------------------- */
 
     public enum CommandEx implements ProtocolCommand {
-        ;
+        HELLO, REPLCONF, RESET;
 
         private final byte[] raw;
 
@@ -25,12 +25,18 @@ public class ProtocolExtensions {
     }
 
     enum KeywordEx implements Rawable {
-        ;
+        CACHING, GETREDIR, NOEVICT("NO-EVICT"), REPLY, TRACKING, TRACKINGINFO,
+        RESTORE, GRAPH, HISTOGRAM, HISTORY, LATEST, MALLOCSTATS("MALLOC-STATS"),
+        SHARDCHANNELS, SHARDNUMSUB;
 
         private final byte[] raw;
 
         KeywordEx() {
             raw = SafeEncoder.encode(name());
+        }
+
+        KeywordEx(@NotNull String alt) {
+            raw = SafeEncoder.encode(alt);
         }
 
         @Override
