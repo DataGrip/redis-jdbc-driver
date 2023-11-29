@@ -16,10 +16,10 @@ class NativeCommandParser extends CommandOrExParser {
     private static final Map<String, Command> COMMANDS = toMap(Command.values());
     private static final Map<String, CommandEx> COMMANDS_EX = toMap(CommandEx.values());
     private static final Set<ProtocolCommand> COMMANDS_WITH_KEYWORDS = Set.of(
-            Command.ACL, Command.CLIENT, Command.CLUSTER, Command.SENTINEL, Command.COMMAND,
-            Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE, Command.OBJECT,
-            Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
-            // TODO: LATENCY
+            Command.ACL, Command.CLIENT, Command.CLUSTER, Command.SENTINEL,
+            Command.COMMAND, Command.CONFIG, Command.FUNCTION, Command.LATENCY,
+            Command.MEMORY, Command.MODULE, Command.OBJECT, Command.PUBSUB,
+            Command.SCRIPT, Command.SLOWLOG, Command.XGROUP, Command.XINFO
     );
 
     @Override
