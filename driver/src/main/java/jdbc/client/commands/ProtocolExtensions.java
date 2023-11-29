@@ -10,12 +10,16 @@ public class ProtocolExtensions {
     /* --------------------------------------------- Native --------------------------------------------- */
 
     public enum CommandEx implements ProtocolCommand {
-        HELLO, REPLCONF, RESET;
+        HELLO, REPLCONF, RESET, RESTOREASKING("RESTORE-ASKING");
 
         private final byte[] raw;
 
         CommandEx() {
             raw = SafeEncoder.encode(name());
+        }
+
+        CommandEx(@NotNull String alt) {
+            raw = SafeEncoder.encode(alt);
         }
 
         @Override
@@ -25,8 +29,8 @@ public class ProtocolExtensions {
     }
 
     enum KeywordEx implements Rawable {
-        CACHING, GETREDIR, NOEVICT("NO-EVICT"), REPLY, TRACKING, TRACKINGINFO,
-        RESTORE, GRAPH, HISTOGRAM, HISTORY, LATEST, MALLOCSTATS("MALLOC-STATS"),
+        CACHING, GETREDIR, NOEVICT("NO-EVICT"), REPLY, TRACKING, NOTOUCH("NO-TOUCH"),
+        TRACKINGINFO, RESTORE, GRAPH, HISTOGRAM, HISTORY, LATEST, MALLOCSTATS("MALLOC-STATS"),
         SHARDCHANNELS, SHARDNUMSUB;
 
         private final byte[] raw;
@@ -36,6 +40,25 @@ public class ProtocolExtensions {
         }
 
         KeywordEx(@NotNull String alt) {
+            raw = SafeEncoder.encode(alt);
+        }
+
+        @Override
+        public byte[] getRaw() {
+            return raw;
+        }
+    }
+
+    enum ClusterKeywordEx implements Rawable {
+        COUNTFAILUREREPORT("COUNT-FAILURE-REPORT"), SETCONFIGEPOCH("SET-CONFIG-EPOCH"), SHARDS;
+
+        private final byte[] raw;
+
+        ClusterKeywordEx() {
+            raw = SafeEncoder.encode(name());
+        }
+
+        ClusterKeywordEx(@NotNull String alt) {
             raw = SafeEncoder.encode(alt);
         }
 
