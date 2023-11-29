@@ -10,13 +10,13 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class JsonCommandParser extends CommandParserBase<JsonCommand, JsonCommandEx> {
+class JsonCommandParser extends CommandOrExParser {
 
     private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
     private static final Map<String, JsonCommandEx> JSON_COMMANDS_EX = toMap(JsonCommandEx.values());
 
     @Override
-    protected @Nullable JsonCommand parseCommand(@NotNull String commandName) {
+    protected @Nullable JsonCommand parseCommandOr(@NotNull String commandName) {
         return JSON_COMMANDS.get(commandName);
     }
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class CountMinSketchCommandParser extends CommandParserWithoutExBase<CountMinSketchCommand> {
+class CountMinSketchCommandParser extends CommandParser {
 
     private static final Map<String, CountMinSketchCommand> COUNT_MIN_SKETCH_COMMANDS = toMap(CountMinSketchCommand.values());
 

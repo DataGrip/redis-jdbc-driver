@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static jdbc.utils.Utils.toMap;
 
-class NativeCommandParser extends CommandParserBase<Command, CommandEx> {
+class NativeCommandParser extends CommandOrExParser {
 
     private static final Map<String, Command> COMMANDS = toMap(Command.values());
     private static final Map<String, CommandEx> COMMANDS_EX = toMap(CommandEx.values());
@@ -23,7 +23,7 @@ class NativeCommandParser extends CommandParserBase<Command, CommandEx> {
     );
 
     @Override
-    protected @Nullable Command parseCommand(@NotNull String commandName) {
+    protected @Nullable Command parseCommandOr(@NotNull String commandName) {
         return COMMANDS.get(commandName);
     }
 

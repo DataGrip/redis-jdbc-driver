@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class TDigestCommandParser extends CommandParserWithoutExBase<TDigestCommand> {
+class TDigestCommandParser extends CommandParser {
 
     private static final Map<String, TDigestCommand> T_DIGEST_COMMANDS = toMap(TDigestCommand.values());
 
