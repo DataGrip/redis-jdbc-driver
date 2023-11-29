@@ -15,10 +15,7 @@ public abstract class CommandParser<T extends ProtocolCommand, E extends Protoco
     public @NotNull RedisCommand parse(@NotNull String commandName, @NotNull Params params) throws SQLException {
         ProtocolCommand command = parseCommandOrEx(commandName);
         if (command != null && hasKeyword(command)) {
-            String keywordName = getKeywordName(params);
-            if (keywordName == null)
-                throw new SQLException(String.format("Query does not contain a keyword for the command %s.", command));
-            return new RedisCommand(command, commandName, keywordName);
+            return new RedisCommand(command, commandName, getKeywordName(params));
         }
         return new RedisCommand(command, commandName, null);
     }
