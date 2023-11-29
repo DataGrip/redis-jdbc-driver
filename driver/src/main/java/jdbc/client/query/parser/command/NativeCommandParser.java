@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static jdbc.utils.Utils.toMap;
 
-class NativeCommandParser extends CommandParser<Command, CommandEx> {
+class NativeCommandParser extends CommandParserBase<Command, CommandEx> {
 
     private static final Map<String, Command> COMMANDS = toMap(Command.values());
     private static final Map<String, CommandEx> COMMANDS_EX = toMap(CommandEx.values());

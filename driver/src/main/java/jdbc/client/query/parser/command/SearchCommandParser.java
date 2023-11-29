@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class SearchCommandParser extends CommandParserWithoutEx<SearchCommand> {
+class SearchCommandParser extends CommandParserWithoutExBase<SearchCommand> {
 
     private static final Map<String, SearchCommand> SEARCH_COMMANDS = toMap(SearchCommand.values());
 

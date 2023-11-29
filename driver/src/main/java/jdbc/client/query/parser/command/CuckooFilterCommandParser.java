@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class CuckooFilterCommandParser extends CommandParserWithoutEx<CuckooFilterCommand> {
+class CuckooFilterCommandParser extends CommandParserWithoutExBase<CuckooFilterCommand> {
 
     private static final Map<String, CuckooFilterCommand> CUCKOO_FILTER_COMMANDS = toMap(CuckooFilterCommand.values());
 

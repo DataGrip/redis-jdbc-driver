@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class TopKCommandParser extends CommandParserWithoutEx<TopKCommand> {
+class TopKCommandParser extends CommandParserWithoutExBase<TopKCommand> {
 
     private static final Map<String, TopKCommand> TOP_K_COMMANDS = toMap(TopKCommand.values());
 

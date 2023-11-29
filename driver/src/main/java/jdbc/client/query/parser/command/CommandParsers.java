@@ -12,9 +12,9 @@ public class CommandParsers {
     }
 
 
-    private static final CommandParser<?, ?> NATIVE_COMMAND_PARSER = new NativeCommandParser();
+    private static final CommandParser NATIVE_COMMAND_PARSER = new NativeCommandParser();
 
-    private static final Map<String, CommandParser<?, ?>> MODULE_COMMAND_PARSERS = new HashMap<>();
+    private static final Map<String, CommandParser> MODULE_COMMAND_PARSERS = new HashMap<>();
 
     static {
         MODULE_COMMAND_PARSERS.put("JSON",    new JsonCommandParser());
@@ -28,7 +28,7 @@ public class CommandParsers {
     }
 
 
-    public static @Nullable CommandParser<?, ?> get(@NotNull String commandName) {
+    public static @Nullable CommandParser get(@NotNull String commandName) {
         if (commandName.contains(".")) {
             String moduleName = commandName.substring(0, commandName.indexOf("."));
             return MODULE_COMMAND_PARSERS.get(moduleName);

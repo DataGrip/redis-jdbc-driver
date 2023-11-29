@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static jdbc.utils.Utils.toMap;
 
-class JsonCommandParser extends CommandParser<JsonCommand, JsonCommandEx> {
+class JsonCommandParser extends CommandParserBase<JsonCommand, JsonCommandEx> {
 
     private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
     private static final Map<String, JsonCommandEx> JSON_COMMANDS_EX = toMap(JsonCommandEx.values());
