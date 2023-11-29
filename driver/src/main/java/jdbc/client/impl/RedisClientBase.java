@@ -22,7 +22,7 @@ public abstract class RedisClientBase implements RedisClient {
         try {
             RedisQuery query = RedisQueryHelper.parseQuery(sql);
             Object data = execute(query);
-            return RedisResultHelper.parseResult(query, data);
+            return RedisResultHelper.parseResult(data, query);
         } catch (JedisException e) {
             throw sqlWrap(e);
         }

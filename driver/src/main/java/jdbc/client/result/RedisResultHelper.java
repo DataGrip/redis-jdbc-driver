@@ -12,15 +12,15 @@ public class RedisResultHelper {
     private RedisResultHelper() {
     }
 
-    public static @NotNull RedisResult parseResult(@NotNull RedisQuery query, @Nullable Object data) {
+    public static @NotNull RedisResult parseResult(@Nullable Object data, @NotNull RedisQuery query) {
         ResultParser resultParser = ResultParsers.get(query);
         if (resultParser != null) {
             try {
-                return resultParser.parse(query, data);
+                return resultParser.parse(data, query);
             }
             catch (Exception ignored) {
             }
         }
-        return ResultParsers.getDefault().parse(query, data);
+        return ResultParsers.getDefault().parse(data, query);
     }
 }

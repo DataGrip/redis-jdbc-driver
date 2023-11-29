@@ -9,11 +9,11 @@ public class RedisListResult extends RedisResultBase<SimpleType<?>, List<Object>
 
     private final boolean raw;
 
-    public RedisListResult(@NotNull RedisQuery query,
-                           @NotNull SimpleType<?> type,
+    public RedisListResult(@NotNull SimpleType<?> type,
                            @NotNull List<Object> result,
+                           @NotNull RedisQuery query,
                            boolean raw) {
-        super(query, type, result);
+        super(type, result, query);
         this.raw = raw;
     }
 
