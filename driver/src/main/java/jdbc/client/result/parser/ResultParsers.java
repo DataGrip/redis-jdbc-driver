@@ -208,9 +208,9 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.PUBLISH,                 LONG);
         CRP_MAP.put(RedisCommands.PUBSUB_CHANNELS,         STRING);
         CRP_MAP.put(RedisCommands.PUBSUB_NUMPAT,           LONG);
-        // TODO: CRP_MAP.put(RedisCommands.PUBSUB_NUMSUB,           LONG_MAP); TODO: implement result parser: LONG_MAP
+        CRP_MAP.put(RedisCommands.PUBSUB_NUMSUB,           PUBSUB_NUMSUB_RESPONSE);
         CRP_MAP.put(RedisCommands.PUBSUB_SHARDCHANNELS,    STRING);
-        // TODO: CRP_MAP.put(RedisCommands.PUBSUB_SHARDNUMSUB,      LONG_MAP); TODO: implement result parser: LONG_MAP
+        CRP_MAP.put(RedisCommands.PUBSUB_SHARDNUMSUB,      PUBSUB_NUMSUB_RESPONSE);
         CRP_MAP.put(RedisCommands.QUIT,                    STRING);
         CRP_MAP.put(RedisCommands.RANDOMKEY,               STRING);
         CRP_MAP.put(RedisCommands.READONLY,                STRING);

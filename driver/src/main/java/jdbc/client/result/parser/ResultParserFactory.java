@@ -450,6 +450,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser PUBSUB_NUMSUB_RESPONSE = new MapResultParser<Long, Long>() {
+        @Override
+        protected @NotNull MapEncoder<Long> getEncoder() {
+            return EncoderFactory.PUBSUB_NUMSUB_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull IdentityConverter<Long> getConverter() {
+            return ConverterFactory.LONG;
+        }
+    };
+
 
     public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
         @Override

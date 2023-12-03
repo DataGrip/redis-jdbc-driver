@@ -312,10 +312,17 @@ public class EncoderFactory {
         }
     };
 
-    public static final ListEncoder<LCSMatchResult> LCS_MATCH_RESULT = new ElementListEncoder<LCSMatchResult>() {
+    public static final ListEncoder<LCSMatchResult> LCS_MATCH_RESULT = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<LCSMatchResult> getBuilder(@NotNull Params params) {
             return BuilderFactory.STR_ALGO_LCS_RESULT_BUILDER;
+        }
+    };
+
+    public static final MapEncoder<Long> PUBSUB_NUMSUB_RESPONSE = new SimpleMapEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map<String, Long>> getMapBuilder() {
+            return BuilderFactory.PUBSUB_NUMSUB_MAP;
         }
     };
 
