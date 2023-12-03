@@ -312,6 +312,13 @@ public class EncoderFactory {
         }
     };
 
+    public static final ListEncoder<LCSMatchResult> LCS_MATCH_RESULT = new ElementListEncoder<LCSMatchResult>() {
+        @Override
+        protected @NotNull Builder<LCSMatchResult> getBuilder(@NotNull Params params) {
+            return BuilderFactory.STR_ALGO_LCS_RESULT_BUILDER;
+        }
+    };
+
 
     public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ListElementListEncoder<>() {
         @Override

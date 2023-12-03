@@ -226,6 +226,23 @@ public class TypeFactory {
         add("consumer-message-count", MAP, StreamPendingSummary::getConsumerMessageCount);
     }};
 
+    public static final ObjectType<LCSMatchResult.Position> LCS_POSITION = new ObjectType<>() {{
+       add("start", LONG, LCSMatchResult.Position::getStart);
+       add("end", LONG, LCSMatchResult.Position::getEnd);
+    }};
+
+    public static final ObjectType<LCSMatchResult.MatchedPosition> LCS_MATCHED_POSITION = new ObjectType<>() {{
+        add("a", MAP, LCSMatchResult.MatchedPosition::getA, ConverterFactory.LCS_POSITION::convert);
+        add("b", MAP, LCSMatchResult.MatchedPosition::getB, ConverterFactory.LCS_POSITION::convert);
+        add("match-len", LONG, LCSMatchResult.MatchedPosition::getMatchLen, Utils.contains(Keyword.WITHMATCHLEN));
+    }};
+
+    public static final ObjectType<LCSMatchResult> LCS_MATCH_RESULT = new ObjectType<>() {{
+       add("match-string", STRING, LCSMatchResult::getMatchString, Utils.contains(Keyword.LEN, Keyword.IDX).negate());
+       add("matches", LIST, LCSMatchResult::getMatches, ConverterFactory.LCS_MATCHED_POSITION::convertList, Utils.contains(Keyword.IDX));
+       add("len", LONG, LCSMatchResult::getLen, Utils.contains(Keyword.LEN, Keyword.IDX));
+    }};
+
 
     public static final ObjectType<KeyValue<String, List<String>>> KEYED_STRING_LIST = new KeyedListType<>() {
         @Override
@@ -313,7 +330,7 @@ public class TypeFactory {
 
     public static final ObjectType<SearchResult> SEARCH_RESULT = new ObjectType<>() {{
         add("total-results", LONG, SearchResult::getTotalResults);
-        add("documents", LIST, SearchResult::getDocuments, ConverterFactory.DOCUMENT::convertList);
+        add("documents", LIST, SearchResult::getDocuments, ConverterFactory.SEARCH_DOCUMENT::convertList);
     }};
 
     public static final ObjectType<Map.Entry<SearchResult, Map<String, Object>>> SEARCH_PROFILE_RESPONSE = new ObjectType<>() {{

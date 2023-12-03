@@ -149,7 +149,7 @@ public class RedisCommands {
     public static final RedisCommand LATENCY_HISTORY         = create(Command.LATENCY, KeywordEx.HISTORY); // TODO: implement result parser
     public static final RedisCommand LATENCY_LATEST          = create(Command.LATENCY, KeywordEx.LATEST); // TODO: implement result parser
     public static final RedisCommand LATENCY_RESET           = create(Command.LATENCY, Keyword.RESET);
-    public static final RedisCommand LCS                     = create(Command.LCS); // TODO: implement result parser
+    public static final RedisCommand LCS                     = create(Command.LCS);
     public static final RedisCommand LINDEX                  = create(Command.LINDEX);
     public static final RedisCommand LINSERT                 = create(Command.LINSERT);
     public static final RedisCommand LLEN                    = create(Command.LLEN);

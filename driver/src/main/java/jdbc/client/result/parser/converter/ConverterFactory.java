@@ -8,6 +8,8 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
+import redis.clients.jedis.resps.LCSMatchResult.MatchedPosition;
+import redis.clients.jedis.resps.LCSMatchResult.Position;
 import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
@@ -273,6 +275,27 @@ public class ConverterFactory {
         }
     };
 
+    public static ObjectConverter<Position> LCS_POSITION = new ObjectConverter<Position>() {
+        @Override
+        public ObjectType<Position> getObjectType() {
+            return TypeFactory.LCS_POSITION;
+        }
+    };
+
+    public static final ObjectConverter<MatchedPosition> LCS_MATCHED_POSITION = new ObjectConverter<MatchedPosition>() {
+        @Override
+        public ObjectType<MatchedPosition> getObjectType() {
+            return TypeFactory.LCS_MATCHED_POSITION;
+        }
+    };
+
+    public static final ObjectConverter<LCSMatchResult> LCS_MATCH_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<LCSMatchResult> getObjectType() {
+            return TypeFactory.LCS_MATCH_RESULT;
+        }
+    };
+
 
     public static final ObjectConverter<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ObjectConverter<>() {
         @Override
@@ -337,7 +360,7 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<Document> DOCUMENT = new ObjectConverter<>() {
+    public static final ObjectConverter<Document> SEARCH_DOCUMENT = new ObjectConverter<>() {
         @Override
         public ObjectType<Document> getObjectType() {
             return TypeFactory.SEARCH_DOCUMENT;

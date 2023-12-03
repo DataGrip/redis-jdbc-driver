@@ -157,7 +157,7 @@ public class ResultParsers {
         // TODO: CRP_MAP.put(RedisCommands.LATENCY_HISTORY,         ???);
         // TODO: CRP_MAP.put(RedisCommands.LATENCY_LATEST,          ???);
         CRP_MAP.put(RedisCommands.LATENCY_RESET,           LONG);
-        // TODO: CRP_MAP.put(RedisCommands.LCS,                     ???); - implement result parser: LCSMatchResult (MatchedPosition, Position)
+        CRP_MAP.put(RedisCommands.LCS,                     LCS_MATCH_RESULT);
         CRP_MAP.put(RedisCommands.LINDEX,                  STRING);
         CRP_MAP.put(RedisCommands.LINSERT,                 LONG);
         CRP_MAP.put(RedisCommands.LLEN,                    LONG);

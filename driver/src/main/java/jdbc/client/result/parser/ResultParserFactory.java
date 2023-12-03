@@ -437,6 +437,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser LCS_MATCH_RESULT = new ObjectListResultParser<LCSMatchResult>() {
+        @Override
+        protected @NotNull ListEncoder<LCSMatchResult> getEncoder() {
+            return EncoderFactory.LCS_MATCH_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<LCSMatchResult> getConverter() {
+            return ConverterFactory.LCS_MATCH_RESULT;
+        }
+    };
+
 
     public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
         @Override
