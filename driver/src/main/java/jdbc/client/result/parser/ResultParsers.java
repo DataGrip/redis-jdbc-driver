@@ -211,7 +211,6 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.PUBSUB_NUMSUB,           PUBSUB_NUMSUB_RESPONSE);
         CRP_MAP.put(RedisCommands.PUBSUB_SHARDCHANNELS,    STRING);
         CRP_MAP.put(RedisCommands.PUBSUB_SHARDNUMSUB,      PUBSUB_NUMSUB_RESPONSE);
-        CRP_MAP.put(RedisCommands.QUIT,                    STRING);
         CRP_MAP.put(RedisCommands.RANDOMKEY,               STRING);
         CRP_MAP.put(RedisCommands.READONLY,                STRING);
         CRP_MAP.put(RedisCommands.READWRITE,               STRING);

@@ -203,7 +203,6 @@ public class RedisCommands {
     public static final RedisCommand PUBSUB_NUMSUB           = create(Command.PUBSUB, Keyword.NUMSUB);
     public static final RedisCommand PUBSUB_SHARDCHANNELS    = create(Command.PUBSUB, KeywordEx.SHARDCHANNELS);
     public static final RedisCommand PUBSUB_SHARDNUMSUB      = create(Command.PUBSUB, KeywordEx.SHARDNUMSUB);
-    public static final RedisCommand QUIT                    = create(Command.QUIT);
     public static final RedisCommand RANDOMKEY               = create(Command.RANDOMKEY);
     public static final RedisCommand READONLY                = create(Command.READONLY);
     public static final RedisCommand READWRITE               = create(Command.READWRITE);
