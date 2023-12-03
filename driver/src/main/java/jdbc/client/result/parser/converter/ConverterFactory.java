@@ -1,5 +1,6 @@
 package jdbc.client.result.parser.converter;
 
+import jdbc.client.query.structures.Params;
 import jdbc.client.result.structures.ObjectType;
 import jdbc.client.result.structures.SimpleType;
 import org.jetbrains.annotations.NotNull;
@@ -181,7 +182,7 @@ public class ConverterFactory {
         }
 
         @Override
-        protected @NotNull String convertImpl(@NotNull HostAndPort encoded) {
+        protected @NotNull String convertImpl(@NotNull HostAndPort encoded, @NotNull Params params) {
             return encoded.toString();
         }
     };
@@ -200,7 +201,7 @@ public class ConverterFactory {
         }
 
         @Override
-        public @NotNull String convertImpl(@NotNull StreamEntryID encoded) {
+        public @NotNull String convertImpl(@NotNull StreamEntryID encoded, @NotNull Params params) {
             return encoded.toString();
         }
     };

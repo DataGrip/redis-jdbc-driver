@@ -1,5 +1,6 @@
 package jdbc.client.result.parser.converter;
 
+import jdbc.client.query.structures.Params;
 import jdbc.client.result.structures.ObjectType;
 import jdbc.client.result.structures.SimpleType;
 import jdbc.types.RedisColumnTypeHelper;
@@ -21,7 +22,7 @@ import redis.clients.jedis.util.KeyValue;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -156,7 +157,7 @@ public class TypeFactory {
     }};
 
     public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
-        add("id", STRING, e -> ConverterFactory.STREAM_ENTRY_ID.convert(e.getID()));
+        add("id", STRING, (e, p) -> ConverterFactory.STREAM_ENTRY_ID.convert(e.getID(), p));
         add("fields", MAP, StreamEntry::getFields);
     }};
 
@@ -246,14 +247,14 @@ public class TypeFactory {
 
     public static final ObjectType<KeyValue<String, List<String>>> KEYED_STRING_LIST = new KeyedListType<>() {
         @Override
-        protected Function<List<String>, List<?>> getValuesConverter() {
+        protected BiFunction<List<String>, Params, List<?>> getValuesConverter() {
             return ConverterFactory.STRING::convertList;
         }
     };
 
     public static final ObjectType<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new KeyedListType<>() {
         @Override
-        protected Function<List<Tuple>, List<?>> getValuesConverter() {
+        protected BiFunction<List<Tuple>, Params, List<?>> getValuesConverter() {
             return ConverterFactory.TUPLE::convertList;
         }
     };
@@ -264,20 +265,20 @@ public class TypeFactory {
             add("values", LIST, KeyValue::getValue, getValuesConverter());
         }
 
-        protected abstract Function<List<T>, List<?>> getValuesConverter();
+        protected abstract BiFunction<List<T>, Params, List<?>> getValuesConverter();
     }
 
 
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<String>, List<?>> getResultsConverter() {
+        protected BiFunction<List<String>, Params, List<?>> getResultsConverter() {
             return ConverterFactory.STRING::convertList;
         }
     };
 
     public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<Tuple>, List<?>> getResultsConverter() {
+        protected BiFunction<List<Tuple>, Params, List<?>> getResultsConverter() {
             return ConverterFactory.TUPLE::convertList;
         }
     };
@@ -289,7 +290,7 @@ public class TypeFactory {
 
     public static final ObjectType<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultType<>() {
         @Override
-        protected Function<List<Map.Entry<String, String>>, List<?>> getResultsConverter() {
+        protected BiFunction<List<Map.Entry<String, String>>, Params, List<?>> getResultsConverter() {
             return ConverterFactory.ENTRY::convertList;
         }
     };
@@ -300,7 +301,7 @@ public class TypeFactory {
             add("results", LIST, ScanResult::getResult, getResultsConverter());
         }
 
-        protected abstract Function<List<T>, List<?>> getResultsConverter();
+        protected abstract BiFunction<List<T>, Params, List<?>> getResultsConverter();
     }
 
 

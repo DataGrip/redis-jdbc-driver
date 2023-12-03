@@ -4,23 +4,23 @@ import jdbc.client.query.structures.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class ObjectTypeField<T> {
 
     private final String name;
     private final SimpleType<?> simpleType;
-    private final Function<T, ?> getter;
+    private final BiFunction<T, Params, ?> converter;
     private final Predicate<Params> isPresent;
 
     <S> ObjectTypeField(@NotNull String name,
                         @NotNull SimpleType<S> simpleType,
-                        @NotNull Function<T, S> getter,
+                        @NotNull BiFunction<T, Params, S> converter,
                         @Nullable Predicate<Params> isPresent) {
         this.name = name;
         this.simpleType = simpleType;
-        this.getter = getter;
+        this.converter = converter;
         this.isPresent = isPresent;
     }
 
@@ -32,8 +32,8 @@ public class ObjectTypeField<T> {
         return simpleType;
     }
 
-    public @NotNull Function<T, ?> getGetter() {
-        return getter;
+    public @NotNull BiFunction<T, Params, ?> getConverter() {
+        return converter;
     }
 
     public boolean isPresent(@NotNull Params params) {
