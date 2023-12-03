@@ -74,7 +74,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLIENT_TRACKINGINFO,     OBJECT_MAP);
         CRP_MAP.put(RedisCommands.CLIENT_UNBLOCK,          LONG);
         CRP_MAP.put(RedisCommands.CLIENT_UNPAUSE,          STRING);
-        // CRP_MAP.put(RedisCommands.COMMAND,                 ???);
+        CRP_MAP.put(RedisCommands.COMMAND,                 COMMAND_INFO);
         CRP_MAP.put(RedisCommands.COMMAND_COUNT,           LONG);
         CRP_MAP.put(RedisCommands.COMMAND_DOCS,            COMMAND_DOCUMENT);
         CRP_MAP.put(RedisCommands.COMMAND_GETKEYS,         STRING);
