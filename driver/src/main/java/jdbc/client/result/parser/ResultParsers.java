@@ -69,6 +69,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLIENT_NOTOUCH,          STRING);
         CRP_MAP.put(RedisCommands.CLIENT_PAUSE,            STRING);
         CRP_MAP.put(RedisCommands.CLIENT_REPLY,            STRING);
+        CRP_MAP.put(RedisCommands.CLIENT_SETINFO,          STRING);
         CRP_MAP.put(RedisCommands.CLIENT_SETNAME,          STRING);
         CRP_MAP.put(RedisCommands.CLIENT_TRACKING,         STRING);
         CRP_MAP.put(RedisCommands.CLIENT_TRACKINGINFO,     OBJECT_MAP);
@@ -152,11 +153,11 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.KEYS,                    STRING);
         CRP_MAP.put(RedisCommands.LASTSAVE,                LONG);
         CRP_MAP.put(RedisCommands.LATENCY_DOCTOR,          STRING);
-        CRP_MAP.put(RedisCommands.LATENCY_GRAPH,           STRING);
-        // TODO: CRP_MAP.put(RedisCommands.LATENCY_HISTOGRAM,       ???);
-        // TODO: CRP_MAP.put(RedisCommands.LATENCY_HISTORY,         ???);
-        // TODO: CRP_MAP.put(RedisCommands.LATENCY_LATEST,          ???);
-        CRP_MAP.put(RedisCommands.LATENCY_RESET,           LONG);
+        CRP_MAP.put(RedisCommands.LATENCY_GRAPH,           RAW_OBJECT); /* missed */
+        CRP_MAP.put(RedisCommands.LATENCY_HISTOGRAM,       RAW_OBJECT); /* missed */
+        CRP_MAP.put(RedisCommands.LATENCY_HISTORY,         RAW_OBJECT); /* missed */
+        CRP_MAP.put(RedisCommands.LATENCY_LATEST,          RAW_OBJECT); /* missed */
+        CRP_MAP.put(RedisCommands.LATENCY_RESET,           RAW_OBJECT); /* missed */
         CRP_MAP.put(RedisCommands.LCS,                     LCS_MATCH_RESULT);
         CRP_MAP.put(RedisCommands.LINDEX,                  STRING);
         CRP_MAP.put(RedisCommands.LINSERT,                 LONG);
@@ -173,7 +174,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.LSET,                    STRING);
         CRP_MAP.put(RedisCommands.LTRIM,                   STRING);
         CRP_MAP.put(RedisCommands.MEMORY_DOCTOR,           STRING);
-        CRP_MAP.put(RedisCommands.MEMORY_MALLOCSTATS,     STRING);
+        CRP_MAP.put(RedisCommands.MEMORY_MALLOCSTATS,      STRING);
         CRP_MAP.put(RedisCommands.MEMORY_PURGE,            STRING);
         CRP_MAP.put(RedisCommands.MEMORY_STATS,            OBJECT_MAP);
         CRP_MAP.put(RedisCommands.MEMORY_USAGE,            LONG);
@@ -198,12 +199,12 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.PEXPIRETIME,             LONG);
         CRP_MAP.put(RedisCommands.PFADD,                   BOOLEAN);
         CRP_MAP.put(RedisCommands.PFCOUNT,                 LONG);
-        // CRP_MAP.put(RedisCommands.PFDEBUG,                 ???);
+        CRP_MAP.put(RedisCommands.PFDEBUG,                 RAW_OBJECT); /* internal */
         CRP_MAP.put(RedisCommands.PFMERGE,                 STRING);
-        // CRP_MAP.put(RedisCommands.PFSELFTEST,              ???);
+        CRP_MAP.put(RedisCommands.PFSELFTEST,              RAW_OBJECT); /* internal */
         CRP_MAP.put(RedisCommands.PING,                    STRING);
         CRP_MAP.put(RedisCommands.PSETEX,                  STRING);
-        // CRP_MAP.put(RedisCommands.PSYNC,                   ???);
+        CRP_MAP.put(RedisCommands.PSYNC,                   STRING);
         CRP_MAP.put(RedisCommands.PTTL,                    LONG);
         CRP_MAP.put(RedisCommands.PUBLISH,                 LONG);
         CRP_MAP.put(RedisCommands.PUBSUB_CHANNELS,         STRING);
@@ -230,7 +231,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.SAVE,                    STRING);
         CRP_MAP.put(RedisCommands.SCAN,                    STRING_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.SCARD,                   LONG);
-        // CRP_MAP.put(RedisCommands.SCRIPT_DEBUG,            ???);
+        CRP_MAP.put(RedisCommands.SCRIPT_DEBUG,            STRING);
         CRP_MAP.put(RedisCommands.SCRIPT_EXISTS,           BOOLEAN);
         CRP_MAP.put(RedisCommands.SCRIPT_FLUSH,            STRING);
         CRP_MAP.put(RedisCommands.SCRIPT_KILL,             STRING);
@@ -266,7 +267,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.SUNION,                  STRING);
         CRP_MAP.put(RedisCommands.SUNIONSTORE,             LONG);
         CRP_MAP.put(RedisCommands.SWAPDB,                  STRING);
-        // CRP_MAP.put(RedisCommands.SYNC,                    ???);
+        CRP_MAP.put(RedisCommands.SYNC,                    STRING);
         CRP_MAP.put(RedisCommands.TIME,                    STRING);
         CRP_MAP.put(RedisCommands.TOUCH,                   LONG);
         CRP_MAP.put(RedisCommands.TTL,                     LONG);
@@ -295,7 +296,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.XREAD,                   STREAM_READ);
         CRP_MAP.put(RedisCommands.XREADGROUP,              STREAM_READ);
         CRP_MAP.put(RedisCommands.XREVRANGE,               STREAM_ENTRY);
-        // CRP_MAP.put(RedisCommands.XSETID,                  ???);
+        CRP_MAP.put(RedisCommands.XSETID,                  RAW_OBJECT); /* internal */
         CRP_MAP.put(RedisCommands.XTRIM,                   LONG);
         CRP_MAP.put(RedisCommands.ZADD,                    LONG);
         CRP_MAP.put(RedisCommands.ZCARD,                   LONG);
@@ -342,7 +343,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLUSTER_GETKEYSINSLOT,   STRING_LIST);
         CRP_MAP.put(RedisCommands.CLUSTER_INFO,            STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_KEYSLOT,         LONG);
-        // TODO: CRP_MAP.put(RedisCommands.CLUSTER_LINKS,           ???);
+        CRP_MAP.put(RedisCommands.CLUSTER_LINKS,           OBJECT_MAP);
         CRP_MAP.put(RedisCommands.CLUSTER_MEET,            STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_MYID,            STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_MYSHARDID,       STRING);
@@ -350,11 +351,12 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLUSTER_REPLICAS,        STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_REPLICATE,       STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_RESET,           STRING);
+        CRP_MAP.put(RedisCommands.CLUSTER_SAVECONFIG,      STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_SETCONFIGEPOCH,  STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_SETSLOT,         STRING);
-        // TODO: CRP_MAP.put(RedisCommands.CLUSTER_SHARDS,          ???);
+        // TODO: CRP_MAP.put(RedisCommands.CLUSTER_SHARDS,          ???); // TODO: ????
         CRP_MAP.put(RedisCommands.CLUSTER_SLAVES,          STRING);
-        // TODO: CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,           ???);
+        CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,           RAW_OBJECT); /* deprecated */
 
         /* --------------------------------------------- RedisJSON --------------------------------------------- */
 

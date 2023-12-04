@@ -10,7 +10,8 @@ public class ProtocolExtensions {
     /* --------------------------------------------- Native --------------------------------------------- */
 
     public enum CommandEx implements ProtocolCommand {
-        HELLO, REPLCONF, RESET, RESTOREASKING("RESTORE-ASKING");
+        HELLO, REPLCONF, RESET, RESTOREASKING("RESTORE-ASKING"), PFDEBUG, PFSELFTEST,
+        PSYNC, SYNC, XSETID;
 
         private final byte[] raw;
 
@@ -31,7 +32,7 @@ public class ProtocolExtensions {
     enum KeywordEx implements Rawable {
         CACHING, GETREDIR, NOEVICT("NO-EVICT"), REPLY, TRACKING, NOTOUCH("NO-TOUCH"),
         TRACKINGINFO, RESTORE, GRAPH, HISTOGRAM, HISTORY, LATEST, MALLOCSTATS("MALLOC-STATS"),
-        SHARDCHANNELS, SHARDNUMSUB;
+        SHARDCHANNELS, SHARDNUMSUB, DEBUG;
 
         private final byte[] raw;
 
