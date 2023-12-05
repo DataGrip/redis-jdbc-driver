@@ -66,6 +66,8 @@ public class TypeFactory {
     }
 
 
+    /* --------------------------------------------- Native --------------------------------------------- */
+
     public static final ObjectType<KeyedListElement> KEYED_STRING = new ObjectType<>() {{
         add("key", STRING, AbstractMap.SimpleImmutableEntry::getKey);
         add("value", STRING, KeyedListElement::getElement);
@@ -81,6 +83,18 @@ public class TypeFactory {
         add("value", STRING, Tuple::getElement);
         add("score", DOUBLE, Tuple::getScore);
     }};
+
+
+    public static final ObjectType<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ObjectType<>() {{
+        add("key", STRING, KeyValue::getKey);
+        add("values", LIST, KeyValue::getValue, ConverterFactory.STRING::convertList);
+    }};
+
+    public static final ObjectType<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ObjectType<>() {{
+        add("key", STRING, KeyValue::getKey);
+        add("elements", LIST, KeyValue::getValue, ConverterFactory.TUPLE::convertList);
+    }};
+
 
     public static final ObjectType<GeoCoordinate> GEO_COORDINATE = new ObjectType<>() {{
         add("longitude", DOUBLE, GeoCoordinate::getLongitude);
@@ -156,6 +170,24 @@ public class TypeFactory {
         add("client-ip-port", STRING, Slowlog::getClientIpPort, ConverterFactory.HOST_AND_PORT::convert);
         add("client-name", STRING, Slowlog::getClientName);
     }};
+
+    public static final ObjectType<LCSMatchResult.Position> LCS_POSITION = new ObjectType<>() {{
+        add("start", LONG, LCSMatchResult.Position::getStart);
+        add("end", LONG, LCSMatchResult.Position::getEnd);
+    }};
+
+    public static final ObjectType<LCSMatchResult.MatchedPosition> LCS_MATCHED_POSITION = new ObjectType<>() {{
+        add("a", MAP, LCSMatchResult.MatchedPosition::getA, ConverterFactory.LCS_POSITION::convert);
+        add("b", MAP, LCSMatchResult.MatchedPosition::getB, ConverterFactory.LCS_POSITION::convert);
+        add("match-len", LONG, LCSMatchResult.MatchedPosition::getMatchLen, Utils.contains(Keyword.WITHMATCHLEN));
+    }};
+
+    public static final ObjectType<LCSMatchResult> LCS_MATCH_RESULT = new ObjectType<>() {{
+        add("match-string", STRING, LCSMatchResult::getMatchString, Utils.contains(Keyword.LEN, Keyword.IDX).negate());
+        add("matches", LIST, LCSMatchResult::getMatches, ConverterFactory.LCS_MATCHED_POSITION::convertList, Utils.contains(Keyword.IDX));
+        add("len", LONG, LCSMatchResult::getLen, Utils.contains(Keyword.LEN, Keyword.IDX));
+    }};
+
 
     public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
         add("id", STRING, StreamEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
@@ -237,47 +269,6 @@ public class TypeFactory {
         add("max-id", STRING, StreamPendingSummary::getMaxId, ConverterFactory.STREAM_ENTRY_ID::convert);
         add("consumer-message-count", MAP, StreamPendingSummary::getConsumerMessageCount);
     }};
-
-    public static final ObjectType<LCSMatchResult.Position> LCS_POSITION = new ObjectType<>() {{
-       add("start", LONG, LCSMatchResult.Position::getStart);
-       add("end", LONG, LCSMatchResult.Position::getEnd);
-    }};
-
-    public static final ObjectType<LCSMatchResult.MatchedPosition> LCS_MATCHED_POSITION = new ObjectType<>() {{
-        add("a", MAP, LCSMatchResult.MatchedPosition::getA, ConverterFactory.LCS_POSITION::convert);
-        add("b", MAP, LCSMatchResult.MatchedPosition::getB, ConverterFactory.LCS_POSITION::convert);
-        add("match-len", LONG, LCSMatchResult.MatchedPosition::getMatchLen, Utils.contains(Keyword.WITHMATCHLEN));
-    }};
-
-    public static final ObjectType<LCSMatchResult> LCS_MATCH_RESULT = new ObjectType<>() {{
-       add("match-string", STRING, LCSMatchResult::getMatchString, Utils.contains(Keyword.LEN, Keyword.IDX).negate());
-       add("matches", LIST, LCSMatchResult::getMatches, ConverterFactory.LCS_MATCHED_POSITION::convertList, Utils.contains(Keyword.IDX));
-       add("len", LONG, LCSMatchResult::getLen, Utils.contains(Keyword.LEN, Keyword.IDX));
-    }};
-
-
-    public static final ObjectType<KeyValue<String, List<String>>> KEYED_STRING_LIST = new KeyedListType<>() {
-        @Override
-        protected BiFunction<List<String>, Params, List<?>> getValuesConverter() {
-            return ConverterFactory.STRING::convertList;
-        }
-    };
-
-    public static final ObjectType<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new KeyedListType<>() {
-        @Override
-        protected BiFunction<List<Tuple>, Params, List<?>> getValuesConverter() {
-            return ConverterFactory.TUPLE::convertList;
-        }
-    };
-
-    private static abstract class KeyedListType<T> extends ObjectType<KeyValue<String, List<T>>> {
-        protected KeyedListType() {
-            add("key", STRING, KeyValue::getKey);
-            add("values", LIST, KeyValue::getValue, getValuesConverter());
-        }
-
-        protected abstract BiFunction<List<T>, Params, List<?>> getValuesConverter();
-    }
 
 
     public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {

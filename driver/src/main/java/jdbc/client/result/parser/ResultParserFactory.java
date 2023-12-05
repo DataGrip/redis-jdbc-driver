@@ -174,6 +174,8 @@ public class ResultParserFactory {
     };
 
 
+    /* --------------------------------------------- Native --------------------------------------------- */
+
     public static final ResultParser KEYED_STRING = new ObjectListResultParser<KeyedListElement>() {
         @Override
         protected @NotNull ListEncoder<KeyedListElement> getEncoder() {
@@ -209,6 +211,32 @@ public class ResultParserFactory {
             return ConverterFactory.KEYED_TUPLE;
         }
     };
+
+
+    public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<String, List<String>>> getEncoder() {
+            return EncoderFactory.KEYED_STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<String, List<String>>> getConverter() {
+            return ConverterFactory.KEYED_STRING_LIST;
+        }
+    };
+
+    public static final ResultParser KEYED_TUPLE_LIST = new ObjectListResultParser<KeyValue<String, List<Tuple>>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<String, List<Tuple>>> getEncoder() {
+            return EncoderFactory.KEYED_TUPLE_LIST;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<String, List<Tuple>>> getConverter() {
+            return ConverterFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
 
     public static final ResultParser GEO_COORDINATE = new ObjectListResultParser<GeoCoordinate>() {
         @Override
@@ -329,6 +357,31 @@ public class ResultParserFactory {
             return ConverterFactory.SLOW_LOG;
         }
     };
+
+    public static final ResultParser LCS_MATCH_RESULT = new ObjectListResultParser<LCSMatchResult>() {
+        @Override
+        protected @NotNull ListEncoder<LCSMatchResult> getEncoder() {
+            return EncoderFactory.LCS_MATCH_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<LCSMatchResult> getConverter() {
+            return ConverterFactory.LCS_MATCH_RESULT;
+        }
+    };
+
+    public static final ResultParser PUBSUB_NUMSUB_RESPONSE = new MapResultParser<Long, Long>() {
+        @Override
+        protected @NotNull MapEncoder<Long> getEncoder() {
+            return EncoderFactory.PUBSUB_NUMSUB_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull IdentityConverter<Long> getConverter() {
+            return ConverterFactory.LONG;
+        }
+    };
+
 
     public static final ResultParser STREAM_ENTRY_ID = new ListResultParser<StreamEntryID, String>() {
         @Override
@@ -459,55 +512,6 @@ public class ResultParserFactory {
         @Override
         protected @NotNull ObjectConverter<StreamPendingSummary> getConverter() {
             return ConverterFactory.STREAM_PENDING_SUMMARY;
-        }
-    };
-
-    public static final ResultParser LCS_MATCH_RESULT = new ObjectListResultParser<LCSMatchResult>() {
-        @Override
-        protected @NotNull ListEncoder<LCSMatchResult> getEncoder() {
-            return EncoderFactory.LCS_MATCH_RESULT;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<LCSMatchResult> getConverter() {
-            return ConverterFactory.LCS_MATCH_RESULT;
-        }
-    };
-
-    public static final ResultParser PUBSUB_NUMSUB_RESPONSE = new MapResultParser<Long, Long>() {
-        @Override
-        protected @NotNull MapEncoder<Long> getEncoder() {
-            return EncoderFactory.PUBSUB_NUMSUB_RESPONSE;
-        }
-
-        @Override
-        protected @NotNull IdentityConverter<Long> getConverter() {
-            return ConverterFactory.LONG;
-        }
-    };
-
-
-    public static final ResultParser KEYED_STRING_LIST = new ObjectListResultParser<KeyValue<String, List<String>>>() {
-        @Override
-        protected @NotNull ListEncoder<KeyValue<String, List<String>>> getEncoder() {
-            return EncoderFactory.KEYED_STRING_LIST;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<KeyValue<String, List<String>>> getConverter() {
-            return ConverterFactory.KEYED_STRING_LIST;
-        }
-    };
-
-    public static final ResultParser KEYED_TUPLE_LIST = new ObjectListResultParser<KeyValue<String, List<Tuple>>>() {
-        @Override
-        protected @NotNull ListEncoder<KeyValue<String, List<Tuple>>> getEncoder() {
-            return EncoderFactory.KEYED_TUPLE_LIST;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<KeyValue<String, List<Tuple>>> getConverter() {
-            return ConverterFactory.KEYED_TUPLE_LIST;
         }
     };
 

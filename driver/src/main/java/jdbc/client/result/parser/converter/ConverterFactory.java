@@ -9,8 +9,6 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
-import redis.clients.jedis.resps.LCSMatchResult.MatchedPosition;
-import redis.clients.jedis.resps.LCSMatchResult.Position;
 import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchResult;
 import redis.clients.jedis.search.aggr.AggregationResult;
@@ -91,6 +89,8 @@ public class ConverterFactory {
     };
 
 
+    /* --------------------------------------------- Native --------------------------------------------- */
+
     public static final ObjectConverter<KeyedListElement> KEYED_STRING = new ObjectConverter<>() {
         @Override
         public ObjectType<KeyedListElement> getObjectType() {
@@ -111,6 +111,22 @@ public class ConverterFactory {
             return TypeFactory.KEYED_TUPLE;
         }
     };
+
+
+    public static final ObjectConverter<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyValue<String, List<String>>> getObjectType() {
+            return TypeFactory.KEYED_STRING_LIST;
+        }
+    };
+
+    public static final ObjectConverter<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyValue<String, List<Tuple>>> getObjectType() {
+            return TypeFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
 
     public static final ObjectConverter<GeoCoordinate> GEO_COORDINATE = new ObjectConverter<>() {
         @Override
@@ -193,6 +209,28 @@ public class ConverterFactory {
             return TypeFactory.SLOW_LOG;
         }
     };
+
+    public static ObjectConverter<LCSMatchResult.Position> LCS_POSITION = new ObjectConverter<>() {
+        @Override
+        public ObjectType<LCSMatchResult.Position> getObjectType() {
+            return TypeFactory.LCS_POSITION;
+        }
+    };
+
+    public static final ObjectConverter<LCSMatchResult.MatchedPosition> LCS_MATCHED_POSITION = new ObjectConverter<>() {
+        @Override
+        public ObjectType<LCSMatchResult.MatchedPosition> getObjectType() {
+            return TypeFactory.LCS_MATCHED_POSITION;
+        }
+    };
+
+    public static final ObjectConverter<LCSMatchResult> LCS_MATCH_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<LCSMatchResult> getObjectType() {
+            return TypeFactory.LCS_MATCH_RESULT;
+        }
+    };
+
 
     public static final SimpleConverter<StreamEntryID, String> STREAM_ENTRY_ID = new SimpleConverter<>() {
         @Override
@@ -287,42 +325,6 @@ public class ConverterFactory {
         @Override
         public ObjectType<StreamPendingSummary> getObjectType() {
             return TypeFactory.STREAM_PENDING_SUMMARY;
-        }
-    };
-
-    public static ObjectConverter<Position> LCS_POSITION = new ObjectConverter<Position>() {
-        @Override
-        public ObjectType<Position> getObjectType() {
-            return TypeFactory.LCS_POSITION;
-        }
-    };
-
-    public static final ObjectConverter<MatchedPosition> LCS_MATCHED_POSITION = new ObjectConverter<MatchedPosition>() {
-        @Override
-        public ObjectType<MatchedPosition> getObjectType() {
-            return TypeFactory.LCS_MATCHED_POSITION;
-        }
-    };
-
-    public static final ObjectConverter<LCSMatchResult> LCS_MATCH_RESULT = new ObjectConverter<>() {
-        @Override
-        public ObjectType<LCSMatchResult> getObjectType() {
-            return TypeFactory.LCS_MATCH_RESULT;
-        }
-    };
-
-
-    public static final ObjectConverter<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ObjectConverter<>() {
-        @Override
-        public ObjectType<KeyValue<String, List<String>>> getObjectType() {
-            return TypeFactory.KEYED_STRING_LIST;
-        }
-    };
-
-    public static final ObjectConverter<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ObjectConverter<>() {
-        @Override
-        public ObjectType<KeyValue<String, List<Tuple>>> getObjectType() {
-            return TypeFactory.KEYED_TUPLE_LIST;
         }
     };
 

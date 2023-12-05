@@ -145,6 +145,8 @@ public class EncoderFactory {
     };
 
 
+    /* --------------------------------------------- Native --------------------------------------------- */
+
     public static final ListEncoder<KeyedListElement> KEYED_STRING = new ElementListEncoder<>() {
         @Override
         protected @NotNull Builder<KeyedListElement> getBuilder(@NotNull Params params) {
@@ -165,6 +167,27 @@ public class EncoderFactory {
             return BuilderFactory.KEYED_ZSET_ELEMENT;
         }
     };
+
+
+    public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ListElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.KEYED_STRING_LIST;
+        }
+
+        @Override
+        protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder(@NotNull Params params) {
+            return BuilderFactory.KEYED_STRING_LIST_LIST;
+        }
+    };
+
+    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.KEYED_TUPLE_LIST;
+        }
+    };
+
 
     public static final ListEncoder<GeoCoordinate> GEO_COORDINATE = new SimpleListEncoder<>() {
         @Override
@@ -243,6 +266,21 @@ public class EncoderFactory {
             return SLOW_LOG_LIST;
         }
     };
+
+    public static final ListEncoder<LCSMatchResult> LCS_MATCH_RESULT = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<LCSMatchResult> getBuilder(@NotNull Params params) {
+            return BuilderFactory.STR_ALGO_LCS_RESULT_BUILDER;
+        }
+    };
+
+    public static final MapEncoder<Long> PUBSUB_NUMSUB_RESPONSE = new SimpleMapEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map<String, Long>> getMapBuilder() {
+            return BuilderFactory.PUBSUB_NUMSUB_MAP;
+        }
+    };
+
 
     public static final ListEncoder<StreamEntryID> STREAM_ENTRY_ID = new ElementListEncoder<>() {
         @Override
@@ -328,40 +366,6 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<StreamPendingSummary> getBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_PENDING_SUMMARY;
-        }
-    };
-
-    public static final ListEncoder<LCSMatchResult> LCS_MATCH_RESULT = new ElementListEncoder<>() {
-        @Override
-        protected @NotNull Builder<LCSMatchResult> getBuilder(@NotNull Params params) {
-            return BuilderFactory.STR_ALGO_LCS_RESULT_BUILDER;
-        }
-    };
-
-    public static final MapEncoder<Long> PUBSUB_NUMSUB_RESPONSE = new SimpleMapEncoder<>() {
-        @Override
-        protected @NotNull Builder<Map<String, Long>> getMapBuilder() {
-            return BuilderFactory.PUBSUB_NUMSUB_MAP;
-        }
-    };
-
-
-    public static final ListEncoder<KeyValue<String, List<String>>> KEYED_STRING_LIST = new ListElementListEncoder<>() {
-        @Override
-        protected @NotNull Builder<KeyValue<String, List<String>>> getBuilder(@NotNull Params params) {
-            return BuilderFactory.KEYED_STRING_LIST;
-        }
-
-        @Override
-        protected @NotNull Builder<List<KeyValue<String, List<String>>>> getListBuilder(@NotNull Params params) {
-            return BuilderFactory.KEYED_STRING_LIST_LIST;
-        }
-    };
-
-    public static final ListEncoder<KeyValue<String, List<Tuple>>> KEYED_TUPLE_LIST = new ElementListEncoder<>() {
-        @Override
-        protected @NotNull Builder<KeyValue<String, List<Tuple>>> getBuilder(@NotNull Params params) {
-            return BuilderFactory.KEYED_TUPLE_LIST;
         }
     };
 
