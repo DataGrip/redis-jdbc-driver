@@ -88,7 +88,7 @@ public class EncoderFactory {
 
         @Override
         protected @NotNull Builder<List<Boolean>> getListBuilder(@NotNull Params params) {
-            return BuilderFactory.BOOLEAN_LIST;
+            return BuilderFactory.BOOLEAN_WITH_ERROR_LIST;
         }
     };
 
