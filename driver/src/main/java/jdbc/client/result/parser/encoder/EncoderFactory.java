@@ -263,7 +263,21 @@ public class EncoderFactory {
         }
     };
 
-    public static final ListEncoder<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new SimpleListEncoder<>() {
+    public static final ListEncoder<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map.Entry<StreamEntryID, List<StreamEntry>>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+    };
+
+    public static final ListEncoder<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map.Entry<StreamEntryID, List<StreamEntryID>>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+    };
+
+    public static final ListEncoder<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new SimpleListEncoder<>() {
         @Override
         protected @NotNull Builder<List<Map.Entry<String, List<StreamEntry>>>> getListBuilder() {
             return BuilderFactory.STREAM_READ_RESPONSE;

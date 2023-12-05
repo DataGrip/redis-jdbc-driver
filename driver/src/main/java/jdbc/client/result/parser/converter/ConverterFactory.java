@@ -213,10 +213,24 @@ public class ConverterFactory {
         }
     };
 
-    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectConverter<>() {
+    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> getObjectType() {
+            return TypeFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> getObjectType() {
+            return TypeFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectConverter<>() {
         @Override
         public ObjectType<Map.Entry<String, List<StreamEntry>>> getObjectType() {
-            return TypeFactory.STREAM_READ_ENTRY;
+            return TypeFactory.STREAM_READ_RESPONSE;
         }
     };
 
@@ -418,7 +432,7 @@ public class ConverterFactory {
     public static final ObjectConverter<TSElement> TIMESERIES_ELEMENT = new ObjectConverter<>() {
         @Override
         public ObjectType<TSElement> getObjectType() {
-            return TypeFactory.TS_ELEMENT;
+            return TypeFactory.TIMESERIES_ELEMENT;
         }
     };
 

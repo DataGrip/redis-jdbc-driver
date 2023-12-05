@@ -279,7 +279,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.WATCH,                   STRING);
         CRP_MAP.put(RedisCommands.XACK,                    LONG);
         CRP_MAP.put(RedisCommands.XADD,                    STREAM_ENTRY_ID);
-        // TODO: CRP_MAP.put(RedisCommands.XAUTOCLAIM,              ???); - implement result parsers
+        CRP_MAP.put(RedisCommands.XAUTOCLAIM,              STREAM_AUTO_CLAIM_RESPONSE,
+                                                           wrap(STREAM_AUTO_CLAIM_ID_RESPONSE, contains(Keyword.JUSTID)));
         CRP_MAP.put(RedisCommands.XCLAIM,                  STREAM_ENTRY);
         CRP_MAP.put(RedisCommands.XDEL,                    LONG);
         CRP_MAP.put(RedisCommands.XGROUP_CREATE,           STRING);
@@ -293,8 +294,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.XLEN,                    LONG);
         CRP_MAP.put(RedisCommands.XPENDING,                STREAM_PENDING_ENTRY, wrap(STREAM_PENDING_SUMMARY, length(2)));
         CRP_MAP.put(RedisCommands.XRANGE,                  STREAM_ENTRY);
-        CRP_MAP.put(RedisCommands.XREAD,                   STREAM_READ);
-        CRP_MAP.put(RedisCommands.XREADGROUP,              STREAM_READ);
+        CRP_MAP.put(RedisCommands.XREAD,                   STREAM_READ_RESPONSE);
+        CRP_MAP.put(RedisCommands.XREADGROUP,              STREAM_READ_RESPONSE);
         CRP_MAP.put(RedisCommands.XREVRANGE,               STREAM_ENTRY);
         CRP_MAP.put(RedisCommands.XSETID,                  RAW_OBJECT); /* internal */
         CRP_MAP.put(RedisCommands.XTRIM,                   LONG);

@@ -354,15 +354,39 @@ public class ResultParserFactory {
         }
     };
 
-    public static final ResultParser STREAM_READ = new ObjectListResultParser<Map.Entry<String, List<StreamEntry>>>() {
+    public static final ResultParser STREAM_AUTO_CLAIM_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntry>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntry>>> getEncoder() {
+            return EncoderFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> getConverter() {
+            return ConverterFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+    };
+
+    public static final ResultParser STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntryID>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntryID>>> getEncoder() {
+            return EncoderFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> getConverter() {
+            return ConverterFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+    };
+
+    public static final ResultParser STREAM_READ_RESPONSE = new ObjectListResultParser<Map.Entry<String, List<StreamEntry>>>() {
         @Override
         protected @NotNull ListEncoder<Map.Entry<String, List<StreamEntry>>> getEncoder() {
-            return EncoderFactory.STREAM_READ_ENTRY;
+            return EncoderFactory.STREAM_READ_RESPONSE;
         }
 
         @Override
         protected @NotNull ObjectConverter<Map.Entry<String, List<StreamEntry>>> getConverter() {
-            return ConverterFactory.STREAM_READ_ENTRY;
+            return ConverterFactory.STREAM_READ_RESPONSE;
         }
     };
 
@@ -632,8 +656,6 @@ public class ResultParserFactory {
 
 
     /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
-
-    // TODO (stack): rename?
 
     public static final ResultParser TIMESERIES_ELEMENT = new ObjectListResultParser<TSElement>() {
         @Override

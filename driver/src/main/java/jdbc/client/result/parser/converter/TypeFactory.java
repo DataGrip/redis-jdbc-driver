@@ -8,6 +8,7 @@ import jdbc.utils.Utils;
 import redis.clients.jedis.GeoCoordinate;
 import redis.clients.jedis.Module;
 import redis.clients.jedis.Protocol.Keyword;
+import redis.clients.jedis.StreamEntryID;
 import redis.clients.jedis.resps.*;
 import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchProtocol.SearchKeyword;
@@ -157,11 +158,21 @@ public class TypeFactory {
     }};
 
     public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
-        add("id", STRING, (e, p) -> ConverterFactory.STREAM_ENTRY_ID.convert(e.getID(), p));
+        add("id", STRING, StreamEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
         add("fields", MAP, StreamEntry::getFields);
     }};
 
-    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_ENTRY = new ObjectType<>() {{
+    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectType<>() {{
+        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
+    }};
+
+    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectType<>() {{
+        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("ids", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY_ID::convertList);
+    }};
+
+    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectType<>() {{
         add("key", STRING, Map.Entry::getKey);
         add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
     }};
@@ -350,7 +361,7 @@ public class TypeFactory {
 
     /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
-    public static final ObjectType<TSElement> TS_ELEMENT = new ObjectType<>() {{
+    public static final ObjectType<TSElement> TIMESERIES_ELEMENT = new ObjectType<>() {{
         add("timestamp", LONG, TSElement::getTimestamp);
         add("value", DOUBLE, TSElement::getValue);
     }};
