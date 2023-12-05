@@ -256,9 +256,14 @@ public class EncoderFactory {
         }
     };
 
-    public static final ListEncoder<StreamEntry> STREAM_ENTRY = new SimpleListEncoder<>() {
+    public static final ListEncoder<StreamEntry> STREAM_ENTRY = new ListElementListEncoder<>() {
         @Override
-        protected @NotNull Builder<List<StreamEntry>> getListBuilder() {
+        protected @NotNull Builder<StreamEntry> getBuilder(@NotNull Params params) {
+            return BuilderFactory.STREAM_ENTRY;
+        }
+
+        @Override
+        protected @NotNull Builder<List<StreamEntry>> getListBuilder(@NotNull Params params) {
             return BuilderFactory.STREAM_ENTRY_LIST;
         }
     };
@@ -482,7 +487,7 @@ public class EncoderFactory {
         }
     };
 
-    public static final MapEncoder<List<String>> SEARCH_SYNONYM_GROUPS = new SimpleMapEncoder<List<String>>() {
+    public static final MapEncoder<List<String>> SEARCH_SYNONYM_GROUPS = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, List<String>>> getMapBuilder() {
             return SearchBuilderFactory.SEARCH_SYNONYM_GROUPS;
