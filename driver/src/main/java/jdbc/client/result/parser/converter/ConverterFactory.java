@@ -128,6 +128,132 @@ public class ConverterFactory {
     };
 
 
+    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<ScanResult<String>> getObjectType() {
+            return TypeFactory.STRING_SCAN_RESULT;
+        }
+    };
+
+    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<ScanResult<Tuple>> getObjectType() {
+            return TypeFactory.TUPLE_SCAN_RESULT;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<String, String>> ENTRY = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<String, String>> getObjectType() {
+            return TypeFactory.ENTRY;
+        }
+    };
+
+    public static final ObjectConverter<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ObjectConverter<>() {
+        @Override
+        public ObjectType<ScanResult<Map.Entry<String, String>>> getObjectType() {
+            return TypeFactory.ENTRY_SCAN_RESULT;
+        }
+    };
+
+
+    public static final SimpleConverter<StreamEntryID, String> STREAM_ENTRY_ID = new SimpleConverter<>() {
+        @Override
+        public SimpleType<String> getSimpleType() {
+            return TypeFactory.STRING;
+        }
+
+        @Override
+        public @NotNull String convertImpl(@NotNull StreamEntryID encoded, @NotNull Params params) {
+            return encoded.toString();
+        }
+    };
+
+    public static final ObjectConverter<StreamEntry> STREAM_ENTRY = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamEntry> getObjectType() {
+            return TypeFactory.STREAM_ENTRY;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> getObjectType() {
+            return TypeFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> getObjectType() {
+            return TypeFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<Map.Entry<String, List<StreamEntry>>> getObjectType() {
+            return TypeFactory.STREAM_READ_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamConsumersInfo> getObjectType() {
+            return TypeFactory.STREAM_CONSUMER_INFO;
+        }
+    };
+
+    public static final ObjectConverter<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamConsumerFullInfo> getObjectType() {
+            return TypeFactory.STREAM_CONSUMER_INFO_FULL;
+        }
+    };
+
+    public static final ObjectConverter<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamGroupInfo> getObjectType() {
+            return TypeFactory.STREAM_GROUP_INFO;
+        }
+    };
+
+    public static final ObjectConverter<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamGroupFullInfo> getObjectType() {
+            return TypeFactory.STREAM_GROUP_INFO_FULL;
+        }
+    };
+
+    public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamInfo> getObjectType() {
+            return TypeFactory.STREAM_INFO;
+        }
+    };
+
+    public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamFullInfo> getObjectType() {
+            return TypeFactory.STREAM_INFO_FULL;
+        }
+    };
+
+    public static final ObjectConverter<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamPendingEntry> getObjectType() {
+            return TypeFactory.STREAM_PENDING_ENTRY;
+        }
+    };
+
+    public static final ObjectConverter<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectConverter<>() {
+        @Override
+        public ObjectType<StreamPendingSummary> getObjectType() {
+            return TypeFactory.STREAM_PENDING_SUMMARY;
+        }
+    };
+
+
     public static final ObjectConverter<GeoCoordinate> GEO_COORDINATE = new ObjectConverter<>() {
         @Override
         public ObjectType<GeoCoordinate> getObjectType() {
@@ -232,132 +358,6 @@ public class ConverterFactory {
     };
 
 
-    public static final SimpleConverter<StreamEntryID, String> STREAM_ENTRY_ID = new SimpleConverter<>() {
-        @Override
-        public SimpleType<String> getSimpleType() {
-            return TypeFactory.STRING;
-        }
-
-        @Override
-        public @NotNull String convertImpl(@NotNull StreamEntryID encoded, @NotNull Params params) {
-            return encoded.toString();
-        }
-    };
-
-    public static final ObjectConverter<StreamEntry> STREAM_ENTRY = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamEntry> getObjectType() {
-            return TypeFactory.STREAM_ENTRY;
-        }
-    };
-
-    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectConverter<>() {
-        @Override
-        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> getObjectType() {
-            return TypeFactory.STREAM_AUTO_CLAIM_RESPONSE;
-        }
-    };
-
-    public static final ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectConverter<>() {
-        @Override
-        public ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> getObjectType() {
-            return TypeFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
-        }
-    };
-
-    public static final ObjectConverter<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectConverter<>() {
-        @Override
-        public ObjectType<Map.Entry<String, List<StreamEntry>>> getObjectType() {
-            return TypeFactory.STREAM_READ_RESPONSE;
-        }
-    };
-
-    public static final ObjectConverter<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamConsumersInfo> getObjectType() {
-            return TypeFactory.STREAM_CONSUMER_INFO;
-        }
-    };
-
-    public static final ObjectConverter<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamConsumerFullInfo> getObjectType() {
-            return TypeFactory.STREAM_CONSUMER_INFO_FULL;
-        }
-    };
-
-    public static final ObjectConverter<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamGroupInfo> getObjectType() {
-            return TypeFactory.STREAM_GROUP_INFO;
-        }
-    };
-
-    public static final ObjectConverter<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamGroupFullInfo> getObjectType() {
-            return TypeFactory.STREAM_GROUP_INFO_FULL;
-        }
-    };
-
-    public static final ObjectConverter<StreamInfo> STREAM_INFO = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamInfo> getObjectType() {
-            return TypeFactory.STREAM_INFO;
-        }
-    };
-
-   public static final ObjectConverter<StreamFullInfo> STREAM_INFO_FULL = new ObjectConverter<>() {
-       @Override
-       public ObjectType<StreamFullInfo> getObjectType() {
-           return TypeFactory.STREAM_INFO_FULL;
-       }
-    };
-
-    public static final ObjectConverter<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamPendingEntry> getObjectType() {
-            return TypeFactory.STREAM_PENDING_ENTRY;
-        }
-    };
-
-    public static final ObjectConverter<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectConverter<>() {
-        @Override
-        public ObjectType<StreamPendingSummary> getObjectType() {
-            return TypeFactory.STREAM_PENDING_SUMMARY;
-        }
-    };
-
-
-    public static final ObjectConverter<ScanResult<String>> STRING_SCAN_RESULT = new ObjectConverter<>() {
-        @Override
-        public ObjectType<ScanResult<String>> getObjectType() {
-            return TypeFactory.STRING_SCAN_RESULT;
-        }
-    };
-
-    public static final ObjectConverter<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ObjectConverter<>() {
-        @Override
-        public ObjectType<ScanResult<Tuple>> getObjectType() {
-            return TypeFactory.TUPLE_SCAN_RESULT;
-        }
-    };
-
-    public static final ObjectConverter<Map.Entry<String, String>> ENTRY = new ObjectConverter<>() {
-        @Override
-        public ObjectType<Map.Entry<String, String>> getObjectType() {
-            return TypeFactory.ENTRY;
-        }
-    };
-
-    public static final ObjectConverter<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ObjectConverter<>() {
-        @Override
-        public ObjectType<ScanResult<Map.Entry<String, String>>> getObjectType() {
-            return TypeFactory.ENTRY_SCAN_RESULT;
-        }
-    };
-
-
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 
 
@@ -451,6 +451,7 @@ public class ConverterFactory {
             return TypeFactory.TIMESERIES_MRANGE_RESPONSE;
         }
     };
+
 
     /* ------------------------------------------------------------------------------------------ */
 

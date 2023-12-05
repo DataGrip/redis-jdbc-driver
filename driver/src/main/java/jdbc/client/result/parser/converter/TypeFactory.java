@@ -96,6 +96,124 @@ public class TypeFactory {
     }};
 
 
+    public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
+        @Override
+        protected BiFunction<List<String>, Params, List<?>> getResultsConverter() {
+            return ConverterFactory.STRING::convertList;
+        }
+    };
+
+    public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>() {
+        @Override
+        protected BiFunction<List<Tuple>, Params, List<?>> getResultsConverter() {
+            return ConverterFactory.TUPLE::convertList;
+        }
+    };
+
+    public static final ObjectType<Map.Entry<String, String>> ENTRY = new ObjectType<>() {{
+        add("field", STRING, Map.Entry::getKey);
+        add("value", STRING, Map.Entry::getValue);
+    }};
+
+    public static final ObjectType<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultType<>() {
+        @Override
+        protected BiFunction<List<Map.Entry<String, String>>, Params, List<?>> getResultsConverter() {
+            return ConverterFactory.ENTRY::convertList;
+        }
+    };
+
+    private static abstract class ScanResultType<T> extends ObjectType<ScanResult<T>> {
+        protected ScanResultType() {
+            add("cursor", STRING, ScanResult::getCursor);
+            add("results", LIST, ScanResult::getResult, getResultsConverter());
+        }
+
+        protected abstract BiFunction<List<T>, Params, List<?>> getResultsConverter();
+    }
+
+
+    public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
+        add("id", STRING, StreamEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("fields", MAP, StreamEntry::getFields);
+    }};
+
+    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectType<>() {{
+        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
+    }};
+
+    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectType<>() {{
+        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("ids", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY_ID::convertList);
+    }};
+
+    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectType<>() {{
+        add("key", STRING, Map.Entry::getKey);
+        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
+    }};
+
+    public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectType<>() {{
+        add("name", STRING, StreamConsumersInfo::getName);
+        add("idle", LONG, StreamConsumersInfo::getIdle);
+        add("pending", LONG, StreamConsumersInfo::getPending);
+    }};
+
+    public static final ObjectType<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectType<>() {{
+        add("name", STRING, StreamConsumerFullInfo::getName);
+        add("seen-time", LONG, StreamConsumerFullInfo::getSeenTime);
+        add("pel-count", LONG, StreamConsumerFullInfo::getPelCount);
+        add("pending", LIST, StreamConsumerFullInfo::getPending);
+    }};
+
+    public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
+        add("name", STRING, StreamGroupInfo::getName);
+        add("consumers", LONG, StreamGroupInfo::getConsumers);
+        add("pending", LONG, StreamGroupInfo::getPending);
+        add("last-delivered-id", STRING, StreamGroupInfo::getLastDeliveredId, ConverterFactory.STREAM_ENTRY_ID::convert);
+    }};
+
+    public static final ObjectType<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectType<>() {{
+        add("name", STRING, StreamGroupFullInfo::getName);
+        add("consumers", LIST, StreamGroupFullInfo::getConsumers, ConverterFactory.STREAM_CONSUMER_INFO_FULL::convertList);
+        add("pending", LIST, StreamGroupFullInfo::getPending);
+        add("pel-count", LONG, StreamGroupFullInfo::getPelCount);
+        add("last-delivered-id", STRING, StreamGroupFullInfo::getLastDeliveredId, ConverterFactory.STREAM_ENTRY_ID::convert);
+    }};
+
+    public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{
+        add("length", LONG, StreamInfo::getLength);
+        add("radix-tree-keys", LONG, StreamInfo::getRadixTreeKeys);
+        add("radix-tree-nodes", LONG, StreamInfo::getRadixTreeNodes);
+        add("groups", LONG, StreamInfo::getGroups);
+        add("last-generated-id", STRING, StreamInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("first-entry", MAP, StreamInfo::getFirstEntry, ConverterFactory.STREAM_ENTRY::convert);
+        add("last-entry", MAP, StreamInfo::getLastEntry, ConverterFactory.STREAM_ENTRY::convert);
+    }};
+
+    public static final ObjectType<StreamFullInfo> STREAM_INFO_FULL = new ObjectType<>() {{
+        add("length", LONG, StreamFullInfo::getLength);
+        add("radix-tree-keys", LONG, StreamFullInfo::getRadixTreeKeys);
+        add("radix-tree-nodes", LONG, StreamFullInfo::getRadixTreeNodes);
+        add("groups", LIST, StreamFullInfo::getGroups, ConverterFactory.STREAM_GROUP_INFO_FULL::convertList);
+        add("last-generated-id", STRING, StreamFullInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("entries", LIST, StreamFullInfo::getEntries, ConverterFactory.STREAM_ENTRY::convertList);
+    }};
+
+    public static final ObjectType<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectType<>() {{
+        add("id", STRING, StreamPendingEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("consumer-name", STRING, StreamPendingEntry::getConsumerName);
+        add("idle-time", LONG, StreamPendingEntry::getIdleTime);
+        add("delivered-times", LONG, StreamPendingEntry::getDeliveredTimes);
+    }};
+
+    public static final ObjectType<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectType<>() {{
+        add("total", LONG, StreamPendingSummary::getTotal);
+        add("min-id", STRING, StreamPendingSummary::getMinId, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("max-id", STRING, StreamPendingSummary::getMaxId, ConverterFactory.STREAM_ENTRY_ID::convert);
+        add("consumer-message-count", MAP, StreamPendingSummary::getConsumerMessageCount);
+    }};
+
+
     public static final ObjectType<GeoCoordinate> GEO_COORDINATE = new ObjectType<>() {{
         add("longitude", DOUBLE, GeoCoordinate::getLongitude);
         add("latitude", DOUBLE, GeoCoordinate::getLatitude);
@@ -189,124 +307,6 @@ public class TypeFactory {
     }};
 
 
-    public static final ObjectType<StreamEntry> STREAM_ENTRY = new ObjectType<>() {{
-        add("id", STRING, StreamEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("fields", MAP, StreamEntry::getFields);
-    }};
-
-    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntry>>> STREAM_AUTO_CLAIM_RESPONSE = new ObjectType<>() {{
-        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
-    }};
-
-    public static final ObjectType<Map.Entry<StreamEntryID, List<StreamEntryID>>> STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectType<>() {{
-        add("cursor-id", STRING, Map.Entry::getKey, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("ids", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY_ID::convertList);
-    }};
-
-    public static final ObjectType<Map.Entry<String, List<StreamEntry>>> STREAM_READ_RESPONSE = new ObjectType<>() {{
-        add("key", STRING, Map.Entry::getKey);
-        add("entries", LIST, Map.Entry::getValue, ConverterFactory.STREAM_ENTRY::convertList);
-    }};
-
-    public static final ObjectType<StreamConsumersInfo> STREAM_CONSUMER_INFO = new ObjectType<>() {{
-        add("name", STRING, StreamConsumersInfo::getName);
-        add("idle", LONG, StreamConsumersInfo::getIdle);
-        add("pending", LONG, StreamConsumersInfo::getPending);
-    }};
-
-    public static final ObjectType<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectType<>() {{
-        add("name", STRING, StreamConsumerFullInfo::getName);
-        add("seen-time", LONG, StreamConsumerFullInfo::getSeenTime);
-        add("pel-count", LONG, StreamConsumerFullInfo::getPelCount);
-        add("pending", LIST, StreamConsumerFullInfo::getPending);
-    }};
-
-    public static final ObjectType<StreamGroupInfo> STREAM_GROUP_INFO = new ObjectType<>() {{
-        add("name", STRING, StreamGroupInfo::getName);
-        add("consumers", LONG, StreamGroupInfo::getConsumers);
-        add("pending", LONG, StreamGroupInfo::getPending);
-        add("last-delivered-id", STRING, StreamGroupInfo::getLastDeliveredId, ConverterFactory.STREAM_ENTRY_ID::convert);
-    }};
-
-    public static final ObjectType<StreamGroupFullInfo> STREAM_GROUP_INFO_FULL = new ObjectType<>() {{
-        add("name", STRING, StreamGroupFullInfo::getName);
-        add("consumers", LIST, StreamGroupFullInfo::getConsumers, ConverterFactory.STREAM_CONSUMER_INFO_FULL::convertList);
-        add("pending", LIST, StreamGroupFullInfo::getPending);
-        add("pel-count", LONG, StreamGroupFullInfo::getPelCount);
-        add("last-delivered-id", STRING, StreamGroupFullInfo::getLastDeliveredId, ConverterFactory.STREAM_ENTRY_ID::convert);
-    }};
-
-    public static final ObjectType<StreamInfo> STREAM_INFO = new ObjectType<>() {{
-        add("length", LONG, StreamInfo::getLength);
-        add("radix-tree-keys", LONG, StreamInfo::getRadixTreeKeys);
-        add("radix-tree-nodes", LONG, StreamInfo::getRadixTreeNodes);
-        add("groups", LONG, StreamInfo::getGroups);
-        add("last-generated-id", STRING, StreamInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("first-entry", MAP, StreamInfo::getFirstEntry, ConverterFactory.STREAM_ENTRY::convert);
-        add("last-entry", MAP, StreamInfo::getLastEntry, ConverterFactory.STREAM_ENTRY::convert);
-    }};
-
-    public static final ObjectType<StreamFullInfo> STREAM_INFO_FULL = new ObjectType<>() {{
-        add("length", LONG, StreamFullInfo::getLength);
-        add("radix-tree-keys", LONG, StreamFullInfo::getRadixTreeKeys);
-        add("radix-tree-nodes", LONG, StreamFullInfo::getRadixTreeNodes);
-        add("groups", LIST, StreamFullInfo::getGroups, ConverterFactory.STREAM_GROUP_INFO_FULL::convertList);
-        add("last-generated-id", STRING, StreamFullInfo::getLastGeneratedId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("entries", LIST, StreamFullInfo::getEntries, ConverterFactory.STREAM_ENTRY::convertList);
-    }};
-
-    public static final ObjectType<StreamPendingEntry> STREAM_PENDING_ENTRY = new ObjectType<>() {{
-        add("id", STRING, StreamPendingEntry::getID, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("consumer-name", STRING, StreamPendingEntry::getConsumerName);
-        add("idle-time", LONG, StreamPendingEntry::getIdleTime);
-        add("delivered-times", LONG, StreamPendingEntry::getDeliveredTimes);
-    }};
-
-    public static final ObjectType<StreamPendingSummary> STREAM_PENDING_SUMMARY = new ObjectType<>() {{
-        add("total", LONG, StreamPendingSummary::getTotal);
-        add("min-id", STRING, StreamPendingSummary::getMinId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("max-id", STRING, StreamPendingSummary::getMaxId, ConverterFactory.STREAM_ENTRY_ID::convert);
-        add("consumer-message-count", MAP, StreamPendingSummary::getConsumerMessageCount);
-    }};
-
-
-    public static final ObjectType<ScanResult<String>> STRING_SCAN_RESULT = new ScanResultType<>() {
-        @Override
-        protected BiFunction<List<String>, Params, List<?>> getResultsConverter() {
-            return ConverterFactory.STRING::convertList;
-        }
-    };
-
-    public static final ObjectType<ScanResult<Tuple>> TUPLE_SCAN_RESULT = new ScanResultType<>() {
-        @Override
-        protected BiFunction<List<Tuple>, Params, List<?>> getResultsConverter() {
-            return ConverterFactory.TUPLE::convertList;
-        }
-    };
-
-    public static final ObjectType<Map.Entry<String, String>> ENTRY = new ObjectType<>() {{
-        add("field", STRING, Map.Entry::getKey);
-        add("value", STRING, Map.Entry::getValue);
-    }};
-
-    public static final ObjectType<ScanResult<Map.Entry<String, String>>> ENTRY_SCAN_RESULT = new ScanResultType<>() {
-        @Override
-        protected BiFunction<List<Map.Entry<String, String>>, Params, List<?>> getResultsConverter() {
-            return ConverterFactory.ENTRY::convertList;
-        }
-    };
-
-    private static abstract class ScanResultType<T> extends ObjectType<ScanResult<T>> {
-        protected ScanResultType() {
-            add("cursor", STRING, ScanResult::getCursor);
-            add("results", LIST, ScanResult::getResult, getResultsConverter());
-        }
-
-        protected abstract BiFunction<List<T>, Params, List<?>> getResultsConverter();
-    }
-
-
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 
 
@@ -357,20 +357,17 @@ public class TypeFactory {
         add("value", DOUBLE, TSElement::getValue);
     }};
 
-    // TODO (stack): element?
     public static final ObjectType<TSKeyValue<TSElement>> TIMESERIES_MGET_RESPONSE = new ObjectType<>() {{
         add("key", STRING, TSKeyValue::getKey);
         add("labels", MAP, TSKeyValue::getLabels, Utils.contains(TimeSeriesKeyword.WITHLABELS, TimeSeriesKeyword.SELECTED_LABELS));
         add("element", MAP, TSKeyValue::getValue, ConverterFactory.TIMESERIES_ELEMENT::convert);
     }};
 
-    // TODO (stack): elements?
     public static final ObjectType<TSKeyedElements> TIMESERIES_MRANGE_RESPONSE = new ObjectType<>() {{
         add("key", STRING, TSKeyedElements::getKey);
         add("elements", LIST, TSKeyedElements::getValue, ConverterFactory.TIMESERIES_ELEMENT::convertList);
     }};
 
-    // TODO (stack): unify KeyValue types?
 
     /* ------------------------------------------------------------------------------------------ */
 

@@ -238,6 +238,176 @@ public class ResultParserFactory {
     };
 
 
+    public static final ResultParser STRING_SCAN_RESULT = new ObjectListResultParser<ScanResult<String>>() {
+        @Override
+        protected @NotNull ListEncoder<ScanResult<String>> getEncoder() {
+            return EncoderFactory.STRING_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<ScanResult<String>> getConverter() {
+            return ConverterFactory.STRING_SCAN_RESULT;
+        }
+    };
+
+    public static final ResultParser TUPLE_SCAN_RESULT = new ObjectListResultParser<ScanResult<Tuple>>() {
+        @Override
+        protected @NotNull ListEncoder<ScanResult<Tuple>> getEncoder() {
+            return EncoderFactory.TUPLE_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<ScanResult<Tuple>> getConverter() {
+            return ConverterFactory.TUPLE_SCAN_RESULT;
+        }
+    };
+
+    public static final ResultParser ENTRY_SCAN_RESULT = new ObjectListResultParser<ScanResult<Map.Entry<String, String>>>() {
+        @Override
+        protected @NotNull ListEncoder<ScanResult<Map.Entry<String, String>>> getEncoder() {
+            return EncoderFactory.ENTRY_SCAN_RESULT;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<ScanResult<Map.Entry<String, String>>> getConverter() {
+            return ConverterFactory.ENTRY_SCAN_RESULT;
+        }
+    };
+
+
+    public static final ResultParser STREAM_ENTRY_ID = new ListResultParser<StreamEntryID, String>() {
+        @Override
+        protected @NotNull ListEncoder<StreamEntryID> getEncoder() {
+            return EncoderFactory.STREAM_ENTRY_ID;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<StreamEntryID, String> getConverter() {
+            return ConverterFactory.STREAM_ENTRY_ID;
+        }
+    };
+
+    public static final ResultParser STREAM_ENTRY = new ObjectListResultParser<StreamEntry>() {
+        @Override
+        protected @NotNull ListEncoder<StreamEntry> getEncoder() {
+            return EncoderFactory.STREAM_ENTRY;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamEntry> getConverter() {
+            return ConverterFactory.STREAM_ENTRY;
+        }
+    };
+
+    public static final ResultParser STREAM_AUTO_CLAIM_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntry>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntry>>> getEncoder() {
+            return EncoderFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> getConverter() {
+            return ConverterFactory.STREAM_AUTO_CLAIM_RESPONSE;
+        }
+    };
+
+    public static final ResultParser STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntryID>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntryID>>> getEncoder() {
+            return EncoderFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> getConverter() {
+            return ConverterFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
+        }
+    };
+
+    public static final ResultParser STREAM_READ_RESPONSE = new ObjectListResultParser<Map.Entry<String, List<StreamEntry>>>() {
+        @Override
+        protected @NotNull ListEncoder<Map.Entry<String, List<StreamEntry>>> getEncoder() {
+            return EncoderFactory.STREAM_READ_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<Map.Entry<String, List<StreamEntry>>> getConverter() {
+            return ConverterFactory.STREAM_READ_RESPONSE;
+        }
+    };
+
+    public static final ResultParser STREAM_CONSUMER_INFO = new ObjectListResultParser<StreamConsumersInfo>() {
+        @Override
+        protected @NotNull ListEncoder<StreamConsumersInfo> getEncoder() {
+            return EncoderFactory.STREAM_CONSUMER_INFO;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamConsumersInfo> getConverter() {
+            return ConverterFactory.STREAM_CONSUMER_INFO;
+        }
+    };
+
+    public static final ResultParser STREAM_GROUP_INFO = new ObjectListResultParser<StreamGroupInfo>() {
+        @Override
+        protected @NotNull ListEncoder<StreamGroupInfo> getEncoder() {
+            return EncoderFactory.STREAM_GROUP_INFO;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamGroupInfo> getConverter() {
+            return ConverterFactory.STREAM_GROUP_INFO;
+        }
+    };
+
+    public static final ResultParser STREAM_INFO = new ObjectListResultParser<StreamInfo>() {
+        @Override
+        protected @NotNull ListEncoder<StreamInfo> getEncoder() {
+            return EncoderFactory.STREAM_INFO;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamInfo> getConverter() {
+            return ConverterFactory.STREAM_INFO;
+        }
+    };
+
+    public static final ResultParser STREAM_INFO_FULL = new ObjectListResultParser<StreamFullInfo>() {
+        @Override
+        protected @NotNull ListEncoder<StreamFullInfo> getEncoder() {
+            return EncoderFactory.STREAM_INFO_FULL;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamFullInfo> getConverter() {
+            return ConverterFactory.STREAM_INFO_FULL;
+        }
+    };
+
+    public static final ResultParser STREAM_PENDING_ENTRY = new ObjectListResultParser<StreamPendingEntry>() {
+        @Override
+        protected @NotNull ListEncoder<StreamPendingEntry> getEncoder() {
+            return EncoderFactory.STREAM_PENDING_ENTRY;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamPendingEntry> getConverter() {
+            return ConverterFactory.STREAM_PENDING_ENTRY;
+        }
+    };
+
+    public static final ResultParser STREAM_PENDING_SUMMARY = new ObjectListResultParser<StreamPendingSummary>() {
+        @Override
+        protected @NotNull ListEncoder<StreamPendingSummary> getEncoder() {
+            return EncoderFactory.STREAM_PENDING_SUMMARY;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<StreamPendingSummary> getConverter() {
+            return ConverterFactory.STREAM_PENDING_SUMMARY;
+        }
+    };
+
+
     public static final ResultParser GEO_COORDINATE = new ObjectListResultParser<GeoCoordinate>() {
         @Override
         protected @NotNull ListEncoder<GeoCoordinate> getEncoder() {
@@ -379,176 +549,6 @@ public class ResultParserFactory {
         @Override
         protected @NotNull IdentityConverter<Long> getConverter() {
             return ConverterFactory.LONG;
-        }
-    };
-
-
-    public static final ResultParser STREAM_ENTRY_ID = new ListResultParser<StreamEntryID, String>() {
-        @Override
-        protected @NotNull ListEncoder<StreamEntryID> getEncoder() {
-            return EncoderFactory.STREAM_ENTRY_ID;
-        }
-
-        @Override
-        protected @NotNull SimpleConverter<StreamEntryID, String> getConverter() {
-            return ConverterFactory.STREAM_ENTRY_ID;
-        }
-    };
-
-    public static final ResultParser STREAM_ENTRY = new ObjectListResultParser<StreamEntry>() {
-        @Override
-        protected @NotNull ListEncoder<StreamEntry> getEncoder() {
-            return EncoderFactory.STREAM_ENTRY;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamEntry> getConverter() {
-            return ConverterFactory.STREAM_ENTRY;
-        }
-    };
-
-    public static final ResultParser STREAM_AUTO_CLAIM_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntry>>>() {
-        @Override
-        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntry>>> getEncoder() {
-            return EncoderFactory.STREAM_AUTO_CLAIM_RESPONSE;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntry>>> getConverter() {
-            return ConverterFactory.STREAM_AUTO_CLAIM_RESPONSE;
-        }
-    };
-
-    public static final ResultParser STREAM_AUTO_CLAIM_ID_RESPONSE = new ObjectListResultParser<Map.Entry<StreamEntryID, List<StreamEntryID>>>() {
-        @Override
-        protected @NotNull ListEncoder<Map.Entry<StreamEntryID, List<StreamEntryID>>> getEncoder() {
-            return EncoderFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<Map.Entry<StreamEntryID, List<StreamEntryID>>> getConverter() {
-            return ConverterFactory.STREAM_AUTO_CLAIM_ID_RESPONSE;
-        }
-    };
-
-    public static final ResultParser STREAM_READ_RESPONSE = new ObjectListResultParser<Map.Entry<String, List<StreamEntry>>>() {
-        @Override
-        protected @NotNull ListEncoder<Map.Entry<String, List<StreamEntry>>> getEncoder() {
-            return EncoderFactory.STREAM_READ_RESPONSE;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<Map.Entry<String, List<StreamEntry>>> getConverter() {
-            return ConverterFactory.STREAM_READ_RESPONSE;
-        }
-    };
-
-    public static final ResultParser STREAM_CONSUMER_INFO = new ObjectListResultParser<StreamConsumersInfo>() {
-        @Override
-        protected @NotNull ListEncoder<StreamConsumersInfo> getEncoder() {
-            return EncoderFactory.STREAM_CONSUMER_INFO;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamConsumersInfo> getConverter() {
-            return ConverterFactory.STREAM_CONSUMER_INFO;
-        }
-    };
-
-    public static final ResultParser STREAM_GROUP_INFO = new ObjectListResultParser<StreamGroupInfo>() {
-        @Override
-        protected @NotNull ListEncoder<StreamGroupInfo> getEncoder() {
-            return EncoderFactory.STREAM_GROUP_INFO;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamGroupInfo> getConverter() {
-            return ConverterFactory.STREAM_GROUP_INFO;
-        }
-    };
-
-    public static final ResultParser STREAM_INFO = new ObjectListResultParser<StreamInfo>() {
-        @Override
-        protected @NotNull ListEncoder<StreamInfo> getEncoder() {
-            return EncoderFactory.STREAM_INFO;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamInfo> getConverter() {
-            return ConverterFactory.STREAM_INFO;
-        }
-    };
-
-    public static final ResultParser STREAM_INFO_FULL = new ObjectListResultParser<StreamFullInfo>() {
-        @Override
-        protected @NotNull ListEncoder<StreamFullInfo> getEncoder() {
-            return EncoderFactory.STREAM_INFO_FULL;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamFullInfo> getConverter() {
-            return ConverterFactory.STREAM_INFO_FULL;
-        }
-    };
-
-    public static final ResultParser STREAM_PENDING_ENTRY = new ObjectListResultParser<StreamPendingEntry>() {
-        @Override
-        protected @NotNull ListEncoder<StreamPendingEntry> getEncoder() {
-            return EncoderFactory.STREAM_PENDING_ENTRY;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamPendingEntry> getConverter() {
-            return ConverterFactory.STREAM_PENDING_ENTRY;
-        }
-    };
-
-    public static final ResultParser STREAM_PENDING_SUMMARY = new ObjectListResultParser<StreamPendingSummary>() {
-        @Override
-        protected @NotNull ListEncoder<StreamPendingSummary> getEncoder() {
-            return EncoderFactory.STREAM_PENDING_SUMMARY;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<StreamPendingSummary> getConverter() {
-            return ConverterFactory.STREAM_PENDING_SUMMARY;
-        }
-    };
-
-
-    public static final ResultParser STRING_SCAN_RESULT = new ObjectListResultParser<ScanResult<String>>() {
-        @Override
-        protected @NotNull ListEncoder<ScanResult<String>> getEncoder() {
-            return EncoderFactory.STRING_SCAN_RESULT;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<ScanResult<String>> getConverter() {
-            return ConverterFactory.STRING_SCAN_RESULT;
-        }
-    };
-
-    public static final ResultParser TUPLE_SCAN_RESULT = new ObjectListResultParser<ScanResult<Tuple>>() {
-        @Override
-        protected @NotNull ListEncoder<ScanResult<Tuple>> getEncoder() {
-            return EncoderFactory.TUPLE_SCAN_RESULT;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<ScanResult<Tuple>> getConverter() {
-            return ConverterFactory.TUPLE_SCAN_RESULT;
-        }
-    };
-
-    public static final ResultParser ENTRY_SCAN_RESULT = new ObjectListResultParser<ScanResult<Map.Entry<String, String>>>() {
-        @Override
-        protected @NotNull ListEncoder<ScanResult<Map.Entry<String, String>>> getEncoder() {
-            return EncoderFactory.ENTRY_SCAN_RESULT;
-        }
-
-        @Override
-        protected @NotNull ObjectConverter<ScanResult<Map.Entry<String, String>>> getConverter() {
-            return ConverterFactory.ENTRY_SCAN_RESULT;
         }
     };
 
@@ -710,8 +710,8 @@ public class ResultParserFactory {
         }
     };
 
-    /* ------------------------------------------------------------------------------------------ */
 
+    /* ------------------------------------------------------------------------------------------ */
 
     private static abstract class ListResultParser<T, S> implements ResultParser {
         protected abstract @NotNull ListEncoder<T> getEncoder();
