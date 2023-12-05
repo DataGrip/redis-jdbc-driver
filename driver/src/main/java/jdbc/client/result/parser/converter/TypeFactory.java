@@ -306,10 +306,17 @@ public class TypeFactory {
         add("len", LONG, LCSMatchResult::getLen, Utils.contains(Keyword.LEN, Keyword.IDX));
     }};
 
+
     public static final ObjectType<KeyValue<Long, Long>> WAITAOF_RESPONSE = new ObjectType<>() {{
         add("local", LONG, KeyValue::getKey);
         add("value", LONG, KeyValue::getValue);
     }};
+
+    public static final ObjectType<KeyValue<Long, Double>> ZRANK_WITHSCORE_RESPONSE = new ObjectType<>() {{
+        add("value", LONG, KeyValue::getKey);
+        add("score", DOUBLE, KeyValue::getValue);
+    }};
+
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 

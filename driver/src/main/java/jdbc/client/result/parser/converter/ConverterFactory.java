@@ -357,10 +357,18 @@ public class ConverterFactory {
         }
     };
 
+
     public static final ObjectConverter<KeyValue<Long, Long>> WAITAOF_RESPONSE = new ObjectConverter<>() {
         @Override
         public ObjectType<KeyValue<Long, Long>> getObjectType() {
             return TypeFactory.WAITAOF_RESPONSE;
+        }
+    };
+
+    public static final ObjectConverter<KeyValue<Long, Double>> ZRANK_WITHSCORE_RESPONSE = new ObjectConverter<>() {
+        @Override
+        public ObjectType<KeyValue<Long, Double>> getObjectType() {
+            return TypeFactory.ZRANK_WITHSCORE_RESPONSE;
         }
     };
 

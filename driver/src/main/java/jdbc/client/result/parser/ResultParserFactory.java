@@ -540,6 +540,7 @@ public class ResultParserFactory {
         }
     };
 
+
     public static final ResultParser PUBSUB_NUMSUB_RESPONSE = new MapResultParser<Long, Long>() {
         @Override
         protected @NotNull MapEncoder<Long> getEncoder() {
@@ -561,6 +562,18 @@ public class ResultParserFactory {
         @Override
         protected @NotNull ObjectConverter<KeyValue<Long, Long>> getConverter() {
             return ConverterFactory.WAITAOF_RESPONSE;
+        }
+    };
+
+    public static final ResultParser ZRANK_WITHSCORE_RESPONSE = new ObjectListResultParser<KeyValue<Long, Double>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<Long, Double>> getEncoder() {
+            return EncoderFactory.ZRANK_WITHSCORE_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<Long, Double>> getConverter() {
+            return ConverterFactory.ZRANK_WITHSCORE_RESPONSE;
         }
     };
 

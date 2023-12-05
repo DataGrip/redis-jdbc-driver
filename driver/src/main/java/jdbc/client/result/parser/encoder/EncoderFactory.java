@@ -384,6 +384,7 @@ public class EncoderFactory {
         }
     };
 
+
     public static final MapEncoder<Long> PUBSUB_NUMSUB_RESPONSE = new SimpleMapEncoder<>() {
         @Override
         protected @NotNull Builder<Map<String, Long>> getMapBuilder() {
@@ -395,6 +396,13 @@ public class EncoderFactory {
         @Override
         protected @NotNull Builder<KeyValue<Long, Long>> getBuilder(@NotNull Params params) {
             return BuilderFactory.LONG_LONG_PAIR;
+        }
+    };
+
+    public static final ListEncoder<KeyValue<Long, Double>> ZRANK_WITHSCORE_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<Long, Double>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.ZRANK_WITHSCORE_PAIR;
         }
     };
 

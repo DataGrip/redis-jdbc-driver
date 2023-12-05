@@ -317,7 +317,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.ZRANGE,                  STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZRANGEBYLEX,             STRING);
         CRP_MAP.put(RedisCommands.ZRANGEBYSCORE,           STRING, wrap(TUPLE, contains(Keyword.WITHSCORES)));
-        CRP_MAP.put(RedisCommands.ZRANK,                   LONG);
+        CRP_MAP.put(RedisCommands.ZRANK,                   LONG,
+                                                           wrap(ZRANK_WITHSCORE_RESPONSE, contains(Keyword.WITHSCORES)));
         CRP_MAP.put(RedisCommands.ZREM,                    LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYLEX,          LONG);
         CRP_MAP.put(RedisCommands.ZREMRANGEBYRANK,         LONG);
