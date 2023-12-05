@@ -275,7 +275,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.UNLINK,                  LONG);
         CRP_MAP.put(RedisCommands.UNWATCH,                 STRING);
         CRP_MAP.put(RedisCommands.WAIT,                    LONG);
-        // TODO: CRP_MAP.put(RedisCommands.WAITAOF,                 ???);
+        CRP_MAP.put(RedisCommands.WAITAOF,                 WAITAOF_RESPONSE);
         CRP_MAP.put(RedisCommands.WATCH,                   STRING);
         CRP_MAP.put(RedisCommands.XACK,                    LONG);
         CRP_MAP.put(RedisCommands.XADD,                    STREAM_ENTRY_ID);

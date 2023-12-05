@@ -391,6 +391,13 @@ public class EncoderFactory {
         }
     };
 
+    public static final ListEncoder<KeyValue<Long, Long>> WAITAOF_RESPONSE = new ElementListEncoder<>() {
+        @Override
+        protected @NotNull Builder<KeyValue<Long, Long>> getBuilder(@NotNull Params params) {
+            return BuilderFactory.LONG_LONG_PAIR;
+        }
+    };
+
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 

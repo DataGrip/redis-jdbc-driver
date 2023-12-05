@@ -306,6 +306,10 @@ public class TypeFactory {
         add("len", LONG, LCSMatchResult::getLen, Utils.contains(Keyword.LEN, Keyword.IDX));
     }};
 
+    public static final ObjectType<KeyValue<Long, Long>> WAITAOF_RESPONSE = new ObjectType<>() {{
+        add("local", LONG, KeyValue::getKey);
+        add("value", LONG, KeyValue::getValue);
+    }};
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 

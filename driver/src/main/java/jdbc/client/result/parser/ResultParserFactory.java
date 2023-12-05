@@ -552,6 +552,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser WAITAOF_RESPONSE = new ObjectListResultParser<KeyValue<Long, Long>>() {
+        @Override
+        protected @NotNull ListEncoder<KeyValue<Long, Long>> getEncoder() {
+            return EncoderFactory.WAITAOF_RESPONSE;
+        }
+
+        @Override
+        protected @NotNull ObjectConverter<KeyValue<Long, Long>> getConverter() {
+            return ConverterFactory.WAITAOF_RESPONSE;
+        }
+    };
+
 
     /* --------------------------------------------- RedisJSON --------------------------------------------- */
 
