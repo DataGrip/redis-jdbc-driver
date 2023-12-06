@@ -10,6 +10,7 @@ import jdbc.client.result.structures.RedisResult;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.ConnectionPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
+import redis.clients.jedis.util.SafeEncoder;
 
 import java.sql.SQLException;
 
@@ -36,7 +37,8 @@ public abstract class RedisClientBase implements RedisClient {
 
 
     private Object executeImpl(@NotNull RedisSetDatabaseQuery query) {
-        return setDatabase(query.getDbIndex());
+        String response = setDatabase(query.getDbIndex());
+        return response != null ? SafeEncoder.encode(response) : null;
     }
 
     protected Object executeImpl(@NotNull RedisKeyPatternQuery query) throws SQLException {

@@ -238,7 +238,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.SCRIPT_LOAD,             STRING);
         CRP_MAP.put(RedisCommands.SDIFF,                   STRING);
         CRP_MAP.put(RedisCommands.SDIFFSTORE,              LONG);
-        CRP_MAP.put(RedisCommands.SELECT,                  STRING); // TODO: ???
+        CRP_MAP.put(RedisCommands.SELECT,                  STRING);
         CRP_MAP.put(RedisCommands.SET,                     STRING);
         CRP_MAP.put(RedisCommands.SETBIT,                  LONG);
         CRP_MAP.put(RedisCommands.SETEX,                   STRING);
