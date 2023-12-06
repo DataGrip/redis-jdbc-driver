@@ -156,11 +156,13 @@ public class TypeFactory {
         add("name", STRING, StreamConsumersInfo::getName);
         add("idle", LONG, StreamConsumersInfo::getIdle);
         add("pending", LONG, StreamConsumersInfo::getPending);
+        add("inactive", LONG, StreamConsumersInfo::getInactive);
     }};
 
     public static final ObjectType<StreamConsumerFullInfo> STREAM_CONSUMER_INFO_FULL = new ObjectType<>() {{
         add("name", STRING, StreamConsumerFullInfo::getName);
         add("seen-time", LONG, StreamConsumerFullInfo::getSeenTime);
+        add("active-time", LONG, StreamConsumerFullInfo::getActiveTime);
         add("pel-count", LONG, StreamConsumerFullInfo::getPelCount);
         add("pending", LIST, StreamConsumerFullInfo::getPending);
     }};
@@ -235,6 +237,7 @@ public class TypeFactory {
         add("flags", LIST, AccessControlUser::getFlags);
         add("keys", LIST, AccessControlUser::getKeys);
         add("passwords", LIST, AccessControlUser::getPassword);
+        add("channels", LIST, AccessControlUser::getChannels);
         add("commands", STRING, AccessControlUser::getCommands);
     }};
 
@@ -246,9 +249,11 @@ public class TypeFactory {
         add("username", STRING, AccessControlLogEntry::getUsername);
         add("age-seconds", STRING, AccessControlLogEntry::getAgeSeconds);
         add("client-info", MAP, AccessControlLogEntry::getClientInfo);
+        add("entry-id", LONG, AccessControlLogEntry::getEntryId);
+        add("timestamp-created", LONG, AccessControlLogEntry::getTimestampCreated);
+        add("timestamp-last-updated", LONG, AccessControlLogEntry::getTimestampLastUpdated);
     }};
 
-    // TODO: CommandDocument: arguments?
     public static final ObjectType<CommandDocument> COMMAND_DOCUMENT = new ObjectType<>("command-name") {{
         add("summary", STRING, CommandDocument::getSummary);
         add("since", STRING, CommandDocument::getSince);
