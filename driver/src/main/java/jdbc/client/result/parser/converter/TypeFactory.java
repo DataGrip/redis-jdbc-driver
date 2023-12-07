@@ -33,7 +33,7 @@ public class TypeFactory {
     }
 
 
-    /* --------------------------------------------- Common --------------------------------------------- */
+    /* ------------------------------------------------- Common ------------------------------------------------- */
 
     public static final SimpleType<Object> OBJECT = new SimpleType<>(RedisColumnTypeHelper.OBJECT);
 
@@ -66,7 +66,7 @@ public class TypeFactory {
     }
 
 
-    /* --------------------------------------------- Native --------------------------------------------- */
+    /* ------------------------------------------------- Native ------------------------------------------------- */
 
     public static final ObjectType<KeyedListElement> KEYED_STRING = new ObjectType<>() {{
         add("key", STRING, AbstractMap.SimpleImmutableEntry::getKey);
@@ -323,10 +323,10 @@ public class TypeFactory {
     }};
 
 
-    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+    /* ----------------------------------------------- RedisJSON ------------------------------------------------ */
 
 
-    /* --------------------------------------------- RediSearch --------------------------------------------- */
+    /* ----------------------------------------------- RediSearch ----------------------------------------------- */
 
     public static final ObjectType<AggregationResult> AGGREGATION_RESULT = new ObjectType<>() {{
         add("total-results", LONG, AggregationResult::getTotalResults);
@@ -358,7 +358,7 @@ public class TypeFactory {
     }};
 
 
-    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+    /* ----------------------------------------------- RedisBloom ----------------------------------------------- */
 
     public static final ObjectType<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ObjectType<>() {{
         add("iterator", LONG, Map.Entry::getKey);
@@ -366,7 +366,7 @@ public class TypeFactory {
     }};
 
 
-    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+    /* -------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
     public static final ObjectType<TSElement> TIMESERIES_ELEMENT = new ObjectType<>() {{
         add("timestamp", LONG, TSElement::getTimestamp);
@@ -385,6 +385,6 @@ public class TypeFactory {
     }};
 
 
-    /* ------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------------- */
 
 }

@@ -26,7 +26,7 @@ public class ConverterFactory {
     }
 
 
-    /* --------------------------------------------- Common --------------------------------------------- */
+    /* ------------------------------------------------- Common ------------------------------------------------- */
 
     public static final IdentityConverter<Object> OBJECT = new IdentityConverter<>() {
         @Override
@@ -89,7 +89,7 @@ public class ConverterFactory {
     };
 
 
-    /* --------------------------------------------- Native --------------------------------------------- */
+    /* ------------------------------------------------- Native ------------------------------------------------- */
 
     public static final ObjectConverter<KeyedListElement> KEYED_STRING = new ObjectConverter<>() {
         @Override
@@ -373,10 +373,10 @@ public class ConverterFactory {
     };
 
 
-    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+    /* ----------------------------------------------- RedisJSON ------------------------------------------------ */
 
 
-    /* --------------------------------------------- RediSearch --------------------------------------------- */
+    /* ----------------------------------------------- RediSearch ----------------------------------------------- */
 
     public static final ObjectConverter<AggregationResult> AGGREGATION_RESULT = new ObjectConverter<>() {
         @Override
@@ -434,7 +434,7 @@ public class ConverterFactory {
     };
 
 
-    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+    /* ----------------------------------------------- RedisBloom ----------------------------------------------- */
 
     public static final ObjectConverter<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ObjectConverter<>() {
         @Override
@@ -444,7 +444,7 @@ public class ConverterFactory {
     };
 
 
-    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+    /* -------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
     public static final ObjectConverter<TSElement> TIMESERIES_ELEMENT = new ObjectConverter<>() {
         @Override
@@ -468,6 +468,6 @@ public class ConverterFactory {
     };
 
 
-    /* ------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------------- */
 
 }

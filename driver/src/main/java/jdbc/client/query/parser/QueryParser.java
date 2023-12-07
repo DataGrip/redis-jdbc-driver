@@ -41,7 +41,7 @@ public class QueryParser {
         return new Params(commandLine.params);
     }
 
-    private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine, @NotNull Params params) throws SQLException {
+    private static @NotNull RedisCommand parseCommand(@NotNull CommandLine commandLine, @NotNull Params params) {
         String commandName = getName(commandLine.command);
         CommandParser commandParser = CommandParsers.get(commandName);
         if (commandParser != null) return commandParser.parse(commandName, params);
