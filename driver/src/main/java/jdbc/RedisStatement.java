@@ -175,19 +175,19 @@ public class RedisStatement implements Statement {
     @Override
     public void addBatch(String sql) throws SQLException {
         checkClosed();
-        // TODO (implement) ?
+        // TODO (implement later) ?
     }
 
     @Override
     public void clearBatch() throws SQLException {
         checkClosed();
-        // TODO (implement) ?
+        // TODO (implement later) ?
     }
 
     @Override
     public int[] executeBatch() throws SQLException {
         checkClosed();
-        // TODO (implement) ?
+        // TODO (implement later) ?
         return new int[0];
     }
 

@@ -3,7 +3,6 @@ package jdbc.client.query.structures;
 import jdbc.client.commands.RedisCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.commands.ProtocolCommand;
 
 public class RedisQuery {
 
@@ -35,16 +34,8 @@ public class RedisQuery {
         return command;
     }
 
-    public @NotNull ProtocolCommand getRawCommand() {
-        return command.getRawCommand();
-    }
-
     public @NotNull Params getParams() {
         return params;
-    }
-
-    public @NotNull String[] getRawParams() {
-        return params.getRawParams();
     }
 
     public @Nullable ColumnHint getColumnHint() {

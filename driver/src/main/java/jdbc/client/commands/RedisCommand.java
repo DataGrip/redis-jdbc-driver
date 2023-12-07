@@ -33,7 +33,7 @@ public class RedisCommand {
     }
 
     @NotNull
-    public ProtocolCommand getRawCommand() {
+    public ProtocolCommand getRaw() {
         return command;
     }
 

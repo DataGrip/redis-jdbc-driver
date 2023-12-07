@@ -32,7 +32,7 @@ public class ResultParserFactory {
     }
 
 
-    /* --------------------------------------------- Common --------------------------------------------- */
+    /* ------------------------------------------------- Common ------------------------------------------------- */
 
     public static final ResultParser RAW_OBJECT = new ListResultParser<>() {
         @Override
@@ -174,7 +174,7 @@ public class ResultParserFactory {
     };
 
 
-    /* --------------------------------------------- Native --------------------------------------------- */
+    /* ------------------------------------------------- Native ------------------------------------------------- */
 
     public static final ResultParser KEYED_STRING = new ObjectListResultParser<KeyedListElement>() {
         @Override
@@ -578,7 +578,7 @@ public class ResultParserFactory {
     };
 
 
-    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+    /* ----------------------------------------------- RedisJSON ------------------------------------------------ */
 
     public static final ResultParser JSON_OBJECT = new ListResultParser<>() {
         @Override
@@ -593,7 +593,7 @@ public class ResultParserFactory {
     };
 
 
-    /* --------------------------------------------- RediSearch --------------------------------------------- */
+    /* ----------------------------------------------- RediSearch ----------------------------------------------- */
 
     public static final ResultParser AGGREGATION_RESULT = new ObjectListResultParser<AggregationResult>() {
         @Override
@@ -669,7 +669,7 @@ public class ResultParserFactory {
     };
 
 
-    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+    /* ----------------------------------------------- RedisBloom ----------------------------------------------- */
 
     public static final ResultParser BLOOM_SCANDUMP_RESPONSE = new ObjectListResultParser<Map.Entry<Long, byte[]>>() {
         @Override
@@ -684,7 +684,7 @@ public class ResultParserFactory {
     };
 
 
-    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+    /* -------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
     public static final ResultParser TIMESERIES_ELEMENT = new ObjectListResultParser<TSElement>() {
         @Override
@@ -736,7 +736,7 @@ public class ResultParserFactory {
     };
 
 
-    /* ------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------------- */
 
     private static abstract class ListResultParser<T, S> implements ResultParser {
         protected abstract @NotNull ListEncoder<T> getEncoder();

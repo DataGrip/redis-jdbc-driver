@@ -30,8 +30,8 @@ public class CommandParsers {
 
     public static @Nullable CommandParser get(@NotNull String commandName) {
         if (commandName.contains(".")) {
-            String moduleName = commandName.substring(0, commandName.indexOf("."));
-            return MODULE_COMMAND_PARSERS.get(moduleName);
+            String commandPrefix = commandName.substring(0, commandName.indexOf("."));
+            return MODULE_COMMAND_PARSERS.get(commandPrefix);
         }
         return NATIVE_COMMAND_PARSER;
     }

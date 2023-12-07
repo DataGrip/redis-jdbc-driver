@@ -30,7 +30,7 @@ public class EncoderFactory {
     }
 
 
-    /* --------------------------------------------- Common --------------------------------------------- */
+    /* ------------------------------------------------- Common ------------------------------------------------- */
 
     public static final ListEncoder<Object> OBJECT = new ElementListEncoder<>() {
         @Override
@@ -145,7 +145,7 @@ public class EncoderFactory {
     };
 
 
-    /* --------------------------------------------- Native --------------------------------------------- */
+    /* ------------------------------------------------- Native ------------------------------------------------- */
 
     public static final ListEncoder<KeyedListElement> KEYED_STRING = new ElementListEncoder<>() {
         @Override
@@ -407,7 +407,7 @@ public class EncoderFactory {
     };
 
 
-    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+    /* ----------------------------------------------- RedisJSON ------------------------------------------------ */
 
     public static final ListEncoder<Object> JSON_OBJECT = new ElementListEncoder<>() {
 
@@ -439,7 +439,7 @@ public class EncoderFactory {
     };
 
 
-    /* --------------------------------------------- RediSearch --------------------------------------------- */
+    /* ----------------------------------------------- RediSearch ----------------------------------------------- */
 
     private static class SearchProfileResponseBuilder<T> extends Builder<Map.Entry<T, Map<String, Object>>> {
 
@@ -514,7 +514,7 @@ public class EncoderFactory {
     };
 
 
-    /* --------------------------------------------- RedisBloom --------------------------------------------- */
+    /* ----------------------------------------------- RedisBloom ----------------------------------------------- */
 
     public static final ListEncoder<Map.Entry<Long, byte[]>> BLOOM_SCANDUMP_RESPONSE = new ElementListEncoder<>() {
 
@@ -533,7 +533,7 @@ public class EncoderFactory {
     };
 
 
-    /* --------------------------------------------- RedisTimeSeries --------------------------------------------- */
+    /* -------------------------------------------- RedisTimeSeries --------------------------------------------- */
 
     public static final ListEncoder<TSElement> TIMESERIES_ELEMENT = new ListElementListEncoder<>() {
         @Override
@@ -578,7 +578,7 @@ public class EncoderFactory {
     };
 
 
-    /* ------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------------- */
 
     private abstract static class SimpleListEncoder<T> extends ListEncoder<T> {
 

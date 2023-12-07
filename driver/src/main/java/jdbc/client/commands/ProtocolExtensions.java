@@ -7,7 +7,7 @@ import redis.clients.jedis.util.SafeEncoder;
 
 public class ProtocolExtensions {
 
-    /* --------------------------------------------- Native --------------------------------------------- */
+    /* ------------------------------------------------- Native ------------------------------------------------- */
 
     public enum CommandEx implements ProtocolCommand {
         HELLO, REPLCONF, RESET, RESTOREASKING("RESTORE-ASKING"), PFDEBUG, PFSELFTEST,
@@ -69,7 +69,7 @@ public class ProtocolExtensions {
         }
     }
 
-    /* --------------------------------------------- RedisJSON --------------------------------------------- */
+    /* ----------------------------------------------- RedisJSON ------------------------------------------------ */
 
     public enum JsonCommandEx implements ProtocolCommand {
         DEBUG("JSON.DEBUG"),
@@ -105,6 +105,6 @@ public class ProtocolExtensions {
         }
     }
 
-    /* ------------------------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------------------------------------------- */
 
 }

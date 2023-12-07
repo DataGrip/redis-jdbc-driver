@@ -19,28 +19,34 @@ public class RedisColumnTypeHelper {
     
     private RedisColumnTypeHelper() {
     }
+
+
+    private static final Map<String, Integer> javaTypeMap = new HashMap<>();
+
+    static {
+        javaTypeMap.put(OBJECT, Types.JAVA_OBJECT);
+        javaTypeMap.put(STRING, Types.VARCHAR);
+        javaTypeMap.put(LONG, Types.BIGINT);
+        javaTypeMap.put(DOUBLE, Types.DOUBLE);
+        javaTypeMap.put(BOOLEAN, Types.BOOLEAN);
+        javaTypeMap.put(BINARY, Types.BINARY);
+        javaTypeMap.put(ARRAY, Types.ARRAY);
+        javaTypeMap.put(MAP, Types.JAVA_OBJECT);
+    }
     
-    private static final Map<String, Integer> javaTypeMap = new HashMap<>() {{
-        put(OBJECT, Types.JAVA_OBJECT);
-        put(STRING, Types.VARCHAR);
-        put(LONG, Types.BIGINT);
-        put(DOUBLE, Types.DOUBLE);
-        put(BOOLEAN, Types.BOOLEAN);
-        put(BINARY, Types.BINARY);
-        put(ARRAY, Types.ARRAY);
-        put(MAP, Types.JAVA_OBJECT);
-    }};
-    
-    private static final Map<String, String> typeNameMap = new HashMap<>() {{
-        put(OBJECT, "java.lang.Object");
-        put(STRING, "java.lang.String");
-        put(LONG, "java.lang.Long");
-        put(DOUBLE, "java.lang.Double");
-        put(BOOLEAN, "java.lang.Boolean");
-        put(BINARY, "[B");
-        put(ARRAY, "java.util.List");
-        put(MAP, "java.util.Map");
-    }};
+    private static final Map<String, String> typeNameMap = new HashMap<>();
+
+    static {
+        typeNameMap.put(OBJECT, "java.lang.Object");
+        typeNameMap.put(STRING, "java.lang.String");
+        typeNameMap.put(LONG, "java.lang.Long");
+        typeNameMap.put(DOUBLE, "java.lang.Double");
+        typeNameMap.put(BOOLEAN, "java.lang.Boolean");
+        typeNameMap.put(BINARY, "[B");
+        typeNameMap.put(ARRAY, "java.util.List");
+        typeNameMap.put(MAP, "java.util.Map");
+    }
+
 
     public static int getJavaType(String typeName) {
         String lower = toLowerCase(typeName);

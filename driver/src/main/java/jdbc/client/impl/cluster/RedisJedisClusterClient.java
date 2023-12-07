@@ -94,8 +94,8 @@ public class RedisJedisClusterClient extends RedisClientBase {
     protected synchronized Object executeImpl(@NotNull RedisQuery query) throws SQLException {
         checkSupportInClusterMode(query);
         String sampleKey = query.getSampleKey();
-        ProtocolCommand cmd = query.getRawCommand();
-        String[] args = query.getRawParams();
+        ProtocolCommand cmd = query.getCommand().getRaw();
+        String[] args = query.getParams().getRaw();
         if (query.isBlocking()) {
             return sampleKey != null
                     ? jedisCluster.sendBlockingCommand(sampleKey, cmd, args)

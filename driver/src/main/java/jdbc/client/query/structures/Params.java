@@ -14,13 +14,13 @@ import static jdbc.utils.Utils.getName;
 public class Params {
 
     private final String[] params;
-    private Map<String, Integer> paramNames;
+    private Map<String, Integer> paramNameIndexes;
 
     public Params(@NotNull String[] params) {
         this.params = params;
     }
 
-    public @NotNull String[] getRawParams() {
+    public @NotNull String[] getRaw() {
         return params;
     }
 
@@ -33,20 +33,20 @@ public class Params {
     }
 
     public @Nullable String getNext(@NotNull Rawable keyword) {
-        Integer index = getParamNames().get(getName(keyword));
+        Integer index = getParamNameIndexes().get(getName(keyword));
         int nextIndex = index != null ? index + 1 : params.length;
         return nextIndex < params.length ? params[nextIndex] : null;
     }
 
     public boolean contains(@NotNull Rawable keyword) {
-        return getParamNames().containsKey(getName(keyword));
+        return getParamNameIndexes().containsKey(getName(keyword));
     }
 
-    private @NotNull Map<String, Integer> getParamNames() {
-        if (paramNames == null) {
+    private @NotNull Map<String, Integer> getParamNameIndexes() {
+        if (paramNameIndexes == null) {
             Stream<Integer> paramIndexes = IntStream.range(0, params.length).boxed();
-            paramNames = paramIndexes.collect(Collectors.toMap(i -> getName(params[i]), i -> i, (n1, n2) -> n1));
+            paramNameIndexes = paramIndexes.collect(Collectors.toMap(i -> getName(params[i]), i -> i, (n1, n2) -> n1));
         }
-        return paramNames;
+        return paramNameIndexes;
     }
 }
