@@ -28,15 +28,20 @@ public class RedisConnection implements Connection {
     private static final String UNKNOWN_SERVER_MODE_MESSAGE = "Unable to get the server mode" +
             " using the \"INFO server\" command to check if the connection mode matches the server mode.";
 
+    private SQLWarning unknownServerModeWarning = null;
+
     public void checkMode() throws SQLException {
         RedisMode serverMode;
         try {
             serverMode = getMetaData().getDatabaseProductMode();
         } catch (SQLException e) {
-            throw new SQLException(UNKNOWN_SERVER_MODE_MESSAGE, e);
+            unknownServerModeWarning = new SQLWarning(UNKNOWN_SERVER_MODE_MESSAGE, e);
+            return;
         }
-        if (serverMode == null)
-            throw new SQLException(UNKNOWN_SERVER_MODE_MESSAGE);
+        if (serverMode == null) {
+            unknownServerModeWarning = new SQLWarning(UNKNOWN_SERVER_MODE_MESSAGE);
+            return;
+        }
         RedisMode clientMode = client.getMode();
         if (clientMode != serverMode) {
             String serverURLPrefix = RedisClientFactory.getURLPrefix(serverMode);
@@ -155,15 +160,14 @@ public class RedisConnection implements Connection {
 
     @Override
     public SQLWarning getWarnings() throws SQLException {
-        // TODO (implement later) ?
         checkClosed();
-        return null;
+        return unknownServerModeWarning;
     }
 
     @Override
     public void clearWarnings() throws SQLException {
-        // TODO (implement later) ?
         checkClosed();
+        unknownServerModeWarning = null;
     }
 
     @Override
