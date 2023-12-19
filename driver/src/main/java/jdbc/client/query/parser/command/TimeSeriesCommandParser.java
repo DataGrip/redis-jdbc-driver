@@ -7,11 +7,11 @@ import redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class TimeSeriesCommandParser extends CommandParser {
 
-    private static final Map<String, TimeSeriesCommand> TIME_SERIES_COMMANDS = toMap(TimeSeriesCommand.values());
+    private static final Map<String, TimeSeriesCommand> TIME_SERIES_COMMANDS = toNameMap(TimeSeriesCommand.values());
 
     @Override
     protected @Nullable TimeSeriesCommand parseCommand(@NotNull String commandName) {

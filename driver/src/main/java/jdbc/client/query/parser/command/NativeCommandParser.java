@@ -9,12 +9,12 @@ import redis.clients.jedis.commands.ProtocolCommand;
 import java.util.Map;
 import java.util.Set;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class NativeCommandParser extends CommandOrExParser {
 
-    private static final Map<String, Command> COMMANDS = toMap(Command.values());
-    private static final Map<String, CommandEx> COMMANDS_EX = toMap(CommandEx.values());
+    private static final Map<String, Command> COMMANDS = toNameMap(Command.values());
+    private static final Map<String, CommandEx> COMMANDS_EX = toNameMap(CommandEx.values());
     private static final Set<ProtocolCommand> COMMANDS_WITH_KEYWORDS = Set.of(
             Command.ACL, Command.CLIENT, Command.CLUSTER, Command.SENTINEL,
             Command.COMMAND, Command.CONFIG, Command.FUNCTION, Command.LATENCY,

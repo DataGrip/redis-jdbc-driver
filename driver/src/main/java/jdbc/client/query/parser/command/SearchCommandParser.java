@@ -7,11 +7,11 @@ import redis.clients.jedis.search.SearchProtocol.SearchCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class SearchCommandParser extends CommandParser {
 
-    private static final Map<String, SearchCommand> SEARCH_COMMANDS = toMap(SearchCommand.values());
+    private static final Map<String, SearchCommand> SEARCH_COMMANDS = toNameMap(SearchCommand.values());
 
     @Override
     protected @Nullable SearchCommand parseCommand(@NotNull String commandName) {

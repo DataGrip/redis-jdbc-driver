@@ -8,12 +8,12 @@ import redis.clients.jedis.json.JsonProtocol.JsonCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class JsonCommandParser extends CommandOrExParser {
 
-    private static final Map<String, JsonCommand> JSON_COMMANDS = toMap(JsonCommand.values());
-    private static final Map<String, JsonCommandEx> JSON_COMMANDS_EX = toMap(JsonCommandEx.values());
+    private static final Map<String, JsonCommand> JSON_COMMANDS = toNameMap(JsonCommand.values());
+    private static final Map<String, JsonCommandEx> JSON_COMMANDS_EX = toNameMap(JsonCommandEx.values());
 
     @Override
     protected @Nullable JsonCommand parseCommandOr(@NotNull String commandName) {

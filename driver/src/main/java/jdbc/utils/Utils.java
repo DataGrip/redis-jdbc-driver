@@ -161,7 +161,7 @@ public class Utils {
     }
 
 
-    public static <T extends Enum<?>> @NotNull Map<String, T> toMap(T @NotNull [] values) {
-        return Arrays.stream(values).collect(Collectors.toMap(Enum::name, v -> v));
+    public static <T extends Rawable> @NotNull Map<String, T> toNameMap(T @NotNull [] values) {
+        return Arrays.stream(values).collect(Collectors.toMap(Utils::getName, v -> v));
     }
 }

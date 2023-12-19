@@ -7,11 +7,11 @@ import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class CountMinSketchCommandParser extends CommandParser {
 
-    private static final Map<String, CountMinSketchCommand> COUNT_MIN_SKETCH_COMMANDS = toMap(CountMinSketchCommand.values());
+    private static final Map<String, CountMinSketchCommand> COUNT_MIN_SKETCH_COMMANDS = toNameMap(CountMinSketchCommand.values());
 
     @Override
     protected @Nullable CountMinSketchCommand parseCommand(@NotNull String commandName) {

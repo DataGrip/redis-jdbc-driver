@@ -7,11 +7,11 @@ import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class TDigestCommandParser extends CommandParser {
 
-    private static final Map<String, TDigestCommand> T_DIGEST_COMMANDS = toMap(TDigestCommand.values());
+    private static final Map<String, TDigestCommand> T_DIGEST_COMMANDS = toNameMap(TDigestCommand.values());
 
     @Override
     protected @Nullable TDigestCommand parseCommand(@NotNull String commandName) {

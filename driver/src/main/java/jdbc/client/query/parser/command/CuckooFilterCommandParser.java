@@ -7,11 +7,11 @@ import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class CuckooFilterCommandParser extends CommandParser {
 
-    private static final Map<String, CuckooFilterCommand> CUCKOO_FILTER_COMMANDS = toMap(CuckooFilterCommand.values());
+    private static final Map<String, CuckooFilterCommand> CUCKOO_FILTER_COMMANDS = toNameMap(CuckooFilterCommand.values());
 
     @Override
     protected @Nullable CuckooFilterCommand parseCommand(@NotNull String commandName) {

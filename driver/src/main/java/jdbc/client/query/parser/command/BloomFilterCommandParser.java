@@ -7,11 +7,11 @@ import redis.clients.jedis.commands.ProtocolCommand;
 
 import java.util.Map;
 
-import static jdbc.utils.Utils.toMap;
+import static jdbc.utils.Utils.toNameMap;
 
 class BloomFilterCommandParser extends CommandParser {
 
-    private static final Map<String, BloomFilterCommand> BLOOM_FILTER_COMMANDS = toMap(BloomFilterCommand.values());
+    private static final Map<String, BloomFilterCommand> BLOOM_FILTER_COMMANDS = toNameMap(BloomFilterCommand.values());
 
     @Override
     protected @Nullable BloomFilterCommand parseCommand(@NotNull String commandName) {
