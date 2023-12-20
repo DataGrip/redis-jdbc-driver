@@ -358,7 +358,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.CLUSTER_SETSLOT,            STRING);
         CRP_MAP.put(RedisCommands.CLUSTER_SHARDS,             RAW_OBJECT); /* TODO: jedis v5.0+ */
         CRP_MAP.put(RedisCommands.CLUSTER_SLAVES,             STRING);
-        CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,              RAW_OBJECT); /* deprecated */
+        CRP_MAP.put(RedisCommands.CLUSTER_SLOTS,              OBJECT); /* deprecated */
 
         /* ------------------------------------------- RedisJSON -------------------------------------------- */
 
