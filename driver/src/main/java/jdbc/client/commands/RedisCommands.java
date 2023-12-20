@@ -131,6 +131,8 @@ public class RedisCommands {
     public static final RedisCommand HINCRBYFLOAT               = create(Command.HINCRBYFLOAT);
     public static final RedisCommand HKEYS                      = create(Command.HKEYS);
     public static final RedisCommand HLEN                       = create(Command.HLEN);
+    public static final RedisCommand HMGET                      = create(Command.HMGET);
+    public static final RedisCommand HMSET                      = create(Command.HMSET);
     public static final RedisCommand HRANDFIELD                 = create(Command.HRANDFIELD);
     public static final RedisCommand HSCAN                      = create(Command.HSCAN);
     public static final RedisCommand HSET                       = create(Command.HSET);

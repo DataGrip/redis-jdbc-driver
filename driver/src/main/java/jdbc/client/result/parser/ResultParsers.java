@@ -140,6 +140,8 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.HINCRBYFLOAT,               DOUBLE);
         CRP_MAP.put(RedisCommands.HKEYS,                      STRING);
         CRP_MAP.put(RedisCommands.HLEN,                       LONG);
+        CRP_MAP.put(RedisCommands.HMGET,                      STRING);
+        CRP_MAP.put(RedisCommands.HMSET,                      STRING);
         CRP_MAP.put(RedisCommands.HRANDFIELD,                 STRING, wrap(STRING_MAP, contains(Keyword.WITHVALUES)));
         CRP_MAP.put(RedisCommands.HSCAN,                      ENTRY_SCAN_RESULT);
         CRP_MAP.put(RedisCommands.HSET,                       LONG);
