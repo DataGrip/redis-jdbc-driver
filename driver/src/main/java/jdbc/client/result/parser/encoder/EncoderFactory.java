@@ -627,7 +627,11 @@ public class EncoderFactory {
         protected boolean isElementList(@NotNull Object data, @NotNull Params params) {
             if (!super.isElementList(data, params)) return false;
             List<?> dataList = (List<?>) data;
-            return dataList.isEmpty() || dataList.get(0) instanceof List;
+            for (Object dataListElement : dataList) {
+                if (dataListElement == null) continue;
+                return dataListElement instanceof List;
+            }
+            return true;
         }
     }
 }
