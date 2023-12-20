@@ -173,6 +173,18 @@ public class ResultParserFactory {
         }
     };
 
+    public static final ResultParser STRING_MAP_FROM_PAIRS = new MapResultParser<String, String>() {
+        @Override
+        protected @NotNull MapEncoder<String> getEncoder() {
+            return EncoderFactory.STRING_MAP_FROM_PAIRS;
+        }
+
+        @Override
+        protected @NotNull SimpleConverter<String, String> getConverter() {
+            return ConverterFactory.STRING;
+        }
+    };
+
 
     /* ------------------------------------------------- Native ------------------------------------------------- */
 

@@ -144,6 +144,13 @@ public class EncoderFactory {
         }
     };
 
+    public static final MapEncoder<String> STRING_MAP_FROM_PAIRS = new SimpleMapEncoder<>() {
+        @Override
+        protected @NotNull Builder<Map<String, String>> getMapBuilder() {
+            return BuilderFactory.STRING_MAP_FROM_PAIRS;
+        }
+    };
+
 
     /* ------------------------------------------------- Native ------------------------------------------------- */
 

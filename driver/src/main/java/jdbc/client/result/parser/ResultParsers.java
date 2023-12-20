@@ -397,7 +397,7 @@ public class ResultParsers {
         CRP_MAP.put(RedisCommands.FT_ALIASDEL,                STRING);
         CRP_MAP.put(RedisCommands.FT_ALIASUPDATE,             STRING);
         CRP_MAP.put(RedisCommands.FT_ALTER,                   STRING);
-        CRP_MAP.put(RedisCommands.FT_CONFIG_GET,              STRING_MAP);
+        CRP_MAP.put(RedisCommands.FT_CONFIG_GET,              STRING_MAP_FROM_PAIRS);
         CRP_MAP.put(RedisCommands.FT_CONFIG_SET,              STRING);
         CRP_MAP.put(RedisCommands.FT_CREATE,                  STRING);
         CRP_MAP.put(RedisCommands.FT_CURSOR_DEL,              STRING);
