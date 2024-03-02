@@ -105,11 +105,11 @@ Pass arguments for your keystore and trust store:
 -Djavax.net.ssl.keyStore=/path/to/client.keystore
 -Djavax.net.ssl.keyStorePassword=password123
 ```
-To disable server certificate verification set the property `verifyServerCertificate=false`.
+To disable server certificate verification set the property `verifyServerCertificate` to `false`.
 
 ### Port Forwarding
 
-Set the property `hostAndPortMapping` to `{<toHost1>:<toPort1>=<fromHost1>:<fromHost1>, …}`.
+Set the property `hostAndPortMapping` to `{<toHost1>:<toPort1>=<fromHost1>:<fromPort1>, …}`.
 
 Example:
 ```
