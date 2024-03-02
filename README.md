@@ -117,7 +117,7 @@ Example:
 ```
 
 For using port forwarding with **Redis Standalone**, providing `hostAndPortMapping` **is not mandatory**.<br> 
- it is sufficient to specify `toHost` and `toPort` in the URL.
+ it is sufficient to specify `fromHost` and `fromPort` in the URL.
 
 For using port forwarding with **Redis Cluster**, providing `hostAndPortMapping` **is mandatory**.<br> 
 The hosts and ports from the URL are used only for connection initialization, during which the hosts and ports of the cluster's nodes are obtained from the server. When sending commands, these obtained hosts and ports are transformed by applying `hostAndPortMapping` and then used.
