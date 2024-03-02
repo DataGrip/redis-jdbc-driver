@@ -44,10 +44,14 @@ public class RedisConnection implements Connection {
         }
         RedisMode clientMode = client.getMode();
         if (clientMode != serverMode) {
+            String clientModeName = toLowerCase(clientMode.name());
+            String serverModeName = toLowerCase(serverMode.name());
             String serverURLPrefix = RedisClientFactory.getURLPrefix(serverMode);
-            String urlFix = serverURLPrefix != null ? String.format("\nPlease change the URL prefix to \"%s\".", serverURLPrefix) : null;
-            throw new SQLException(String.format("The connection mode \"%s\" does not match the server mode \"%s\".%s",
-                    toLowerCase(clientMode.name()), toLowerCase(serverMode.name()), urlFix));
+            String messageTail = serverURLPrefix != null
+                    ? String.format("Please change the URL prefix to \"%s\".", serverURLPrefix)
+                    : String.format("Meanwhile, the connection mode \"%s\" is not supported at the moment.", serverModeName);
+            throw new SQLException(String.format("The connection mode \"%s\" does not match the server mode \"%s\".\n%s",
+                    clientModeName, serverModeName, messageTail));
         }
     }
 
