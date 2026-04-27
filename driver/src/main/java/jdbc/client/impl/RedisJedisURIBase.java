@@ -21,6 +21,7 @@ import java.util.Properties;
 import static jdbc.properties.RedisDefaultConfig.CONFIG;
 import static jdbc.properties.RedisDriverPropertyInfoHelper.*;
 import static jdbc.utils.SSLUtils.getTrustEverybodySSLContext;
+import static jdbc.utils.SSLUtils.getValidatingSSLContext;
 import static jdbc.utils.Utils.*;
 
 public abstract class RedisJedisURIBase implements JedisClientConfig {
@@ -104,8 +105,20 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         return url.replaceFirst(prefix, "");
     }
 
-    protected abstract @NotNull String getPrefix();
+    private String validateAndGetUrl(String path) {
+        String url = path;
+        if (!isNullOrEmpty(url)) {
+            try {
+                new URL(url);
+            }
+            catch (MalformedURLException e) {
+                url = "file:" + url;
+            }
+        }
+        return url;
+    }
 
+    protected abstract @NotNull String getPrefix();
 
     private void setAuth(@NotNull String authBlock, Properties info) {
         String user = CONFIG.getUser();
@@ -166,20 +179,37 @@ public abstract class RedisJedisURIBase implements JedisClientConfig {
         ssl = getBoolean(parameters, info, SSL, CONFIG.isSsl());
         if (ssl) {
             boolean verifyServerCertificate = getBoolean(parameters, info, VERIFY_SERVER_CERTIFICATE, CONFIG.isVerifyServerCertificate());
+
+            // Read keystore properties for client certificate authentication (used in both branches)
+            String keystorePath = getString(parameters, info, KEYSTORE_PATH, System.getProperty("javax.net.ssl.keyStore", ""));
+            String keystorePassword
+                    = getString(parameters, info, KEYSTORE_PASSWORD, System.getProperty("javax.net.ssl.keyStorePassword", ""));
+            String keystoreType = getString(parameters, info, KEYSTORE_TYPE,
+                    System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType()));
+            String keystoreUrl = validateAndGetUrl(keystorePath);
+
             if (!verifyServerCertificate) {
-                String keyStoreType = System.getProperty("javax.net.ssl.keyStoreType", KeyStore.getDefaultType());
-                String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword", "");
-                String keyStoreUrl = System.getProperty("javax.net.ssl.keyStore", "");
-                // check keyStoreUrl
-                if (!isNullOrEmpty(keyStoreUrl)) {
-                    try {
-                        new URL(keyStoreUrl);
-                    } catch (MalformedURLException e) {
-                        keyStoreUrl = "file:" + keyStoreUrl;
-                    }
-                }
-                SSLContext context = getTrustEverybodySSLContext(keyStoreUrl, keyStoreType, keyStorePassword);
+                // For verifyServerCertificate=false, create custom SSLContext that trusts everything
+                // but still loads client certificate from keystore if provided
+                SSLContext context = getTrustEverybodySSLContext(keystoreUrl, keystoreType, keystorePassword);
                 sslSocketFactory = context.getSocketFactory();
+            } else {
+                // Read truststore properties (only needed for verifyServerCertificate=true)
+                String truststorePath = getString(parameters, info, TRUSTSTORE_PATH, System.getProperty("javax.net.ssl.trustStore", ""));
+                String truststorePassword
+                        = getString(parameters, info, TRUSTSTORE_PASSWORD, System.getProperty("javax.net.ssl.trustStorePassword", ""));
+                String truststoreType = getString(parameters, info, TRUSTSTORE_TYPE,
+                        System.getProperty("javax.net.ssl.trustStoreType", KeyStore.getDefaultType()));
+                String truststoreUrl = validateAndGetUrl(truststorePath);
+
+                if (!isNullOrEmpty(truststoreUrl) || !isNullOrEmpty(keystoreUrl)) {
+                    // Custom truststore or keystore provided - create validating SSLContext
+                    SSLContext context = getValidatingSSLContext(truststoreUrl, truststoreType, truststorePassword,
+                            keystoreUrl, keystoreType, keystorePassword);
+                    sslSocketFactory = context.getSocketFactory();
+                }
+                // else: No custom truststore/keystore - leave sslSocketFactory as null
+                //       Jedis will use SSLContext.getDefault() with JVM's default truststore
             }
         }
     }

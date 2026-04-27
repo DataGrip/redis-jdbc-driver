@@ -5,6 +5,10 @@ import jdbc.client.impl.standalone.RedisJedisURI;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Comparator;
 
@@ -101,5 +105,34 @@ public class RedisURITest {
         assertEquals("password", uri.getPassword());
         assertEquals(0, uri.getDatabase());
         assertEquals(6, uri.getMaxAttempts());
+    }
+
+    @Test
+    public void testSSLWithTruststoreParams() throws SQLException, URISyntaxException {
+        URL resource = RedisURITest.class.getResource("test-truststore.jks");
+        String truststorePath = URLEncoder.encode(resource.toURI().getPath(), StandardCharsets.UTF_8);
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://?ssl=true&truststorePath=" + truststorePath + "&truststorePassword=testpass&truststoreType=JKS", null);
+        assertTrue(uri.isSsl());
+        assertNotNull(uri.getSslSocketFactory());
+    }
+
+    @Test
+    public void testSSLWithKeystoreParams() throws SQLException, URISyntaxException {
+        URL resource = RedisURITest.class.getResource("test-keystore.jks");
+        String keystorePath = URLEncoder.encode(resource.toURI().getPath(), StandardCharsets.UTF_8);
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://?ssl=true&keystorePath=" + keystorePath + "&keystorePassword=testpass&keystoreType=JKS", null);
+        assertTrue(uri.isSsl());
+        assertNotNull(uri.getSslSocketFactory());
+    }
+
+    @Test
+    public void testSSLWithTruststoreAndKeystoreParams() throws SQLException, URISyntaxException {
+        URL truststoreResource = RedisURITest.class.getResource("test-truststore.jks");
+        URL keystoreResource = RedisURITest.class.getResource("test-keystore.jks");
+        String truststorePath = URLEncoder.encode(truststoreResource.toURI().getPath(), StandardCharsets.UTF_8);
+        String keystorePath = URLEncoder.encode(keystoreResource.toURI().getPath(), StandardCharsets.UTF_8);
+        RedisJedisURI uri = new RedisJedisURI("jdbc:redis://?ssl=true&truststorePath=" + truststorePath + "&truststorePassword=testpass&keystorePath=" + keystorePath + "&keystorePassword=testpass", null);
+        assertTrue(uri.isSsl());
+        assertNotNull(uri.getSslSocketFactory());
     }
 }

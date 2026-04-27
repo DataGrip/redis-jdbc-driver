@@ -90,6 +90,12 @@ jdbc:redis:cluster://[[<user>:]<password>@][<host1>[:<port1>],<host2>[:<port2>],
 | clientName              | String             | null    |                                     |
 | ssl                     | Boolean            | false   | Enable SSL.                         |
 | verifyServerCertificate | Boolean            | true    | Configure a connection that uses SSL but does not verify the identity of the server. |
+| truststorePath          | String             | null    | Path to truststore file for server certificate validation. |
+| truststorePassword      | String             | null    | Password for truststore file.       |
+| truststoreType          | String             | JKS     | Truststore type (JKS, PKCS12, etc.). |
+| keystorePath            | String             | null    | Path to keystore file for client certificate authentication. |
+| keystorePassword        | String             | null    | Password for keystore file.         |
+| keystoreType            | String             | JKS     | Keystore type (JKS, PKCS12, etc.).  |
 | hostAndPortMapping      | Map<String,String> | null    |                                     |
 | verifyConnectionMode    | Boolean            | true    | Verify that the mode specified for a connection in the URL prefix matches the server mode (standalone, cluster, sentinel). |
 
@@ -97,11 +103,22 @@ jdbc:redis:cluster://[[<user>:]<password>@][<host1>[:<port1>],<host2>[:<port2>],
 
 Set the property `ssl` to `true`.
 
-Pass arguments for your keystore and trust store: 
+Configure keystore and truststore using connection properties or system properties (as fallback):
+
+```
+jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>]?ssl=true&truststorePath=/path/to/client.truststore&truststorePassword=password&<property1>=<value>&<property2>=<value>&...]
+```
+
+For client authentication (mutual TLS), also provide keystore:
+
+```
+jdbc:redis://[[<user>:]<password>@][<host>[:<port>]][/<database>]?ssl=true&keystorePath=/path/to/client.keystore&keystorePassword=password&<property1>=<value>&<property2>=<value>&...]
+```
+
+System properties are used as fallback if connection properties are not provided:
 ```
 -Djavax.net.ssl.trustStore=/path/to/client.truststore
 -Djavax.net.ssl.trustStorePassword=password123
-# If you're using client authentication:
 -Djavax.net.ssl.keyStore=/path/to/client.keystore
 -Djavax.net.ssl.keyStorePassword=password123
 ```

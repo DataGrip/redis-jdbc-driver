@@ -1,5 +1,6 @@
 package jdbc.properties;
 
+import java.security.KeyStore;
 import java.sql.DriverPropertyInfo;
 import java.util.ArrayList;
 
@@ -17,6 +18,12 @@ public class RedisDriverPropertyInfoHelper {
     public static final String MAX_ATTEMPTS = "maxAttempts";
     public static final String SSL = "ssl";
     public static final String VERIFY_SERVER_CERTIFICATE = "verifyServerCertificate";
+    public static final String TRUSTSTORE_PATH = "truststorePath";
+    public static final String TRUSTSTORE_PASSWORD = "truststorePassword";
+    public static final String TRUSTSTORE_TYPE = "truststoreType";
+    public static final String KEYSTORE_PATH = "keystorePath";
+    public static final String KEYSTORE_PASSWORD = "keystorePassword";
+    public static final String KEYSTORE_TYPE = "keystoreType";
 
     public static final String HOST_AND_PORT_MAPPING = "hostAndPortMapping";
     public static final String HOST_AND_PORT_MAPPING_DEFAULT = null;
@@ -43,6 +50,12 @@ public class RedisDriverPropertyInfoHelper {
         addPropInfo(propInfos, SSL, String.valueOf(CONFIG.isSsl()), "Enable SSL.", booleanChoices);
         addPropInfo(propInfos, VERIFY_SERVER_CERTIFICATE, String.valueOf(CONFIG.isVerifyServerCertificate()),
                 "Configure a connection that uses SSL but does not verify the identity of the server.", booleanChoices);
+        addPropInfo(propInfos, TRUSTSTORE_PATH, null, "Path to truststore file for server certificate validation.");
+        addPropInfo(propInfos, TRUSTSTORE_PASSWORD, null, "Password for truststore file.");
+        addPropInfo(propInfos, TRUSTSTORE_TYPE, KeyStore.getDefaultType(), "Truststore type (default: " + KeyStore.getDefaultType() + ").");
+        addPropInfo(propInfos, KEYSTORE_PATH, null, "Path to keystore file for client certificate authentication.");
+        addPropInfo(propInfos, KEYSTORE_PASSWORD, null, "Password for keystore file.");
+        addPropInfo(propInfos, KEYSTORE_TYPE, KeyStore.getDefaultType(), "Keystore type (default: " + KeyStore.getDefaultType() + ").");
         addPropInfo(propInfos, HOST_AND_PORT_MAPPING, HOST_AND_PORT_MAPPING_DEFAULT, "Host and port mapping.");
         addPropInfo(propInfos, VERIFY_CONNECTION_MODE, String.valueOf(VERIFY_CONNECTION_MODE_DEFAULT),
                 "Verify that the mode specified for a connection in the URL prefix matches the server mode (standalone, cluster, sentinel).", booleanChoices);
